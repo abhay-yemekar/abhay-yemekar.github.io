@@ -1,0 +1,12 @@
+# Normalise text files to LF in the repository regardless of the machine's
+# core.autocrlf setting, so a clone on another box stores identical bytes and
+# the Linux CI runner sees what was committed. Working copies on Windows still
+# check out with CRLF where the editor wants it.
+* text=auto eol=lf
+
+# Binary — never touch these, and don't try to diff them as text.
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.woff2 binary
+*.pdf   binary
