@@ -1,0 +1,185 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+/*
+ * Ink & Amber — semantic tokens.
+ * Dark is the default; light is an explicit opt-in via [data-theme='light'].
+ *
+ * Every fg/bg pair here clears WCAG AA for normal text (>= 4.5:1) in both
+ * themes, verified by measuring the computed values in-browser rather than by
+ * eye. fg-subtle is deliberately not as dim as it looks like it could be: it
+ * carries 11-12px metadata, which gets no large-text exemption.
+ */
+:root,
+[data-theme='dark'] {
+  --color-bg: #0b0b0c;
+  --color-bg-elev: #131315;
+  --color-bg-elev-2: #1a1a1d;
+  --color-fg: #edeae4;
+  --color-fg-muted: #a6a29a;
+  --color-fg-subtle: #8b8680;
+  --color-border: #26262a;
+  --color-border-strong: #35353a;
+  --color-accent: #e8a33d;
+  --color-accent-fg: #0b0b0c;
+  --color-ring: #e8a33d;
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --color-bg: #f7f5f1;
+  --color-bg-elev: #ffffff;
+  --color-bg-elev-2: #efece6;
+  --color-fg: #14161a;
+  --color-fg-muted: #55524c;
+  --color-fg-subtle: #6b6862;
+  --color-border: #e0dcd4;
+  --color-border-strong: #cfc9bf;
+  /* Darker amber: #E8A33D on paper is ~1.9:1 and fails AA. This is ~5.8:1. */
+  --color-accent: #8f5a0c;
+  --color-accent-fg: #ffffff;
+  --color-ring: #8f5a0c;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-bg-elev: var(--color-bg-elev);
+  --color-bg-elev-2: var(--color-bg-elev-2);
+  --color-fg: var(--color-fg);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-fg-subtle: var(--color-fg-subtle);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-accent: var(--color-accent);
+  --color-accent-fg: var(--color-accent-fg);
+  --color-ring: var(--color-ring);
+
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans: 'Inter Tight Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --container-content: 1120px;
+
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-hover: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Fixed nav is 64px; keep anchored headings clear of it. */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition:
+      background-color 250ms var(--ease-hover),
+      color 250ms var(--ease-hover);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-fg);
+  }
+}
+
+@layer components {
+  .u-container {
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .u-container {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Mono eyebrow used for section labels and tech tags. */
+  .u-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .u-micro {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+  }
+
+  /* Amber underline that draws in on hover — used on inline text links only. */
+  .u-link {
+    color: var(--color-fg);
+    text-decoration: none;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 200ms var(--ease-hover);
+  }
+
+  .u-link:hover,
+  .u-link:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/*
+ * Global reduced-motion backstop. Component variants also collapse via
+ * useReducedMotion(), but this catches CSS-driven motion too.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
