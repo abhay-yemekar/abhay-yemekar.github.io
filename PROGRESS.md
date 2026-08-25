@@ -132,3 +132,48 @@ regression.
 
 **Open questions.** Still waiting on the resume PDF and on whether the live
 SearchScribe deploy is the current build. Neither blocks the deploy.
+
+---
+
+## 2026-08-25 — Committed, ready to push
+
+**What changed.** Eight scoped commits on top of the repo's existing two, so the
+push is a plain fast-forward with no unrelated histories and no force-push:
+scaffold → styles → data → hooks → sections → head/assets → CI → docs.
+
+Added `.gitattributes` pinning `* text=auto eol=lf`. This machine has
+`core.autocrlf=true` globally, which stores LF and checks out CRLF — the right
+outcome, but it depends on a machine-level setting, so a clone elsewhere would
+commit different bytes. Two components had been rewritten with CRLF by an
+earlier scripted edit; the attributes file normalised them on the way in.
+
+`.claude/settings.local.json` is now gitignored — it is per-machine permission
+state. `.claude/launch.json` stays committed, since it is shared preview config.
+
+Verified before committing: `tsc --noEmit` clean, build clean at 98.68 kB gzip,
+`dist/` untracked, privacy gate re-run across all eight new commits (the only
+hits are the docs *describing* the constraint — no phone number, no address, no
+`streetAddress`/`postalCode`/`telephone` keys anywhere).
+
+Reduced motion and focus were verified structurally rather than by hand, because
+the preview pane in this environment does not composite: a global
+`prefers-reduced-motion` rule clamps animation and transition durations to
+0.01ms, the three animated components each branch on `useReducedMotion()`, and a
+bare `:focus-visible` rule gives every focusable element a 2px amber outline at
+3px offset in both themes. A physical keyboard pass is still worth doing once the
+site is live.
+
+**Why the git split.** Eight commits rather than one because the history is the
+only place a future reader can see *why* each piece is shaped the way it is —
+the font subsetting, the IntersectionObserver rewrite, the `LazyMotion` scope.
+Only the final commit yields a building tree, which is normal for an initial
+import and not worth contorting the split to avoid.
+
+**Next.** Push (Abhay runs it — needs the SSH passphrase), switch the repo's
+Pages source from branch to GitHub Actions, then fix HTTPS: remove and re-add
+`abhayemekar.me` in Pages settings to force certificate issuance, wait for
+"Certificate created", tick Enforce HTTPS. DNS needs no changes. Then update the
+Gamma placeholder link on LinkedIn.
+
+**Open questions.** Unchanged: the resume PDF, and whether the live SearchScribe
+deploy runs the current Next.js build. Neither blocks the deploy.
