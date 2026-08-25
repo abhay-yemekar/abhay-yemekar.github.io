@@ -1,0 +1,13 @@
+{
+  "name": "Abhay Yemekar",
+  "short_name": "Abhay",
+  "description": "Software engineer building Python, AI/LLM and backend systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0b0c",
+  "theme_color": "#0b0b0c",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

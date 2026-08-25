@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Abhay Yemekar — Software Engineer</title>
+    <meta
+      name="description"
+      content="Software engineer in Pune building Python, AI/LLM and backend systems. Chrome extensions, RAG pipelines, and production APIs."
+    />
+    <meta name="author" content="Abhay Yemekar" />
+    <link rel="canonical" href="https://abhayemekar.me/" />
+    <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f5f1" media="(prefers-color-scheme: light)" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Abhay Yemekar" />
+    <meta property="og:title" content="Abhay Yemekar — Software Engineer" />
+    <meta
+      property="og:description"
+      content="Software engineer in Pune building Python, AI/LLM and backend systems. Chrome extensions, RAG pipelines, and production APIs."
+    />
+    <meta property="og:url" content="https://abhayemekar.me/" />
+    <meta property="og:image" content="https://abhayemekar.me/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Abhay Yemekar — Software Engineer" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Abhay Yemekar — Software Engineer" />
+    <meta
+      name="twitter:description"
+      content="Software engineer in Pune building Python, AI/LLM and backend systems."
+    />
+    <meta name="twitter:image" content="https://abhayemekar.me/og.png" />
+
+    <!--
+      Applies the stored theme before first paint so there is no flash of the
+      wrong background. Kept inline and dependency-free on purpose.
+    -->
+    <script>
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('theme')
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark'
+          document.documentElement.dataset.theme = theme
+        } catch (e) {
+          /* Private mode or blocked storage: the dark default in the markup stands. */
+        }
+      })()
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Abhay Yemekar",
+        "url": "https://abhayemekar.me/",
+        "image": "https://abhayemekar.me/og.png",
+        "jobTitle": "Software Engineer",
+        "email": "mailto:abhay.s.yemekar@gmail.com",
+        "worksFor": { "@type": "Organization", "name": "Translytics" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Pune",
+          "addressRegion": "Maharashtra",
+          "addressCountry": "IN"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Shri Guru Gobind Singhji Institute of Engineering & Technology"
+        },
+        "knowsAbout": [
+          "Python",
+          "Backend engineering",
+          "Large language models",
+          "Retrieval-augmented generation",
+          "FastAPI",
+          "Chrome extensions"
+        ],
+        "sameAs": [
+          "https://github.com/abhay-yemekar",
+          "https://www.linkedin.com/in/abhayyemekar/"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
