@@ -85,7 +85,7 @@ export const experience: Experience[] = [
     bullets: [
       'Designed and shipped a three-factor authentication flow combining face recognition, email OTP and voice phrase verification.',
       'Integrated OpenCV for detection and an LBPH model for recognition, with a calibration tool for threshold tuning.',
-      'Shipped as AI-Powered 3-Factor Login — see Projects for measured results.',
+      'Shipped as AI-Powered 3-Factor Login: about 95% correct identification and 88% of spoof attempts blocked in testing.',
     ],
   },
 ]

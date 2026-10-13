@@ -79,7 +79,10 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         </div>
       )}
 
-      <div className="mt-7 grid gap-5 sm:grid-cols-3">
+      {/* Half cards sit side by side at lg, too narrow for three text columns. */}
+      <div
+        className={`mt-7 grid gap-5 sm:grid-cols-3 ${project.span === 'half' ? 'lg:grid-cols-1' : ''}`}
+      >
         <CaseStudyBlock label="The problem" body={project.problem} />
         <CaseStudyBlock label="What I built" body={project.built} />
         <CaseStudyBlock label="What I learned" body={project.learned} />
