@@ -177,3 +177,42 @@ Gamma placeholder link on LinkedIn.
 
 **Open questions.** Unchanged: the resume PDF, and whether the live SearchScribe
 deploy runs the current Next.js build. Neither blocks the deploy.
+
+---
+
+## 2026-10-13 — Content refresh: Translytics, HireLens, WriteRight, REFLEX-AI
+
+**What changed.** Content only, all in `src/data/*.ts` plus the matching meta
+description in `index.html`:
+
+- **Hero and SEO.** New subhead for the current role; `seo.description` (and the
+  `description` / `og:description` meta it mirrors) now names AI agents, RAG,
+  backend systems, HireLens and yDirect, with no employer specifics.
+- **Translytics.** Summary and bullets kept deliberately generic: no product
+  architecture, component or feature names. Other roles unchanged.
+- **Featured work** is now HireLens (wide), yDirect (wide), SearchScribe and
+  ForecastGPT (paired halves). HireLens copy comes from its public README.
+  yDirect is at v1.3.3 and links its LinkedIn page. ForecastGPT links its live
+  Render app, noting the free-tier cold start.
+- **SearchScribe** re-checked against the current README and repo: Next.js 16 /
+  React 19, Tavily research feeding Gemini, Postgres in production, Ruff / mypy /
+  pytest / Vitest / Playwright. The "55 backend tests" figure was stale (the repo
+  now has far more test functions) and was dropped, not replaced. The live link
+  moved to `searchscribe-ai.vercel.app`; the old URL only redirects.
+- **More projects.** Added WriteRight and REFLEX-AI. Removed the Resume Screening
+  Tool, whose repo became HireLens. AI-Powered 3-Factor Login moved here from
+  featured; a secondary entry has no stat strip, so its measured numbers now live
+  only in its repo README.
+- **Skills.** Added LangGraph, Ollama, pgvector, Hono, Drizzle, Redis / RQ, MySQL,
+  React, Next.js, JavaScript and Chrome Extensions (MV3); renamed Anthropic Claude
+  to Claude API; dropped Cursor, GitHub Copilot and the Jira duplicate; folded
+  CI/CD into the GitHub Actions chip. Every cluster stays at 14 or fewer.
+
+**Why.** The site described the job and the project list as of August. HireLens
+is now the strongest public project and belongs at the top.
+
+**Open questions.** The BitMap experience bullet still says "see Projects for
+measured results". Those numbers are no longer shown on the page now that the
+3-Factor card is secondary, so the bullet needs a small reword or the card goes
+back to featured. The earlier SearchScribe question is resolved: the live deploy
+runs the current Next.js build.

@@ -24,7 +24,7 @@ export const profile = {
   headlineEmphasis: 'clean, modular, reliable',
 
   subhead:
-    'Currently building Python, AI/LLM and backend systems at Translytics in Pune.',
+    'Currently a software engineer at Translytics in Pune, building AI and backend systems.',
 
   focus: ['Python', 'AI / LLMs', 'Backend', 'Data'],
 
@@ -44,6 +44,6 @@ export const profile = {
 export const seo = {
   title: 'Abhay Yemekar — Software Engineer',
   description:
-    'Software engineer in Pune building Python, AI/LLM and backend systems. Chrome extensions, RAG pipelines, and production APIs.',
+    'Software engineer in Pune building AI agents, RAG pipelines and backend systems. Creator of HireLens, glass-box candidate ranking, and yDirect for Chrome.',
   ogImage: '/og.png',
 } as const

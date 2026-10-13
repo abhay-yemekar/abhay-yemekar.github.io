@@ -25,11 +25,10 @@ export const experience: Experience[] = [
     end: 'Present',
     location: 'Pune City, Maharashtra',
     arrangement: 'On-site',
-    summary:
-      'Python, AI/ML and LLM engineering in a supply-chain-adjacent product context.',
+    summary: 'AI and backend engineering for a supply-chain planning SaaS platform.',
     bullets: [
-      'Building backend services and AI-enabled workflows in Python.',
-      'Working across LLM integration, API design and data-heavy processing.',
+      'Building AI-powered features and backend services in Python for a multi-tenant planning product.',
+      'Working across LLM integration, API design and data-heavy processing, from design through QA and release.',
     ],
   },
   {

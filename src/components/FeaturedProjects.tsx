@@ -6,8 +6,8 @@ import { SectionShell } from './SectionShell'
 export function FeaturedProjects() {
   return (
     <SectionShell section={sections.work}>
-      {/* Asymmetric on purpose: the shipped product and the measured one get full
-          width; the two build-outs pair up. */}
+      {/* Asymmetric on purpose: the two shipped products get full width; the two
+          build-outs pair up. Keep the 'half' cards to an even count. */}
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
         {featuredProjects.map((project, i) => (
           <div

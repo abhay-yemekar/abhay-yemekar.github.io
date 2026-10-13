@@ -65,8 +65,9 @@ in-browser rather than eyeballing it.
 
 The accent (amber) is allowed in a short list of places: section index numerals
 and label rules, link underlines, the project-card top hairline, one serif-italic
-clause in the hero, the active nav indicator, and the metric numerals on the
-3-Factor Login card. No accent fills, no gradients.
+clause in the hero, the active nav indicator, and the metric numerals in a
+project card's stat strip (no featured project carries measured numbers right
+now). No accent fills, no gradients.
 
 ### Theme
 
