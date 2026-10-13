@@ -10,15 +10,17 @@ const EMAIL = 'abhay.s.yemekar@gmail.com'
 export const profile = {
   name: 'Abhay Yemekar',
   shortName: 'Abhay',
-  role: 'Software Engineer',
+  /** How Abhay presents himself; his job title at Translytics stays in the subhead. */
+  role: 'Full-stack AI Engineer',
   company: 'Translytics',
+  city: 'Pune',
   location: 'Pune, Maharashtra, India',
   email: EMAIL,
 
   siteUrl: 'https://abhayemekar.me',
 
   headline:
-    'A software engineer who turns ambiguous, messy problems into clean, modular, reliable systems.',
+    'A full-stack AI engineer who turns ambiguous, messy problems into clean, modular, reliable systems.',
 
   /** Rendered in amber serif italic inside the hero headline. */
   headlineEmphasis: 'clean, modular, reliable',
@@ -42,8 +44,8 @@ export const profile = {
 } as const
 
 export const seo = {
-  title: 'Abhay Yemekar — Software Engineer',
+  title: 'Abhay Yemekar — Full-stack AI Engineer',
   description:
-    'Software engineer in Pune building AI agents, RAG pipelines and backend systems. Creator of HireLens, glass-box candidate ranking, and yDirect for Chrome.',
+    'Full-stack AI engineer in Pune building AI agents, RAG pipelines and backend systems. Creator of HireLens, glass-box candidate ranking, and yDirect.',
   ogImage: '/og.png',
 } as const

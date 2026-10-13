@@ -47,7 +47,7 @@ export function Hero() {
             <span className="mx-2 text-accent" aria-hidden="true">
               /
             </span>
-            {profile.company}
+            {profile.city}
           </p>
         </m.div>
 
