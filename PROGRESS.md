@@ -309,3 +309,86 @@ pattern into the visual language, so the explainer feels native to the site.
 
 **Open questions.** Whether HireLens is solo work. Whether to run the HireLens
 benchmark live against local Ollama for real numbers.
+
+---
+
+## 2026-10-14 — Phase 2: foundation (branch `feat/foundation`)
+
+**What changed.**
+
+- **Every route is prerendered**, and the browser gets no React.
+  - `src/entry-server.tsx` renders `/` and `/work/hirelens/` with
+    `react-dom/static` `prerender()`. `scripts/prerender.mjs` writes them to
+    `dist/`.
+  - The dev server renders through the same function, so dev and prod HTML match.
+  - Client JS is `src/client/main.ts`: the theme toggle and the nav marker,
+    0.84 kB gzip.
+  - `motion` and `@vitejs/plugin-react` are removed. Vite 8 compiles TSX on its
+    own.
+  - This goes one step past the brief's "prerender plus hydrateRoot". Nothing on
+    the site needs client React, so no page hydrates.
+- **Evidence tokens.** Paper/ink/amber in both themes, with amber limited to
+  evidence. There's a type scale with no text under 13px, plus radius and motion
+  tokens. Unused `bg-elev-2` and `border-strong` were removed. The measured table
+  is `docs/CONTRAST.md`.
+- **Fonts.**
+  - Newsreader (wght-only file, 58 KB) and JetBrains Mono. Instrument Serif and
+    Inter Tight are removed.
+  - Metric-matched local fallbacks, measured in Chrome: Newsreader against
+    Georgia at 95.89% (400) and 98.25% (500); JetBrains Mono against Courier New
+    at 99.98%.
+- **TODO mechanism** (`src/lib/todo.ts`). Visible in dev, omitted from
+  production, listed by the prerender.
+- **Case-study template.** `CaseStudyPage`, typed `caseStudies.ts`, and a
+  `Diagram` with one grammar (dashed LLM / solid code / pill data / amber trust
+  path) that falls back to a stacked list below 1280px. HireLens is the first
+  entry; its role is "Solo", confirmed by Abhay.
+- **Home rebuilt in the approved order:** hero (Gate 2 copy plus the proof strip),
+  work, also built, experience, capabilities, about (education plus 2 credentials
+  plus LinkedIn), contact. The section-level copy is still the old copy; Phase 3
+  rewrites it.
+- **Budget gate.** `scripts/check-budgets.mjs` fails the build over: initial JS
+  10 kB, CSS 15 kB, HTML 40 kB per page, fonts 130 KiB.
+- **Audit fix:** the theme is no longer written to storage on first load. CSS
+  follows the OS live until the visitor presses the toggle.
+
+**Measured** (`npm run preview`, lighthouse@12, median of 3):
+
+| | before (Phase 0) | after |
+|---|---|---|
+| `/` mobile | 95 / 100 / 100 / 100 | **100 / 100 / 100 / 100** |
+| `/` LCP · CLS · TBT | 2.42 s · 0.026 · 18 ms | **1.66 s · 0 · 0 ms** |
+| `/work/hirelens/` mobile | — | **100 / 100 / 100 / 100**, LCP 1.66 s |
+| desktop, both pages | 100 | 100, LCP 0.41 s |
+| JS per page (gzip) | 99.0 kB | **0.84 kB** |
+| fonts | 128.4 KiB | **96.2 KiB** |
+| page weight | 240.6 kB | **119.8 kB** |
+| words in raw HTML | 0 | **1,131** (`/`), 643 (`/work/hirelens/`) |
+| `#work` on a 360px phone | 4,744 px (screen 6) | **857 px (screen 2)** |
+
+- **axe-core 4.14:** 0 violations on both pages, both themes, at 360 and 1280px.
+- **Keyboard:** 33 stops on `/` and 17 on the case page, all with a visible focus
+  ring.
+- **Console and layout:** zero console errors, no horizontal overflow at 360, 768,
+  1280 or 1920px. JS-off and reduced-motion captures are in
+  `docs/screenshots/phase-2/`.
+
+**What went wrong first.**
+
+- The case page scored 91 for accessibility. Two causes:
+  - `fg-subtle` on the evidence wash measures 3.54:1 in dark. Highlighted
+    diagram nodes now use `fg-muted`, and the rule is recorded in
+    `globals.css` and `CONTRAST.md`.
+  - The stacked sidenote links were 19.5px tall. They're now ≥ 24px.
+- `@font-face` descriptors can't take CSS variables, so the fallback metrics are
+  literal values.
+- The dev plugin needed Node types. Rather than add `@types/node` without asking,
+  it reads the template through Vite's `?raw` import and types the request
+  locally.
+
+**Next.** Phase 3: copy rewrite, the other three case studies, the HireLens
+benchmark against local Ollama. Then Gate 3.
+
+**Open questions.** `npm audit` reports 2 high-severity advisories in build-time
+dev dependencies (`sharp`, `source-map-js`). Neither ships to visitors; they're
+handled in Phase 6.
