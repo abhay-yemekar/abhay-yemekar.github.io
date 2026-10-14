@@ -1,103 +1,41 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Abhay Yemekar — Full-stack AI Engineer</title>
-    <meta
-      name="description"
-      content="Full-stack AI engineer in Pune building AI agents, RAG pipelines and backend systems. Creator of HireLens, glass-box candidate ranking, and yDirect."
-    />
+    <!-- Per-page tags (title, canonical, Open Graph, JSON-LD) come from src/entry-server.tsx. -->
+    <!--app-head-->
     <meta name="author" content="Abhay Yemekar" />
-    <link rel="canonical" href="https://abhayemekar.me/" />
-    <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f7f5f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Abhay Yemekar" />
-    <meta property="og:title" content="Abhay Yemekar — Full-stack AI Engineer" />
-    <meta
-      property="og:description"
-      content="Full-stack AI engineer in Pune building AI agents, RAG pipelines and backend systems. Creator of HireLens, glass-box candidate ranking, and yDirect."
-    />
-    <meta property="og:url" content="https://abhayemekar.me/" />
-    <meta property="og:image" content="https://abhayemekar.me/og.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Abhay Yemekar — Full-stack AI Engineer" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Abhay Yemekar — Full-stack AI Engineer" />
-    <meta
-      name="twitter:description"
-      content="Full-stack AI engineer in Pune building AI agents, RAG pipelines and backend systems."
-    />
-    <meta name="twitter:image" content="https://abhayemekar.me/og.png" />
-
     <!--
-      Applies the stored theme before first paint so there is no flash of the
-      wrong background. Kept inline and dependency-free on purpose.
+      Runs before first paint. With no stored choice it does nothing about the
+      theme: CSS follows prefers-color-scheme, live. It only applies a theme
+      the visitor picked with the toggle, and marks the page as JS-capable so
+      the toggle becomes visible. Kept inline and dependency-free on purpose.
     -->
     <script>
       ;(function () {
+        var root = document.documentElement
+        root.classList.add('js')
         try {
           var stored = localStorage.getItem('theme')
-          var theme =
-            stored === 'light' || stored === 'dark'
-              ? stored
-              : window.matchMedia('(prefers-color-scheme: light)').matches
-                ? 'light'
-                : 'dark'
-          document.documentElement.dataset.theme = theme
+          if (stored === 'light' || stored === 'dark') root.dataset.theme = stored
         } catch (e) {
-          /* Private mode or blocked storage: the dark default in the markup stands. */
+          /* Private mode or blocked storage: the OS preference stands. */
         }
       })()
     </script>
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Abhay Yemekar",
-        "url": "https://abhayemekar.me/",
-        "image": "https://abhayemekar.me/og.png",
-        "jobTitle": "Software Engineer",
-        "email": "mailto:abhay.s.yemekar@gmail.com",
-        "worksFor": { "@type": "Organization", "name": "Translytics" },
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Pune",
-          "addressRegion": "Maharashtra",
-          "addressCountry": "IN"
-        },
-        "alumniOf": {
-          "@type": "CollegeOrUniversity",
-          "name": "Shri Guru Gobind Singhji Institute of Engineering & Technology"
-        },
-        "knowsAbout": [
-          "Python",
-          "Backend engineering",
-          "Large language models",
-          "Retrieval-augmented generation",
-          "FastAPI",
-          "Chrome extensions"
-        ],
-        "sameAs": [
-          "https://github.com/abhay-yemekar",
-          "https://www.linkedin.com/in/abhayyemekar/"
-        ]
-      }
-    </script>
+    <script type="module" src="/src/client/main.ts"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!--app-html-->
   </body>
 </html>
