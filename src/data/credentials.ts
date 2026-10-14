@@ -57,3 +57,13 @@ export const education = {
   leadershipLine:
     'Student Coordinator for Team Pragyaa, one of the institute’s largest national socio-technical fests; Class Representative 2021–22; volunteer at Smart India Hackathon 2020.',
 } as const
+
+/**
+ * The home page shows education plus these two (Gate 1: three entries and a
+ * LinkedIn link). They're the two with the most signal for AI engineering roles.
+ */
+export const featuredCertifications = certifications.filter((c) =>
+  ['OCI 2025 Certified AI Foundations Associate', 'AI Fluency: Framework & Foundations'].includes(
+    c.name,
+  ),
+)

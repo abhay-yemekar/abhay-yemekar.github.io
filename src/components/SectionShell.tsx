@@ -1,47 +1,34 @@
 import type { ReactNode } from 'react'
 import type { Section } from '../data/sections'
-import { Reveal } from './Reveal'
 
 type SectionShellProps = {
   section: Section
   children: ReactNode
-  /** Optional intro line rendered directly under the rail heading on mobile. */
-  className?: string
+  /** Optional line under the heading, e.g. a count or a link. */
+  aside?: ReactNode
 }
 
 /**
- * The repeating layout motif: a 160px left rail carrying the mono index and
- * label, with content in the right column. Below lg the rail collapses to an
- * inline row above the content.
+ * A section with a real heading: an amber mono numeral and a serif h2 at full
+ * size. This replaces the 160px left rail, which cost width and shrank every
+ * section heading to a 12px label.
  */
-export function SectionShell({ section, children, className }: SectionShellProps) {
+export function SectionShell({ section, children, aside }: SectionShellProps) {
   const headingId = `${section.id}-heading`
 
   return (
-    <section
-      id={section.id}
-      aria-labelledby={headingId}
-      className={`border-t border-border py-20 lg:py-32 ${className ?? ''}`}
-    >
+    <section id={section.id} aria-labelledby={headingId} className="border-t border-border py-16 lg:py-24">
       <div className="u-container">
-        <div className="lg:grid lg:grid-cols-[10rem_1fr] lg:gap-16">
-          <Reveal className="mb-10 lg:mb-0">
-            <div className="flex items-baseline gap-3 lg:sticky lg:top-28 lg:flex-col lg:items-start lg:gap-2">
-              <span className="u-label text-accent" aria-hidden="true">
-                {section.index}
-              </span>
-              <h2 id={headingId} className="u-label text-fg-subtle">
-                {section.label}
-              </h2>
-              <span
-                className="hidden h-px w-10 bg-accent lg:mt-2 lg:block"
-                aria-hidden="true"
-              />
-            </div>
-          </Reveal>
-
-          <div className="min-w-0">{children}</div>
+        <div className="mb-10 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 lg:mb-14">
+          <h2 id={headingId} className="flex items-baseline gap-3.5 text-h2">
+            <span className="u-meta text-accent" aria-hidden="true">
+              {section.index}
+            </span>
+            {section.label}
+          </h2>
+          {aside && <div className="u-meta text-fg-subtle">{aside}</div>}
         </div>
+        {children}
       </div>
     </section>
   )

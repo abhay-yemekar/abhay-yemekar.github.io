@@ -61,42 +61,6 @@ export const featuredProjects: Project[] = [
     span: 'wide',
   },
   {
-    slug: 'ydirect',
-    name: 'yDirect',
-    tagline: 'Save once, reuse in seconds — a snippet manager living in Chrome’s side panel.',
-    period: 'Shipped · v1.3.3',
-    problem:
-      'The same replies, prompts and templates get retyped every day. Kept in scattered notes they are slow to find and easy to lose.',
-    built:
-      'A published Manifest V3 extension with no framework and no build step — plain ES modules, a service worker, and an offscreen document to run the Google auth flow that a service worker cannot. Firebase Functions on Node 22 back it, with Firestore rules enforcing authorisation server-side, and a strict per-page CSP with an explicit connect-src allowlist. 16 Node test suites plus a syntax gate over every entrypoint.',
-    learned:
-      'MV3’s lifecycle punishes assumptions about persistence. Designing for a service worker that dies at any moment, and pushing authorisation into Firestore rules rather than client code, is what made it trustworthy enough to publish.',
-    stack: [
-      'Chrome MV3',
-      'JavaScript',
-      'Firebase Auth',
-      'Firestore',
-      'Cloud Functions',
-      'Node 22',
-    ],
-    links: [
-      {
-        label: 'Chrome Web Store',
-        href: 'https://chromewebstore.google.com/detail/ehkahipeoahnbfbahlkedgdcjefejihg',
-      },
-      {
-        label: 'Product & docs',
-        href: 'https://github.com/abhay-yemekar/ydirect',
-        note: 'source private',
-      },
-      {
-        label: 'LinkedIn page',
-        href: 'https://www.linkedin.com/company/ydirect/',
-      },
-    ],
-    span: 'wide',
-  },
-  {
     slug: 'searchscribe',
     name: 'SearchScribe AI Studio',
     tagline:
@@ -161,6 +125,42 @@ export const featuredProjects: Project[] = [
       },
     ],
     span: 'half',
+  },
+  {
+    slug: 'ydirect',
+    name: 'yDirect',
+    tagline: 'Save once, reuse in seconds — a snippet manager living in Chrome’s side panel.',
+    period: 'Shipped · v1.3.3',
+    problem:
+      'The same replies, prompts and templates get retyped every day. Kept in scattered notes they are slow to find and easy to lose.',
+    built:
+      'A published Manifest V3 extension with no framework and no build step — plain ES modules, a service worker, and an offscreen document to run the Google auth flow that a service worker cannot. Firebase Functions on Node 22 back it, with Firestore rules enforcing authorisation server-side, and a strict per-page CSP with an explicit connect-src allowlist. 16 Node test suites plus a syntax gate over every entrypoint.',
+    learned:
+      'MV3’s lifecycle punishes assumptions about persistence. Designing for a service worker that dies at any moment, and pushing authorisation into Firestore rules rather than client code, is what made it trustworthy enough to publish.',
+    stack: [
+      'Chrome MV3',
+      'JavaScript',
+      'Firebase Auth',
+      'Firestore',
+      'Cloud Functions',
+      'Node 22',
+    ],
+    links: [
+      {
+        label: 'Chrome Web Store',
+        href: 'https://chromewebstore.google.com/detail/ehkahipeoahnbfbahlkedgdcjefejihg',
+      },
+      {
+        label: 'Product & docs',
+        href: 'https://github.com/abhay-yemekar/ydirect',
+        note: 'source private',
+      },
+      {
+        label: 'LinkedIn page',
+        href: 'https://www.linkedin.com/company/ydirect/',
+      },
+    ],
+    span: 'wide',
   },
 ]
 

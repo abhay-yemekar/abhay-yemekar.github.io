@@ -1,52 +1,43 @@
 import { navItems } from '../data/sections'
 import { profile } from '../data/profile'
-import { useActiveSection } from '../hooks/useActiveSection'
 import { ThemeToggle } from './ThemeToggle'
 
-const NAV_IDS = navItems.map((item) => item.id)
+type NavProps = {
+  /** Home links scroll within the page and track the section in view. */
+  page: 'home' | 'case'
+}
 
-export function Nav() {
-  const active = useActiveSection(NAV_IDS)
+export function Nav({ page }: NavProps) {
+  const onHome = page === 'home'
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-sm">
       <nav aria-label="Primary" className="u-container">
         <div className="flex h-16 items-center justify-between gap-4">
           <a
-            href="#top"
-            className="u-label text-fg transition-colors duration-200 hover:text-accent"
+            href={onHome ? '#top' : '/'}
+            className="whitespace-nowrap text-[1.0625rem] font-semibold text-fg no-underline"
           >
             {profile.name}
           </a>
 
-          <div className="flex items-center gap-1 sm:gap-2">
-            <ul className="hidden items-center gap-1 sm:flex">
-              {navItems.map((item) => {
-                const isActive = active === item.id
-                return (
-                  <li key={item.id}>
-                    <a
-                      href={`#${item.id}`}
-                      aria-current={isActive ? 'true' : undefined}
-                      className={`u-label rounded px-3 py-2 transition-colors duration-200 hover:text-fg ${
-                        isActive ? 'text-accent' : 'text-fg-subtle'
-                      }`}
-                    >
-                      {item.nav}
-                    </a>
-                  </li>
-                )
-              })}
+          <div className="flex items-center gap-1">
+            <ul className="u-meta flex items-center">
+              {navItems.map((item) => (
+                // Below 640px only Work and Contact fit beside the name and the
+                // 44px theme toggle; About is one scroll away.
+                <li key={item.id} className={item.id === 'about' ? 'hidden sm:block' : undefined}>
+                  <a
+                    href={onHome ? `#${item.id}` : `/#${item.id}`}
+                    {...(onHome ? { 'data-spy': '' } : {})}
+                    {...(!onHome && item.id === 'work' ? { 'aria-current': 'true' as const } : {})}
+                    className="u-tap px-2 text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg sm:px-3 [&[aria-current]]:text-fg [&[aria-current]]:shadow-[inset_0_-2px_0_var(--color-mark)]"
+                  >
+                    {item.nav}
+                  </a>
+                </li>
+              ))}
             </ul>
-
-            {/* Mobile keeps a single anchor rather than a hamburger. */}
-            <a
-              href="#work"
-              className="u-label rounded px-3 py-2 text-fg-subtle transition-colors duration-200 hover:text-fg sm:hidden"
-            >
-              Work
-            </a>
-
             <ThemeToggle />
           </div>
         </div>
