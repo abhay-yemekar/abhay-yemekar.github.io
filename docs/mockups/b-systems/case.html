@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mockup B · Systems · HireLens case study</title>
+<!-- Mockup only: production self-hosts these faces (latin subset) per CLAUDE.md. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4f5f3; --bg-elev: #ffffff; --fg: #0e1012; --fg-muted: #474d52; --fg-subtle: #5c6267;
+    --grid: #e4e7e4; --rule: #cfd4d1; --signal: #b8390b;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1011; --bg-elev: #16191b; --fg: #e8ebe9; --fg-muted: #a6ada9; --fg-subtle: #8a918d;
+      --grid: #1a1e20; --rule: #2b3033; --signal: #ff7d47;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.6 'Schibsted Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.8125rem; letter-spacing: 0.01em; line-height: 1.5; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+  @media (min-width: 1024px) { .wrap { padding: 0 40px; } }
+  nav { border-bottom: 1px solid var(--rule); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  nav ul { display: flex; list-style: none; margin: 0; padding: 0; }
+  nav a { text-decoration: none; padding: 12px 14px; display: inline-block; color: var(--fg-muted); text-transform: uppercase; }
+  .brand { color: var(--fg) !important; padding-left: 0 !important; font-weight: 600; white-space: nowrap; }
+  nav li a { padding: 12px 8px; }
+  @media (min-width: 640px) { nav li a { padding: 12px 14px; } }
+  .todo { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border: 1px dashed var(--signal); padding: 2px 7px; }
+
+  header.case { padding: 40px 0 0; }
+  .crumb { color: var(--fg-subtle); margin: 0 0 24px; text-transform: uppercase; }
+  .crumb a { text-decoration: none; }
+  .title { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; border-bottom: 1px solid var(--fg); padding-bottom: 16px; }
+  h1 { font-weight: 800; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.9; letter-spacing: -0.05em; margin: 0; }
+  .tagline { font-size: clamp(1.125rem, 1.6vw, 1.375rem); max-width: 34ch; margin: 0; color: var(--fg-muted); }
+
+  .layout { display: grid; gap: 32px; padding: 32px 0 96px; }
+  @media (min-width: 1024px) { .layout { grid-template-columns: 3fr 9fr; gap: 24px; } }
+  aside.spec { align-self: start; }
+  @media (min-width: 1024px) { aside.spec { position: sticky; top: 24px; } }
+  aside dl { margin: 0; }
+  aside dt { color: var(--fg-subtle); text-transform: uppercase; padding-top: 12px; border-top: 1px solid var(--rule); }
+  aside dd { margin: 4px 0 14px; }
+  aside a { min-height: 32px; display: inline-flex; align-items: center; }
+
+  figure.diagram { margin: 0 0 8px; background: var(--bg-elev); border: 1px solid var(--rule); position: relative; }
+  figure.diagram header { display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--fg-subtle); text-transform: uppercase; }
+  figure.diagram svg { display: block; width: 100%; height: auto; padding: 20px; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; }
+  figcaption { padding: 10px 14px; border-top: 1px solid var(--rule); color: var(--fg-subtle); }
+  .box rect { fill: var(--bg-elev); stroke: var(--fg-muted); stroke-width: 1.25; }
+  .box.llm rect { stroke-dasharray: 5 4; }
+  .box.data rect { fill: var(--bg); }
+  .box.hot rect { stroke: var(--signal); stroke-width: 2.25; }
+  .box.warn rect { stroke-dasharray: 2 3; }
+  .box .t { font: 600 15px 'Schibsted Grotesk', sans-serif; fill: var(--fg); }
+  .box .s { font: 400 11px 'JetBrains Mono', monospace; fill: var(--fg-subtle); }
+  .edge { fill: none; stroke: var(--fg-subtle); stroke-width: 1.25; }
+  .edge.hot { stroke: var(--signal); stroke-width: 2.25; }
+  .lbl { font: 400 11px 'JetBrains Mono', monospace; fill: var(--fg-subtle); }
+  .arrow { fill: var(--fg-subtle); } .arrow.hot { fill: var(--signal); }
+  .packet { fill: var(--signal); }
+  @media (prefers-reduced-motion: no-preference) {
+    .packet { offset-path: path('M875 133 V269 H238'); animation: travel 3.6s cubic-bezier(0.65, 0, 0.35, 1) 0.5s infinite; }
+    @keyframes travel { 0% { offset-distance: 0%; opacity: 0; } 6% { opacity: 1; } 90% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+  }
+  @media (prefers-reduced-motion: reduce) { .packet { display: none; } }
+
+  section.sec { display: grid; gap: 8px 24px; padding: 28px 0; border-top: 1px solid var(--rule); }
+  @media (min-width: 768px) { section.sec { grid-template-columns: 2fr 7fr; } }
+  section.sec > .h { color: var(--signal); text-transform: uppercase; }
+  h2 { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.02em; margin: 0 0 10px; }
+  section.sec p { margin: 0 0 12px; color: var(--fg-muted); max-width: 64ch; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 500; color: var(--fg-subtle); text-transform: uppercase; border-bottom-color: var(--fg); }
+  td b { font-weight: 600; }
+  td.m { color: var(--fg-muted); }
+  .draft { color: var(--fg-subtle); }
+</style>
+</head>
+<body>
+<nav aria-label="Primary"><div class="wrap">
+  <a class="brand mono" href="home.html">ABHAY YEMEKAR</a>
+  <ul class="mono"><li><a href="home.html#work">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul>
+</div></nav>
+
+<main class="wrap">
+  <header class="case">
+    <p class="crumb mono"><a href="home.html#work">Systems</a> / 01</p>
+    <div class="title"><h1>HireLens</h1><p class="tagline">Glass-box candidate ranking. Every score cites the exact evidence it came from.</p></div>
+  </header>
+
+  <div class="layout">
+    <aside class="spec mono" aria-label="Project facts">
+      <dl>
+        <dt>Status</dt><dd>v1.4.0 · 6 Oct 2026</dd>
+        <dt>Role</dt><dd><span class="todo">TODO: confirm solo</span></dd>
+        <dt>License</dt><dd>MIT</dd>
+        <dt>Stack</dt><dd>TypeScript, Next.js 16, Hono, Postgres + pgvector, Drizzle, Turborepo</dd>
+        <dt>Models</dt><dd>Google, Anthropic, Groq, OpenRouter, Mistral, Cerebras, Ollama</dd>
+        <dt>Links</dt><dd><a href="#">Live demo ↗</a><br /><a href="#">Repository ↗</a><br /><a href="#">npm ↗</a></dd>
+      </dl>
+    </aside>
+
+    <div>
+      <figure class="diagram">
+        <header class="mono"><span>Fig. 1 / Scoring path</span><span>dashed = LLM · solid = code</span></header>
+        <svg viewBox="0 0 1000 420" role="img" aria-labelledby="dg-t dg-d">
+          <title id="dg-t">HireLens scoring pipeline</title>
+          <desc id="dg-d">A job description becomes a rubric through an LLM step. A resume is extracted, parsed and optionally masked by deterministic code. An LLM scores each criterion and returns a quote. Deterministic code then locates that quote in the resume. If found, it becomes an evidence span with character offsets that feeds a weighted overall score and a hash-chained audit log. If not found, the score is set to zero and flagged for review.</desc>
+          <defs>
+            <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow" d="M0 0 8 4 0 8z" /></marker>
+            <marker id="arh" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow hot" d="M0 0 8 4 0 8z" /></marker>
+          </defs>
+          <path class="edge" d="M230 53 H262" marker-end="url(#ar)" />
+          <path class="edge" d="M480 53 H512" marker-end="url(#ar)" />
+          <path class="edge" d="M230 153 H262" marker-end="url(#ar)" />
+          <path class="edge" d="M480 153 H512" marker-end="url(#ar)" />
+          <path class="edge" d="M730 53 H748 V92 H762" marker-end="url(#ar)" />
+          <path class="edge" d="M730 153 H748 V116 H762" marker-end="url(#ar)" />
+          <path class="edge hot" d="M875 133 V232" marker-end="url(#arh)" />
+          <text class="lbl" x="885" y="186">quote</text>
+          <path class="edge hot" d="M770 269 H738" marker-end="url(#arh)" />
+          <text class="lbl" x="732" y="258">found</text>
+          <path class="edge" d="M875 298 V342" marker-end="url(#ar)" />
+          <text class="lbl" x="885" y="324">not found</text>
+          <path class="edge hot" d="M520 269 H488" marker-end="url(#arh)" />
+          <path class="edge hot" d="M270 269 H238" marker-end="url(#arh)" />
+          <g class="box data"><rect x="20" y="24" width="210" height="58" /><text class="t" x="125" y="50" text-anchor="middle">Job description</text><text class="s" x="125" y="68" text-anchor="middle">pasted text</text></g>
+          <g class="box llm"><rect x="270" y="24" width="210" height="58" /><text class="t" x="375" y="50" text-anchor="middle">Derive rubric</text><text class="s" x="375" y="68" text-anchor="middle">LLM · Zod-validated</text></g>
+          <g class="box data"><rect x="520" y="24" width="210" height="58" /><text class="t" x="625" y="50" text-anchor="middle">Rubric</text><text class="s" x="625" y="68" text-anchor="middle">5–8 criteria · anchored 0–5</text></g>
+          <g class="box data"><rect x="20" y="124" width="210" height="58" /><text class="t" x="125" y="150" text-anchor="middle">Resume</text><text class="s" x="125" y="168" text-anchor="middle">PDF · DOCX · TXT</text></g>
+          <g class="box"><rect x="270" y="124" width="210" height="58" /><text class="t" x="375" y="150" text-anchor="middle">Extract + parse</text><text class="s" x="375" y="168" text-anchor="middle">deterministic</text></g>
+          <g class="box"><rect x="520" y="124" width="210" height="58" /><text class="t" x="625" y="150" text-anchor="middle">Blind mask</text><text class="s" x="625" y="168" text-anchor="middle">optional · offsets kept</text></g>
+          <g class="box llm"><rect x="770" y="74" width="210" height="58" /><text class="t" x="875" y="100" text-anchor="middle">Score each criterion</text><text class="s" x="875" y="118" text-anchor="middle">LLM · temperature 0</text></g>
+          <g class="box hot"><rect x="770" y="240" width="210" height="58" /><text class="t" x="875" y="266" text-anchor="middle">Locate the quote</text><text class="s" x="875" y="284" text-anchor="middle">exact match → offsets</text></g>
+          <g class="box warn"><rect x="770" y="350" width="210" height="58" /><text class="t" x="875" y="376" text-anchor="middle">Score set to 0</text><text class="s" x="875" y="394" text-anchor="middle">flagged for review</text></g>
+          <g class="box data hot"><rect x="520" y="240" width="210" height="58" /><text class="t" x="625" y="266" text-anchor="middle">Evidence span</text><text class="s" x="625" y="284" text-anchor="middle">chars [start, end)</text></g>
+          <g class="box"><rect x="270" y="240" width="210" height="58" /><text class="t" x="375" y="266" text-anchor="middle">Weighted overall</text><text class="s" x="375" y="284" text-anchor="middle">0–100</text></g>
+          <g class="box"><rect x="20" y="240" width="210" height="58" /><text class="t" x="125" y="266" text-anchor="middle">Audit log</text><text class="s" x="125" y="284" text-anchor="middle">hash-chained</text></g>
+          <circle class="packet" r="5" cx="0" cy="0" />
+        </svg>
+        <figcaption class="mono">Embeddings (pgvector) power search and Ask, never scoring.</figcaption>
+      </figure>
+
+      <section class="sec">
+        <span class="h mono">01 / Problem</span>
+        <div><h2>A bare number nobody can check.</h2><p>Most AI screening tools return a score. Recruiters can't check it, candidates can't question it, and nobody can tell whether it treats groups of people differently.</p></div>
+      </section>
+
+      <section class="sec">
+        <span class="h mono">02 / Decisions</span>
+        <div>
+          <p class="draft mono">Draft wording. The reasoning gets confirmed with Abhay at Gate 3.</p>
+          <table>
+            <thead><tr><th>Decision</th><th>Over</th><th>Trade-off</th></tr></thead>
+            <tbody>
+              <tr><td><b>The model quotes; code locates the quote</b></td><td class="m">Trusting offsets the model reports</td><td class="m">A paraphrased quote zeroes the score and goes to a human</td></tr>
+              <tr><td><b>Framework-free core package</b></td><td class="m">Engine code inside the web app</td><td class="m">One more package boundary to maintain</td></tr>
+              <tr><td><b>Hono embedded same-origin in Vercel</b></td><td class="m">A separate API service</td><td class="m">API and web deploy together</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec">
+        <span class="h mono">03 / Evaluation</span>
+        <div>
+          <h2>Four metrics, same engine.</h2>
+          <table>
+            <thead><tr><th>Metric</th><th>Measures</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td><b>Direction accuracy</b></td><td class="m">Agreement with expected strong/weak</td><td><span class="todo">TODO: real-model run</span></td></tr>
+              <tr><td><b>Self-consistency</b></td><td class="m">Score spread across repeat runs</td><td><span class="todo">TODO</span></td></tr>
+              <tr><td><b>Position bias</b></td><td class="m">Kendall τ under shuffled order</td><td><span class="todo">TODO</span></td></tr>
+              <tr><td><b>Name-swap bias</b></td><td class="m">Score movement when only the name changes</td><td><span class="todo">TODO</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+</body>
+</html>

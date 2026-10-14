@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mockup B · Systems · Home</title>
+<!-- Mockup only: production self-hosts these faces (latin subset) per CLAUDE.md. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4f5f3; --bg-elev: #ffffff; --fg: #0e1012; --fg-muted: #474d52; --fg-subtle: #5c6267;
+    --grid: #e4e7e4; --rule: #cfd4d1; --signal: #b8390b;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1011; --bg-elev: #16191b; --fg: #e8ebe9; --fg-muted: #a6ada9; --fg-subtle: #8a918d;
+      --grid: #1a1e20; --rule: #2b3033; --signal: #ff7d47;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.6 'Schibsted Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.8125rem; letter-spacing: 0.01em; line-height: 1.5; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px; position: relative; }
+  @media (min-width: 1024px) { .wrap { padding: 0 40px; } }
+  /* Visible 12-column grid, drawn as hairlines behind the content. */
+  .grid-bg { position: absolute; inset: 0 40px; pointer-events: none; display: none; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+  .grid-bg span { border-left: 1px solid var(--grid); border-right: 1px solid var(--grid); }
+  @media (min-width: 1024px) { .grid-bg { display: grid; } }
+
+  nav { border-bottom: 1px solid var(--rule); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  nav ul { display: flex; list-style: none; margin: 0; padding: 0; }
+  nav a { text-decoration: none; padding: 12px 14px; display: inline-block; color: var(--fg-muted); text-transform: uppercase; }
+  nav a[aria-current] { color: var(--fg); }
+  nav a[aria-current]::before { content: '■ '; color: var(--signal); font-size: 0.6em; vertical-align: 2px; }
+  .brand { color: var(--fg) !important; padding-left: 0 !important; font-weight: 600; }
+
+  .hero { display: grid; gap: 40px; padding: 64px 0 48px; position: relative; }
+  @media (min-width: 1024px) { .hero { grid-template-columns: repeat(12, 1fr); gap: 24px; padding: 96px 0 56px; } }
+  @media (min-width: 1024px) { .hero .copy { grid-column: 1 / span 7; } .hero .sys { grid-column: 8 / span 5; } }
+  nav li a { padding: 12px 8px; }
+  @media (min-width: 640px) { nav li a { padding: 12px 14px; } }
+  .brand { white-space: nowrap; }
+  .eyebrow { color: var(--fg-subtle); margin: 0 0 20px; text-transform: uppercase; }
+  h1 { font-weight: 700; font-size: clamp(2.5rem, 5.6vw, 4.75rem); line-height: 0.98; letter-spacing: -0.035em; margin: 0; max-width: 13ch; }
+  .lede { color: var(--fg-muted); font-size: clamp(1.125rem, 1.5vw, 1.3125rem); max-width: 40ch; margin: 24px 0 0; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; background: var(--fg); color: var(--bg); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--rule); }
+
+  .sys { background: var(--bg-elev); border: 1px solid var(--rule); align-self: start; }
+  .sys header { display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--fg-subtle); text-transform: uppercase; }
+  .sys header .live::before { content: '● '; color: var(--signal); }
+  .sys svg { display: block; width: 100%; height: auto; padding: 16px 12px; }
+  .n rect { fill: var(--bg); stroke: var(--fg-muted); stroke-width: 1; }
+  .n.llm rect { stroke-dasharray: 4 3; }
+  .n.hot rect { stroke: var(--signal); stroke-width: 1.75; }
+  .n text { font: 500 12.5px 'Schibsted Grotesk', sans-serif; fill: var(--fg); }
+  .n text.s { font: 400 9.5px 'JetBrains Mono', monospace; fill: var(--fg-subtle); }
+  .e { fill: none; stroke: var(--rule); stroke-width: 1.25; }
+  .e.hot { stroke: var(--signal); stroke-width: 1.75; }
+  .packet { fill: var(--signal); }
+  @media (prefers-reduced-motion: no-preference) {
+    .packet { offset-path: path('M60 30 V82 H170 V134 H280 V186'); animation: travel 3.2s cubic-bezier(0.65, 0, 0.35, 1) 0.6s infinite; }
+    @keyframes travel { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 85% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+  }
+  @media (prefers-reduced-motion: reduce) { .packet { display: none; } }
+  .sys footer { padding: 10px 14px; border-top: 1px solid var(--rule); color: var(--fg-subtle); }
+
+  .spec { display: grid; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--rule); position: relative; background: var(--bg); }
+  @media (min-width: 768px) { .spec { grid-template-columns: repeat(4, 1fr); } }
+  .spec div { padding: 14px 16px 16px 0; border-bottom: 1px solid var(--rule); }
+  @media (min-width: 768px) { .spec div { border-bottom: 0; border-right: 1px solid var(--rule); padding-left: 16px; } .spec div:first-child { padding-left: 0; } .spec div:last-child { border-right: 0; } }
+  .spec .k { color: var(--fg-subtle); text-transform: uppercase; display: block; }
+  .spec b { display: block; font-weight: 600; font-size: 1.0625rem; margin-top: 6px; }
+  .spec .v { color: var(--fg-muted); }
+
+  section.work { padding: 72px 0 96px; position: relative; }
+  .sechead { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--fg); padding-bottom: 12px; margin-bottom: 0; }
+  h2 { font-weight: 700; font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -0.03em; margin: 0; }
+  .row { display: grid; gap: 16px; padding: 28px 0; border-bottom: 1px solid var(--rule); }
+  @media (min-width: 1024px) { .row { grid-template-columns: 1fr 5fr 6fr; gap: 24px; } }
+  .row .idx { color: var(--signal); }
+  h3 { font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; margin: 0; }
+  .row p { margin: 6px 0 0; color: var(--fg-muted); }
+  .kv { display: grid; grid-template-columns: 130px 1fr; gap: 6px 16px; margin: 0; }
+  .kv dt { color: var(--fg-subtle); text-transform: uppercase; }
+  .kv dd { margin: 0; }
+  .todo { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border: 1px dashed var(--signal); color: var(--fg); padding: 2px 7px; }
+</style>
+</head>
+<body>
+<nav aria-label="Primary"><div class="wrap">
+  <a class="brand mono" href="#">ABHAY YEMEKAR</a>
+  <ul class="mono"><li><a href="#work" aria-current="true">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul>
+</div></nav>
+
+<main>
+  <div class="wrap">
+    <div class="grid-bg" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <section class="hero">
+      <div class="copy">
+        <p class="eyebrow mono">Full-stack AI engineer / Pune, IN</p>
+        <h1>AI engineer building agents, RAG and the backends behind them.</h1>
+        <p class="lede">Software engineer at Translytics. I built HireLens, open-source candidate ranking where every score cites the resume text behind it.</p>
+        <div class="ctas"><a class="btn" href="#work">See the systems →</a><a class="btn ghost" href="#">Email</a></div>
+      </div>
+
+      <figure class="sys" style="margin:0">
+        <header class="mono"><span>HireLens / scoring path</span><span class="live">v1.4.0</span></header>
+        <svg viewBox="0 0 400 230" role="img" aria-label="HireLens scoring path: resume and rubric, then LLM score, then code verifies the quote, then evidence span.">
+          <path class="e" d="M60 30 V82 H170" />
+          <path class="e hot" d="M60 30 V82 H170 V134 H280 V186" />
+          <g class="n"><rect x="10" y="10" width="100" height="40" /><text x="60" y="29" text-anchor="middle">Resume</text><text class="s" x="60" y="42" text-anchor="middle">+ rubric</text></g>
+          <g class="n llm"><rect x="120" y="62" width="100" height="40" /><text x="170" y="81" text-anchor="middle">Score</text><text class="s" x="170" y="94" text-anchor="middle">LLM · quote</text></g>
+          <g class="n"><rect x="230" y="114" width="100" height="40" /><text x="280" y="133" text-anchor="middle">Verify</text><text class="s" x="280" y="146" text-anchor="middle">code · offsets</text></g>
+          <g class="n hot"><rect x="230" y="176" width="160" height="40" /><text x="310" y="195" text-anchor="middle">Evidence span</text><text class="s" x="310" y="208" text-anchor="middle">chars [start, end)</text></g>
+          <circle class="packet" r="4" cx="0" cy="0" />
+        </svg>
+        <footer class="mono">Dashed = model. Solid = code. The model proposes; code verifies.</footer>
+      </figure>
+    </section>
+
+    <div class="spec mono">
+      <div><span class="k">01 / Open source</span><b>HireLens</b><span class="v">MIT · npm v1.4.0</span></div>
+      <div><span class="k">02 / Published</span><b>yDirect</b><span class="v">Chrome Web Store</span></div>
+      <div><span class="k">03 / Now</span><b>Translytics</b><span class="v">Software engineer · 2026–</span></div>
+      <div><span class="k">04 / Before</span><b>Tata Elxsi</b><span class="v">Software engineer · 2023–26</span></div>
+    </div>
+
+    <section class="work" id="work" aria-labelledby="work-h">
+      <div class="sechead"><h2 id="work-h">Systems</h2><span class="mono">4 featured · 5 more</span></div>
+      <article class="row">
+        <span class="idx mono">01</span>
+        <div><h3>HireLens</h3><p>Glass-box candidate ranking. Every score cites the exact evidence it came from.</p></div>
+        <dl class="kv mono">
+          <dt>Pattern</dt><dd>LLM proposes, code verifies</dd>
+          <dt>Stack</dt><dd>TypeScript · Hono · Postgres + pgvector</dd>
+          <dt>Proof</dt><dd><span class="todo">TODO: real eval numbers</span></dd>
+          <dt>Links</dt><dd>Case study → · Demo ↗ · Repo ↗</dd>
+        </dl>
+      </article>
+      <article class="row">
+        <span class="idx mono">02</span>
+        <div><h3>SearchScribe AI Studio</h3><p>A topic in, a researched and sanitised draft out. The LLM never writes HTML.</p></div>
+        <dl class="kv mono">
+          <dt>Pattern</dt><dd>Model output as untrusted input</dd>
+          <dt>Stack</dt><dd>FastAPI · Next.js 16 · Postgres · Gemini</dd>
+          <dt>Links</dt><dd>Case study → · Live ↗ · Repo ↗</dd>
+        </dl>
+      </article>
+    </section>
+  </div>
+</main>
+</body>
+</html>

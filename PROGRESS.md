@@ -258,3 +258,54 @@ numbers get compared against this one.
 
 **Open questions.** Whether to give case studies their own URLs (recommended). The
 `www.` certificate needs Abhay in the GitHub Pages settings.
+
+---
+
+## 2026-10-14 — Phase 1: strategy and design direction (branch `docs/strategy`)
+
+**What changed.** Docs only:
+
+- `docs/STRATEGY.md`: positioning, three hero options, information architecture, a
+  case-study template with its data shape, and two visual directions with a
+  recommendation.
+- Four static mockups under `docs/mockups/` (each direction's home and its HireLens
+  case study).
+- Sixteen screenshots under `docs/screenshots/phase-1/`.
+
+Gate 1 decisions applied: work moves above About and Experience; Credentials are cut
+to 3 entries plus LinkedIn; the benchmarks are eugeneyan.com, hamel.dev and jxnl.co.
+
+Measured for the proposal:
+
+- **Latin woff2 weights** (Google Fonts CSS API, HEAD requests):
+  - Newsreader roman 56.7 KiB
+  - Schibsted Grotesk 45.7 KiB
+  - JetBrains Mono 39.5 KiB
+  - Newsreader with the opsz axis is 128.9 KiB per style. Too heavy, so the
+    wght-only file is proposed.
+- **Contrast:** every text pair in both palettes, both themes, is ≥ 5.29:1. The light
+  evidence mark was darkened from `#d99a1e` (2.24:1 non-text, a fail) to `#a86f0a`
+  (3.90:1).
+- **Mockups:** no horizontal overflow at 360 or 1280 px. The first pass had two mobile
+  bugs, both fixed:
+  - Direction A's hero lost its side padding because a `padding` shorthand overrode
+    `.wrap`.
+  - Direction B's 12-column spans leaked into the single-column phone layout.
+
+Mapping the HireLens repo (read-only) changed some copy facts:
+
+- CI runs the harness's unit tests, not the benchmark, so the live portfolio's "eval
+  harness in CI" wording overclaims.
+- The committed eval numbers are a mock-model run.
+- Blind-review docs and code disagree.
+- Embeddings are Google-only.
+- `apps/web/src/lib/demo-data.ts` holds the 12 synthetic resumes for the explainer.
+
+**Why.** The positioning ("AI systems that show their work") is the pattern already
+present in HireLens, SearchScribe, ForecastGPT and REFLEX-AI. Direction A turns that
+pattern into the visual language, so the explainer feels native to the site.
+
+**Next.** Gate 2. Then Phase 2: prerender, tokens and fonts.
+
+**Open questions.** Whether HireLens is solo work. Whether to run the HireLens
+benchmark live against local Ollama for real numbers.

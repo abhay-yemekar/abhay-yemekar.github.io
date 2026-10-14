@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mockup A · Evidence · Home</title>
+<!-- Mockup only: production self-hosts these faces (latin subset) per CLAUDE.md. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@200..800&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f7f5ef; --bg-elev: #fffdf8; --fg: #1a1917; --fg-muted: #4f4b45; --fg-subtle: #625e57;
+    --rule: #dcd6ca; --accent: #8a5300; --mark: #a86f0a; --wash: rgb(227 165 42 / 0.3);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121110; --bg-elev: #1b1a18; --fg: #ece8df; --fg-muted: #b3ada2; --fg-subtle: #959086;
+      --rule: #2e2c28; --accent: #f0b54c; --mark: #f0b54c; --wash: rgb(240 181 76 / 0.2);
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.1875rem/1.6 'Newsreader', Georgia, serif; font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.8125rem; letter-spacing: 0.02em; line-height: 1.5; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 1024px) { .wrap { padding: 0 48px; } }
+
+  nav { border-bottom: 1px solid var(--rule); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  nav a { text-decoration: none; padding: 12px 12px; display: inline-block; color: var(--fg-muted); }
+  nav a[aria-current] { color: var(--fg); box-shadow: inset 0 -2px 0 var(--mark); }
+  .brand { font-weight: 600; color: var(--fg) !important; padding-left: 0 !important; font-size: 1.0625rem; font-family: 'Newsreader', serif; letter-spacing: 0; }
+
+  /* The one motif: evidence. A wash, an underline mark and a citation number. */
+  .ev { background: linear-gradient(var(--wash), var(--wash)) no-repeat 0 0 / 100% 100%; box-shadow: inset 0 -2px 0 var(--mark); padding: 0 0.08em; border-radius: 2px; }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .ev { animation: draw linear both; animation-timeline: view(); animation-range: entry 20% cover 35%; }
+      @keyframes draw { from { background-size: 0% 100%; } }
+    }
+  }
+  sup.cite { font-family: 'JetBrains Mono', monospace; font-size: 0.42em; color: var(--accent); margin-left: 0.1em; vertical-align: super; letter-spacing: 0; }
+  sup.cite a { text-decoration: none; }
+
+  nav li a { padding: 12px 8px; }
+  @media (min-width: 640px) { nav li a { padding: 12px 12px; } }
+  .brand { white-space: nowrap; }
+  .hero { padding-block: 56px 40px; }
+  @media (min-width: 1024px) { .hero { padding-block: 80px 48px; } }
+  .hero-grid { display: grid; gap: 48px; }
+  @media (min-width: 1024px) { .hero-grid { grid-template-columns: 7fr 5fr; gap: 56px; align-items: end; } }
+  .eyebrow { color: var(--fg-subtle); margin: 0 0 28px; }
+  h1 { font-weight: 500; font-size: clamp(2.6rem, 6.4vw, 5rem); line-height: 1.04; letter-spacing: -0.025em; margin: 0; max-width: 15ch; }
+  .lede { color: var(--fg-muted); font-size: clamp(1.1875rem, 1.6vw, 1.375rem); max-width: 34ch; margin: 28px 0 0; }
+  @media (min-width: 1024px) { .lede { max-width: 44ch; } }
+  .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 36px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: var(--fg); color: var(--bg); text-decoration: none; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; }
+  .textlink { min-height: 48px; display: inline-flex; align-items: center; text-decoration: none; box-shadow: inset 0 -1px 0 var(--mark); line-height: 1.2; height: fit-content; padding: 4px 0; }
+
+  .sources { border-top: 1px solid var(--rule); margin-top: 64px; padding-top: 20px; display: grid; gap: 10px 32px; color: var(--fg-muted); }
+  @media (min-width: 768px) { .sources { grid-template-columns: repeat(3, 1fr); } }
+  .sources p { margin: 0; }
+  .sources b { color: var(--fg); font-weight: 600; }
+  .sources .n { color: var(--accent); margin-right: 8px; }
+
+  section.work { border-top: 1px solid var(--rule); padding: 64px 0 96px; }
+  .sechead { display: flex; align-items: baseline; gap: 14px; margin: 0 0 36px; }
+  .sechead .mono { color: var(--accent); }
+  h2 { font-weight: 500; font-size: clamp(1.9rem, 3vw, 2.5rem); letter-spacing: -0.015em; margin: 0; line-height: 1.1; }
+  .feature { display: grid; gap: 32px; }
+  @media (min-width: 1024px) { .feature { grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; } }
+  h3 { font-weight: 500; font-size: 2.25rem; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
+  .tag { color: var(--fg-subtle); margin: 8px 0 18px; }
+  .feature p.sum { color: var(--fg-muted); margin: 0 0 22px; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .links a { min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; box-shadow: inset 0 -1px 0 var(--mark); height: fit-content; padding: 6px 0; }
+
+  .card { background: var(--bg-elev); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+  .card header { display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--rule); color: var(--fg-subtle); }
+  .crit { padding: 18px; border-bottom: 1px solid var(--rule); }
+  .crit .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .crit .name { font-weight: 600; font-size: 1.125rem; }
+  .crit .why { color: var(--fg-muted); margin: 8px 0 0; font-size: 1.0625rem; }
+  .todo { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border: 1px dashed var(--mark); color: var(--accent); padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+  .resume { padding: 18px; font-size: 1rem; color: var(--fg-muted); line-height: 1.7; }
+  .resume .ev { color: var(--fg); }
+  .off { display: block; margin-top: 10px; color: var(--fg-subtle); }
+  .note { color: var(--fg-subtle); margin: 12px 0 0; }
+</style>
+</head>
+<body>
+<nav aria-label="Primary">
+  <div class="wrap">
+    <a class="brand" href="#">Abhay Yemekar</a>
+    <ul class="mono">
+      <li><a href="#work" aria-current="true">Work</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow mono">Full-stack AI engineer · Pune</p>
+        <h1>I build AI systems that <span class="ev">show their work</span>.<sup class="cite"><a href="#s1">1</a></sup></h1>
+        <p class="lede">HireLens, my open-source ranking engine, ties every score to the exact resume text behind it. Agents, RAG pipelines, and the backends that ship them.</p>
+        <div class="ctas">
+          <a class="btn" href="#work">See how HireLens scores a candidate <span aria-hidden="true">→</span></a>
+          <a class="textlink mono" href="#">Email me</a>
+        </div>
+      </div>
+
+      <figure class="card" style="margin:0" aria-label="HireLens output sample">
+        <header class="mono"><span>HireLens · criterion 2 of 6</span><span>synthetic resume</span></header>
+        <div class="crit">
+          <div class="row"><span class="name">RAG &amp; vector databases</span><span class="todo">TODO: score</span></div>
+          <p class="why">Rationale comes from the real HireLens output, quoted as returned.</p>
+        </div>
+        <div class="resume">
+          …moved search from keywords to <span class="ev">retrieval over a pgvector index, re-ranking the top 50 chunks</span><sup class="cite"><a href="#">a</a></sup> before generation…
+          <span class="off mono">evidence · chars [TODO, TODO) · located by code, not the model</span>
+        </div>
+      </figure>
+    </div>
+
+    <div class="sources mono" aria-label="Sources">
+      <p id="s1"><span class="n">1</span><b>HireLens</b> · glass-box ranking · MIT, npm v1.4.0</p>
+      <p><span class="n">2</span><b>yDirect</b> · on the Chrome Web Store</p>
+      <p><span class="n">3</span><b>Translytics</b> · software engineer · prev. Tata Elxsi</p>
+    </div>
+  </section>
+
+  <section class="work" id="work" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="sechead"><span class="mono">01</span><h2 id="work-h">Selected work</h2></div>
+      <div class="feature">
+        <div>
+          <h3>HireLens</h3>
+          <p class="tag mono">v1.4.0 · Nov 2025 – present</p>
+          <p class="sum">Most AI screeners return a bare number nobody can check. HireLens scores a resume against a rubric you control. The model quotes its evidence, and code verifies that the quote is really in the resume before the score counts.</p>
+          <div class="links mono">
+            <a href="#">Read the case study →</a>
+            <a href="#">Live demo ↗</a>
+            <a href="#">Repository ↗</a>
+          </div>
+        </div>
+        <div>
+          <h3>SearchScribe AI Studio</h3>
+          <p class="tag mono">Nov 2025 – present</p>
+          <p class="sum">A topic in, a researched and sanitised draft out. The LLM only produces structured data; deterministic code renders and sanitises the HTML, so the model never writes markup.</p>
+          <div class="links mono">
+            <a href="#">Read the case study →</a>
+            <a href="#">Live site ↗</a>
+            <a href="#">Repository ↗</a>
+          </div>
+        </div>
+      </div>
+      <p class="note mono">Mockup: layout only. The hero excerpt is placeholder text. Phase 4 uses HireLens's own synthetic resumes and real engine output.</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>
