@@ -216,3 +216,45 @@ measured results". Those numbers are no longer shown on the page now that the
 3-Factor card is secondary, so the bullet needs a small reword or the card goes
 back to featured. The earlier SearchScribe question is resolved: the live deploy
 runs the current Next.js build.
+
+---
+
+## 2026-10-14 — Phase 0: audit (branch `docs/audit`)
+
+**What changed.** Docs only. Added `docs/PORTFOLIO_BRIEF.md` (the overhaul brief),
+`docs/AUDIT.md` (scorecard, findings P0–P3, the five changes that matter most), and a
+"before" screenshot set under `docs/screenshots/phase-0/`. No product code changed.
+
+Measured, not assumed:
+
+- Lighthouse, median of 3: local mobile 95/100/100/100 with LCP 2.42 s, 81% of it
+  render delay; live mobile 98, LCP 1.88 s; desktop 100 on both.
+- The live HTML body contains 0 words.
+- axe-core 4.14.0: 0 violations at 360 and 1280 px in both themes.
+- Keyboard: 30 tab stops, every one with a visible focus ring.
+- Worst token contrast: 4.71:1.
+- On a phone, `#work` starts at 4,744 px (screen 6 of 19).
+
+New findings since August:
+
+- **`https://www.abhayemekar.me` serves the `*.github.io` certificate.** The apex
+  certificate covers only `abhayemekar.me`. The `www` CNAME is correct, so the fix is
+  to re-issue the certificate in Pages settings, not to change DNS.
+- **`useTheme` persists the theme on mount.** A first visit therefore pins the
+  OS-derived theme, and the site stops following OS changes afterwards. The audit
+  harness hit this directly: without clearing `localStorage`, every run after the
+  first rendered in the first run's theme.
+- **`public/404.html` still uses the pre-August `--subtle` values** (3.66:1 / 3.98:1).
+- **`og.png` still reads "SOFTWARE ENGINEER".**
+
+Brief updates from Abhay: the Mahindra & Mahindra client may be named; `ydirect.tech`
+is still in development and stays unlinked; HireLens runs locally from
+`C:\Playground\hirelens`.
+
+**Why.** The brief makes Gate 1 a measured baseline. Every later phase's "after"
+numbers get compared against this one.
+
+**Next.** Gate 1 review. Then Phase 1: positioning, IA and two visual directions.
+
+**Open questions.** Whether to give case studies their own URLs (recommended). The
+`www.` certificate needs Abhay in the GitHub Pages settings.
