@@ -3,6 +3,7 @@ import type { CaseStudy, SourceRef } from '../data/caseStudies'
 import { caseStudies } from '../data/caseStudies'
 import { Diagram } from '../components/Diagram'
 import { Footer } from '../components/Footer'
+import { HireLensExplainer } from '../components/HireLensExplainer'
 import { ForwardArrow } from '../components/Icons'
 import { LinkRow } from '../components/LinkRow'
 import { Nav } from '../components/Nav'
@@ -107,6 +108,16 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <CaseSection index={idx()} title="Architecture" wide>
             <Diagram spec={study.architecture.diagram} caption={study.architecture.caption} />
           </CaseSection>
+
+          {study.explainer && (
+            <CaseSection index={idx()} title="In action" wide>
+              <p className="max-w-(--container-prose)">
+                One fictional resume, scored by the production engine. Pick a criterion to see the evidence it cited;
+                switch on blind review to see what reviewers get instead.
+              </p>
+              <HireLensExplainer />
+            </CaseSection>
+          )}
 
           <CaseSection index={idx()} title="Decisions">
             {study.decisionsDraft && import.meta.env.DEV && (

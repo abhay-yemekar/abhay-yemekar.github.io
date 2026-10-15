@@ -80,6 +80,8 @@ export type CaseStudy = {
   problem: string
   constraints: { claim: string; detail: string; cites?: SourceRef[] }[]
   architecture: { diagram: DiagramSpec; caption: string }
+  /** Shows the interactive HireLens explainer (real engine output) after the architecture. */
+  explainer?: boolean
   /** Set while decision wording awaits Abhay's confirmation (Gate 3). */
   decisionsDraft?: boolean
   decisions: Decision[]
@@ -256,6 +258,7 @@ export const caseStudies: CaseStudy[] = [
     summary:
       'Scores a resume against a rubric you control. The model quotes its evidence, and code checks the quote is really in the resume before the score counts.',
     pattern: 'The model proposes; code verifies',
+    explainer: true,
     glance: {
       role: 'Solo',
       status: 'v1.4.0 · released 6 Oct 2026',
