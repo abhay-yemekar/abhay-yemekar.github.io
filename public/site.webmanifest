@@ -1,11 +1,11 @@
 {
   "name": "Abhay Yemekar",
   "short_name": "Abhay",
-  "description": "Software engineer building Python, AI/LLM and backend systems.",
+  "description": "Full-stack AI engineer building AI systems that show their work: agents, RAG pipelines and the backends behind them.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0b0b0c",
-  "theme_color": "#0b0b0c",
+  "background_color": "#f7f5ef",
+  "theme_color": "#121110",
   "icons": [
     { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
