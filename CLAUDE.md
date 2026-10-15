@@ -12,7 +12,8 @@ npm run dev          # Vite on :5173; pages rendered per request by src/entry-se
 npm run build        # typecheck → client build → SSR build → prerender → budget check
 npm run preview      # serve dist/ on :4173 (production check)
 npm run typecheck    # tsc --noEmit alone
-npm run gen:assets   # regenerate favicons + og.png from the SVG monogram
+npm run gen:assets   # regenerate the favicons from the SVG monogram (sharp)
+npm run gen:og       # regenerate public/og/*.png share cards (headless Chrome, real fonts)
 ```
 
 There is no test suite and no linter. `npm run build` is the gate. It fails on a
@@ -41,13 +42,14 @@ it isn't a real preset and silently produces junk numbers.
 
 ## Rendering
 
-`src/entry-server.tsx` owns the routes (`/` and `/work/<slug>/` per entry in
-`src/data/caseStudies.ts`). It renders each one with `react-dom/static`
+`src/entry-server.tsx` owns the routes: `/`, `/work/<slug>/` per entry in
+`src/data/caseStudies.ts`, and `404.html`. It renders each one with `react-dom/static`
 `prerender()` into `index.html`, replacing `<!--app-head-->` and
 `<!--app-html-->`.
 
-- **Build:** `scripts/prerender.mjs` writes `dist/<route>/index.html` and prints
-  any TODOs.
+- **Build:** `scripts/prerender.mjs` writes `dist/<route>/index.html` and
+  `dist/404.html`. It also generates `sitemap.xml` and `llms.txt` from the same
+  data, and prints any TODOs.
 - **Dev:** the `render-in-dev` plugin in `vite.config.ts` runs the same function
   per request. Dev and prod HTML are identical. Editing a TSX file reloads the
   page, since there is no client component to hot-swap.
@@ -73,8 +75,8 @@ src/components/    sections plus Nav, SectionShell, Diagram, LinkRow, TodoMark, 
 src/client/        the only browser JS: theme.ts, active-section.ts
 src/lib/           head.ts (per-page meta), todo.ts (placeholder mechanism)
 src/styles/        globals.css (tokens) + fonts.css (@font-face + fallbacks)
-scripts/           prerender.mjs, check-budgets.mjs, gen-assets.mjs
-public/            CNAME, robots.txt, sitemap.xml, 404.html, favicons, og.png
+scripts/           prerender.mjs, check-budgets.mjs, gen-og.mjs, gen-assets.mjs, hirelens-sample.mts
+public/            CNAME, robots.txt, site.webmanifest, favicons, og/*.png (generated)
 index.html         the template: static head tags, inline theme script, markers
 docs/              brief, audit, strategy, contrast table, mockups, screenshots
 ```
@@ -125,6 +127,7 @@ components. Type sizes are tokens too (`text-display`, `text-h2`, `text-lede`,
 - the active-nav underline
 - the diagram's trust path
 - section numerals
+- measured metric values (a number on the page is evidence too)
 
 Nothing else. No amber fills except the evidence wash (≤ 30% opacity), and no
 gradients. The primary button is an ink fill (`.u-btn`).
@@ -171,6 +174,17 @@ fallback faces, because it's wider at 500 than at 400.
 
 `vite.config.ts` preloads the Newsreader face. It has to be a plugin because Vite
 content-hashes font filenames.
+
+### SEO and sharing
+
+- **Per-page tags** (title, description ≤ 160 characters, canonical, OG,
+  Twitter) come from `src/lib/head.ts`.
+- **JSON-LD** comes from `src/lib/structured-data.ts`: Person, WebSite and
+  ProfilePage on the home page; SoftwareSourceCode or SoftwareApplication plus a
+  BreadcrumbList on each case study. Structured data repeats only what the page
+  says, with no ratings and no counts.
+- **Share cards:** the copy is `ogCards` in the entry. After changing a title,
+  run `npm run gen:og` and commit the PNGs.
 
 ### Accessibility
 

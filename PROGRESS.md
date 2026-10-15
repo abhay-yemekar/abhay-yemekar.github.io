@@ -511,3 +511,71 @@ his own key.
   `docs/screenshots/phase-4/`.
 
 **Next.** Phase 5: SEO and sharing.
+
+---
+
+## 2026-10-15 — Phase 5: SEO and sharing (branch `feat/seo`)
+
+**What changed.**
+
+- **Share cards.** `scripts/gen-og.mjs` renders one 1200×630 card per page
+  (`public/og/*.png`, 15–22 KB each) by screenshotting HTML in headless Chrome.
+  That way the cards use Newsreader and the Evidence tokens. librsvg can't load
+  web fonts, which is why the old card was set in Georgia. It also still said
+  "SOFTWARE ENGINEER". The card copy comes from `ogCards` in the entry, loaded
+  through Vite, so a card can't disagree with its page.
+- **Per-page meta.**
+  - Home description trimmed to 133 characters (was 176).
+  - Case-study descriptions are the tagline plus "A case study by Abhay
+    Yemekar", all under 140.
+  - Every page points at its own card.
+- **JSON-LD** (`src/lib/structured-data.ts`):
+  - Home: Person (with `@id`), WebSite and ProfilePage.
+  - Case studies: SoftwareSourceCode (HireLens, SearchScribe, ForecastGPT) or
+    SoftwareApplication (yDirect, free offer, no rating), plus a BreadcrumbList.
+  - Every block parses.
+- **Generated at build:** `sitemap.xml` (5 URLs, lastmod = build date) and
+  `llms.txt`. The static `public/sitemap.xml` is removed.
+- **404 page.** It's prerendered with the site's own nav, fonts and tokens, and
+  is `noindex` with no canonical. This replaces the standalone `public/404.html`,
+  whose 12px text failed contrast (audit P2-5). The nav gains an "other" state
+  so a 404 doesn't mark Work as current.
+- **Smaller fixes.**
+  - Favicons recoloured to the dark Evidence tokens.
+  - `site.webmanifest` description and colours updated (it still said "Software
+    engineer building Python, AI/LLM and backend systems").
+  - `gen-assets.mjs` makes favicons only.
+- **HireLens outcome** gains one measured number: 522 npm downloads,
+  12 Sep – 11 Oct 2026, checked against the npm downloads API on 2026-10-15 and
+  linked as the source. It's kept off the home page, because a rolling 30-day
+  number goes stale.
+- **HireLens evaluation:** method only for launch (Gate 3, option c). The results
+  TODO is removed.
+
+**Analytics: a proposal, not installed.** The default stays none, and the footer
+says "No tracking". If Abhay wants a signal:
+
+- **GoatCounter** (open source, free for personal sites). No cookies and no
+  personal data; IPs aren't stored. It needs one small third-party script from
+  gc.zgo.at, so it's still a request to someone else's server.
+- **Cloudflare Web Analytics** (free, cookieless). Same trade-off, and the data
+  goes to Cloudflare.
+
+GitHub Pages exposes no server logs, so there's no zero-script option. If
+either is added, the footer's "No tracking" line has to change in the same
+commit.
+
+**Measured.**
+
+- axe: 0 violations on all six pages, including 404, both themes, at 360 and
+  1280px.
+- No console errors.
+- Budgets hold. JS is 1.42 kB gzip per page plus the 1 kB explainer chunk where
+  it's used.
+- No `telephone`, `streetAddress`, `postalCode` or `tel:` in any built page.
+
+**The resume stays off.** The PDF Abhay sent contains his phone number and a
+template author name. He'll re-export it from Word, and the scan runs again
+before it's copied in.
+
+**Next.** Phase 6: the quality bar, the README, and the final report.
