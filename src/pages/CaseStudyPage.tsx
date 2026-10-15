@@ -181,6 +181,24 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           )}
 
           <CaseSection index={idx()} title="Outcome">
+            {study.outcome.metrics && study.outcome.metrics.length > 0 && (
+              // Measured numbers only, each with its source and the date it was read.
+              <ul className="m-0 mb-6 grid max-w-(--container-prose) list-none gap-4 p-0 sm:grid-cols-2">
+                {study.outcome.metrics.map((metric) => (
+                  <li key={metric.label} className="rounded-card border border-border bg-bg-elev px-5 py-4">
+                    <p className="m-0 text-[2.25rem] leading-none text-accent">{metric.value}</p>
+                    <p className="m-0 mt-2 text-small">{metric.label}</p>
+                    <p className="u-meta m-0 mt-2 text-fg-subtle">
+                      Source:{' '}
+                      <a href={metric.source.href} target="_blank" rel="noopener noreferrer" className="u-link">
+                        {metric.source.label}
+                      </a>
+                      , read {metric.measuredAt}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
             <ul className="max-w-(--container-prose) list-disc pl-5 marker:text-fg-subtle">
               {study.outcome.facts.map((fact) => (
                 <li key={fact}>{fact}</li>
