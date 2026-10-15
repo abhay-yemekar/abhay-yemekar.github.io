@@ -295,6 +295,13 @@
   }
 }
 
+/* Set by src/client/theme.ts for the one frame in which the theme changes. */
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  transition: none !important;
+}
+
 /* Theme toggle: invisible until the inline script confirms JS is running. */
 html:not(.js) [data-theme-toggle] {
   visibility: hidden;
