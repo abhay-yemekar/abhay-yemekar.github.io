@@ -31,7 +31,7 @@ export function Nav({ page }: NavProps) {
                     href={onHome ? `#${item.id}` : `/#${item.id}`}
                     {...(onHome ? { 'data-spy': '' } : {})}
                     {...(!onHome && item.id === 'work' ? { 'aria-current': 'true' as const } : {})}
-                    className="u-tap px-2 text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg sm:px-3 [&[aria-current]]:text-fg [&[aria-current]]:shadow-[inset_0_-2px_0_var(--color-mark)]"
+                    className="u-tap px-2 text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg sm:px-3 [&[aria-current]]:text-fg [&[aria-current]]:underline [&[aria-current]]:decoration-mark [&[aria-current]]:decoration-2 [&[aria-current]]:underline-offset-[0.4em]"
                   >
                     {item.nav}
                   </a>

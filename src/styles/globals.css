@@ -188,16 +188,22 @@
     letter-spacing: var(--text-meta--letter-spacing);
   }
 
-  /* Text link: an amber underline mark that thickens on hover and focus. */
+  /*
+   * Text link: an amber underline that thickens on hover and focus. A real
+   * text-decoration, not a box-shadow: forced-colors (high contrast) mode
+   * strips shadows, which would leave links indistinguishable from text.
+   */
   .u-link {
-    text-decoration: none;
-    box-shadow: inset 0 -1px 0 var(--color-mark);
-    transition: box-shadow var(--duration-fast) var(--ease-hover);
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-mark);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: text-decoration-thickness var(--duration-fast) var(--ease-hover);
   }
 
   .u-link:hover,
   .u-link:focus-visible {
-    box-shadow: inset 0 -2px 0 var(--color-mark);
+    text-decoration-thickness: 2px;
   }
 
   /* Standalone link or button row: a 44px tap target with the underline kept tight to the text. */
