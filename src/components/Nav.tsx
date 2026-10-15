@@ -3,8 +3,12 @@ import { profile } from '../data/profile'
 import { ThemeToggle } from './ThemeToggle'
 
 type NavProps = {
-  /** Home links scroll within the page and track the section in view. */
-  page: 'home' | 'case'
+  /**
+   * home: links scroll within the page and track the section in view.
+   * case: links go back to the home page, with Work marked current.
+   * other: links go back to the home page, nothing marked (the 404 page).
+   */
+  page: 'home' | 'case' | 'other'
 }
 
 export function Nav({ page }: NavProps) {
@@ -30,7 +34,7 @@ export function Nav({ page }: NavProps) {
                   <a
                     href={onHome ? `#${item.id}` : `/#${item.id}`}
                     {...(onHome ? { 'data-spy': '' } : {})}
-                    {...(!onHome && item.id === 'work' ? { 'aria-current': 'true' as const } : {})}
+                    {...(page === 'case' && item.id === 'work' ? { 'aria-current': 'true' as const } : {})}
                     className="u-tap px-2 text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg sm:px-3 [&[aria-current]]:text-fg [&[aria-current]]:underline [&[aria-current]]:decoration-mark [&[aria-current]]:decoration-2 [&[aria-current]]:underline-offset-[0.4em]"
                   >
                     {item.nav}

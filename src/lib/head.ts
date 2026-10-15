@@ -9,6 +9,8 @@ export type PageMeta = {
   ogImageAlt: string
   ogType: 'website' | 'article'
   jsonLd?: object[]
+  /** For the 404 page: kept out of search results, with no canonical URL. */
+  noindex?: boolean
 }
 
 const escapeAttr = (value: string) =>
@@ -25,12 +27,14 @@ export function renderHead(meta: PageMeta): string {
   const tags = [
     `<title>${escapeAttr(meta.title)}</title>`,
     `<meta name="description" content="${escapeAttr(meta.description)}" />`,
-    `<link rel="canonical" href="${url}" />`,
+    ...(meta.noindex
+      ? [`<meta name="robots" content="noindex" />`]
+      : [`<link rel="canonical" href="${url}" />`]),
     `<meta property="og:type" content="${meta.ogType}" />`,
     `<meta property="og:site_name" content="${escapeAttr(profile.name)}" />`,
     `<meta property="og:title" content="${escapeAttr(meta.title)}" />`,
     `<meta property="og:description" content="${escapeAttr(meta.description)}" />`,
-    `<meta property="og:url" content="${url}" />`,
+    ...(meta.noindex ? [] : [`<meta property="og:url" content="${url}" />`]),
     `<meta property="og:image" content="${image}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,

@@ -60,10 +60,8 @@ export const hero = {
 export const homeSeo = {
   title: 'Abhay Yemekar — AI engineer building agents, RAG and backends',
   description:
-    'Full-stack AI engineer in Pune. Creator of HireLens, open-source candidate ranking where every score cites the resume text behind it. Agents, RAG pipelines and backend systems.',
-  ogImage: '/og.png',
-  // og.png is regenerated in Phase 5; until then the alt describes the card as it is.
-  ogImageAlt: 'Abhay Yemekar — portfolio card',
+    // ≤ 160 characters, so search results show it whole. The title carries the keywords.
+    'Full-stack AI engineer in Pune. Creator of HireLens, open-source candidate ranking where every score cites the resume text behind it.',
 } as const
 
 /** JSON-LD Person. City-level address only: no street, no postal code, no telephone. */
@@ -72,7 +70,7 @@ export const personJsonLd = {
   '@type': 'Person',
   name: profile.name,
   url: `${SITE_URL}/`,
-  image: `${SITE_URL}/og.png`,
+  image: `${SITE_URL}/og/home.png`,
   jobTitle: profile.jobTitle,
   email: `mailto:${EMAIL}`,
   worksFor: { '@type': 'Organization', name: profile.company },

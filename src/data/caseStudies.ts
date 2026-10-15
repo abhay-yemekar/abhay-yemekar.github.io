@@ -89,6 +89,10 @@ export type CaseStudy = {
   outcome: { facts: string[]; metrics?: Measured[] }
   next: string | Todo
   og: { title: string; subtitle: string }
+  /** Drives the page's JSON-LD (src/lib/structured-data.ts). */
+  structured:
+    | { type: 'SoftwareSourceCode'; languages: string[]; version?: string }
+    | { type: 'SoftwareApplication'; category: string; operatingSystem: string; version: string; installUrl: string }
 }
 
 const HIRELENS_REPO = 'https://github.com/abhay-yemekar/hirelens'
@@ -315,11 +319,11 @@ export const caseStudies: CaseStudy[] = [
     evaluation: {
       method:
         'A seeded synthetic benchmark runs through the same scoring engine as the product and measures direction accuracy, self-consistency, position bias (Kendall τ under shuffled order) and name-swap bias.',
-      // Ran 2026-10-15 against ollama/llama3.2:3b (the only local chat model):
-      // it broke the scoring schema twice and the harness stopped, as designed.
-      // Real numbers need a larger local model or a hosted key (Gate 3).
-      results: [todo('real-model benchmark results: needs a model that satisfies the scoring schema')],
-      note: 'The repo’s committed report is a mock-model plumbing run, and its README says so. Only a live run produces numbers worth publishing.',
+      // Gate 3 decision: method only for launch. A run against local
+      // ollama/llama3.2:3b (2026-10-15) broke the scoring schema twice and the
+      // harness stopped, as designed. Publish numbers only from a live run.
+      results: [],
+      note: 'No benchmark numbers are published yet. The repo’s committed report is a mock-model plumbing run, and its README says so.',
     },
     outcome: {
       facts: [
@@ -327,9 +331,21 @@ export const caseStudies: CaseStudy[] = [
         'Ships as the hirelens CLI on npm and as container images on GHCR.',
         'Self-hosts with one docker compose command.',
       ],
+      metrics: [
+        {
+          value: '522',
+          label: 'npm downloads of the hirelens CLI, 12 Sep – 11 Oct 2026',
+          source: {
+            label: 'npm downloads API',
+            href: 'https://api.npmjs.org/downloads/point/2026-09-12:2026-10-11/hirelens',
+          },
+          measuredAt: '2026-10-15',
+        },
+      ],
     },
     next: todo('what Abhay would change next (≤ 60 words)'),
     og: { title: 'HireLens', subtitle: 'Every score cites the exact evidence it came from.' },
+    structured: { type: 'SoftwareSourceCode', languages: ['TypeScript'], version: '1.4.0' },
   },
   {
     slug: 'searchscribe',
@@ -416,7 +432,8 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
     next: todo('what Abhay would change next (≤ 60 words)'),
-    og: { title: 'SearchScribe AI Studio', subtitle: 'The model never writes HTML.' },
+    og: { title: 'SearchScribe', subtitle: 'The model never writes HTML.' },
+    structured: { type: 'SoftwareSourceCode', languages: ['Python', 'TypeScript'] },
   },
   {
     slug: 'forecastgpt',
@@ -502,6 +519,7 @@ export const caseStudies: CaseStudy[] = [
     },
     next: 'Visual-native retrieval over investor decks, so figures in charts can be read without OCR. It is designed, on ColPali-style models, but not started.',
     og: { title: 'ForecastGPT', subtitle: 'Code extracts the numbers. The model writes.' },
+    structured: { type: 'SoftwareSourceCode', languages: ['Python'] },
   },
   {
     slug: 'ydirect',
@@ -582,6 +600,13 @@ export const caseStudies: CaseStudy[] = [
     },
     next: todo('what Abhay would change next (≤ 60 words)'),
     og: { title: 'yDirect', subtitle: 'Snippets and prompts in Chrome’s side panel.' },
+    structured: {
+      type: 'SoftwareApplication',
+      category: 'BrowserApplication',
+      operatingSystem: 'Chrome',
+      version: '1.3.3',
+      installUrl: 'https://chromewebstore.google.com/detail/ehkahipeoahnbfbahlkedgdcjefejihg',
+    },
   },
 ]
 
