@@ -52,8 +52,10 @@ it isn't a real preset and silently produces junk numbers.
   per request. Dev and prod HTML are identical. Editing a TSX file reloads the
   page, since there is no client component to hot-swap.
 
-The browser gets HTML, CSS, fonts and `src/client/main.ts`, which is under 1 kB of
-plain TypeScript: the theme toggle and the nav's current-section marker.
+The browser gets HTML, CSS, fonts and `src/client/main.ts`, about 1 kB gzip of
+plain TypeScript: the theme toggle and the nav's current-section marker. On pages
+with the HireLens explainer, `main.ts` also imports `src/client/explainer.ts`
+(about 1 kB) on demand.
 Interactive behaviour goes in `src/client/` as small enhancers keyed on `data-*`
 attributes. Pages must work fully without them. If something ever needs real
 client state, hydrate that one component with `hydrateRoot`. Don't bring React
@@ -81,6 +83,20 @@ docs/              brief, audit, strategy, contrast table, mockups, screenshots
 architecture: copy, projects, case studies and credentials are data, not JSX.
 
 ## Conventions
+
+### The HireLens explainer
+
+`HireLensExplainer.tsx` and `HeroEvidence.tsx` render real HireLens output from
+`src/data/hirelens-sample.json`: one fictional resume, scored by the production
+engine through the public demo. Provenance travels inside the JSON.
+
+- `src/lib/hirelens.ts` checks every quote against its offsets at build time, and
+  the build fails if one is off.
+- Regenerate the sample with `scripts/hirelens-sample.mts` (usage is in its
+  header). Never hand-edit scores or rationales.
+- The prerendered markup holds every criterion and both the clear and the blind
+  resume. The script only switches which is shown, so without JS the first
+  criterion shows with all evidence underlined.
 
 ### Missing facts: `todo()`
 

@@ -459,3 +459,55 @@ handled in Phase 6.
   588); Selected work at 870px on a 360px phone.
 
 **Next.** Gate 3. Then Phase 4: the HireLens explainer.
+
+---
+
+## 2026-10-15 — Phase 4: the signature moment (branch `feat/signature`)
+
+**What changed.**
+
+- **The HireLens explainer.** It's under the HireLens entry on the home page and
+  in an "In action" section on `/work/hirelens/`.
+  - Choosing a criterion shows its score, its rating level and the model's
+    rationale (quoted as returned), and highlights its evidence in the resume at
+    the exact character offsets.
+  - Blind review swaps in HireLens's own masked text, which keeps every offset.
+  - The prerendered HTML contains all of it. `src/client/explainer.ts` (1 kB,
+    loaded only where the explainer exists) switches what's showing.
+- **The hero** gets a static card with one real criterion, so there's proof above
+  the fold on desktop.
+- **Where the data comes from.** One request to the HireLens live demo returned
+  `mode: "llm"`, model `gemini-2.5-flash`, overall 73, six criteria.
+  - The resume, rubric and masking come from HireLens's own demo data and
+    `blindView()`.
+  - `scripts/hirelens-sample.mts` rebuilds the fixture. It reproduced the
+    committed JSON byte for byte, using the documented command.
+  - `src/lib/hirelens.ts` re-checks every offset at build time.
+- **Resume link.** The hero gets a Resume (PDF) link that appears only once
+  `profile.resumeUrl` is set.
+
+**Why not the local benchmark.** This laptop has an i7-1185G7 with integrated
+graphics and 2 GB of free RAM. A 7B model would swap for hours. Real production
+output for one fictional candidate is a better proof than benchmark numbers from
+a small local model. Benchmark numbers stay a TODO; Abhay can run the harness with
+his own key.
+
+**The resume Abhay sent can't ship yet.**
+- The contact line has a phone number.
+- The PDF's Author field names a different person (left over from a template).
+- Two claims overreach the code: HireLens "CI evals", and ForecastGPT
+  "schema-enforced" with "grounds every claim".
+- Its npm figure is real: the npm API confirms 522 downloads for `hirelens` from
+  2026-09-12 to 2026-10-11.
+
+**Measured:**
+
+- **Lighthouse mobile:** 100 / 100 / 100 / 100 on `/` and `/work/hirelens/`,
+  LCP 1.66 s (the h1), TBT 0, CLS 0.
+- **axe:** 0 violations on all five pages, both themes, at 360 and 1280px.
+- **Keyboard:** 55 stops on `/`, all with a visible focus ring.
+- **Interaction:** checked in the browser (switching criteria, blind toggle, the
+  chunk loading on demand). The JS-off and reduced-motion captures are in
+  `docs/screenshots/phase-4/`.
+
+**Next.** Phase 5: SEO and sharing.
