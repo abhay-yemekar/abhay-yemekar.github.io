@@ -46,7 +46,7 @@ export const hero = {
   evidence: 'show their work',
   lede: 'HireLens, my open-source ranking engine, ties every score to the exact resume text behind it. Agents, RAG pipelines, and the backends that ship them.',
   /** `shortLabel` is used below 640px, where the full label wraps to two lines. */
-  primaryCta: { label: 'See how HireLens scores a candidate', shortLabel: 'See how HireLens scores', href: '#hirelens' },
+  primaryCta: { label: 'See how HireLens scores a candidate', shortLabel: 'See how HireLens scores', href: '#how-hirelens-scores' },
   secondaryCta: { label: 'Email me', href: `mailto:${EMAIL}` },
   /** The proof strip. Every item is a checkable public fact. */
   sources: [

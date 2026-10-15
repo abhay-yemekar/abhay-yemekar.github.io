@@ -1,4 +1,5 @@
-import { hero } from '../data/profile'
+import { hero, profile } from '../data/profile'
+import { HeroEvidence } from './HeroEvidence'
 import { ExternalArrow, ForwardArrow } from './Icons'
 
 /** Splits the headline so the evidence clause can carry the mark and citation. */
@@ -23,26 +24,38 @@ export function Hero() {
 
   return (
     <section id="top" aria-labelledby="hero-heading" className="u-container pt-14 pb-12 lg:pt-20 lg:pb-14">
-      <p className="u-meta mb-7 text-fg-subtle">{hero.eyebrow}</p>
-      <h1 id="hero-heading" className="max-w-[15ch] text-display">
-        {before}
-        <span className="u-evidence">{evidence}</span>
-        {after}
-        <a href="#source-1" className="u-cite" aria-label="Source 1">
-          1
-        </a>
-      </h1>
-      <p className="mt-7 max-w-[34ch] text-lede text-fg-muted lg:max-w-[44ch]">{hero.lede}</p>
+      <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[7fr_5fr]">
+        <div>
+          <p className="u-meta mb-7 text-fg-subtle">{hero.eyebrow}</p>
+          <h1 id="hero-heading" className="max-w-[15ch] text-display">
+            {before}
+            <span className="u-evidence">{evidence}</span>
+            {after}
+            <a href="#source-1" className="u-cite" aria-label="Source 1">
+              1
+            </a>
+          </h1>
+          <p className="mt-7 max-w-[34ch] text-lede text-fg-muted lg:max-w-[44ch]">{hero.lede}</p>
 
-      <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
-        <a href={hero.primaryCta.href} className="u-btn">
-          <span className="sm:hidden">{hero.primaryCta.shortLabel}</span>
-          <span className="hidden sm:inline">{hero.primaryCta.label}</span>
-          <ForwardArrow />
-        </a>
-        <a href={hero.secondaryCta.href} className="u-meta u-tap">
-          <span className="u-link text-fg">{hero.secondaryCta.label}</span>
-        </a>
+          <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
+            <a href={hero.primaryCta.href} className="u-btn">
+              <span className="sm:hidden">{hero.primaryCta.shortLabel}</span>
+              <span className="hidden sm:inline">{hero.primaryCta.label}</span>
+              <ForwardArrow />
+            </a>
+            <a href={hero.secondaryCta.href} className="u-meta u-tap">
+              <span className="u-link text-fg">{hero.secondaryCta.label}</span>
+            </a>
+            {/* Appears only once public/resume.pdf exists and resumeUrl points at it. */}
+            {profile.resumeUrl && (
+              <a href={profile.resumeUrl} className="u-meta u-tap">
+                <span className="u-link text-fg">Resume (PDF)</span>
+              </a>
+            )}
+          </div>
+        </div>
+
+        <HeroEvidence />
       </div>
 
       <ol aria-label="Sources" className="u-meta mt-14 grid list-none gap-x-8 gap-y-3 border-t border-border p-0 pt-5 text-fg-muted md:grid-cols-3">
