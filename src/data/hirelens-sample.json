@@ -1,0 +1,116 @@
+{
+  "provenance": {
+    "source": "https://hirelens-rosy.vercel.app/api/demo/score",
+    "request": {
+      "resumeId": "jordan-avery"
+    },
+    "fetchedAt": "2026-10-15",
+    "mode": "llm",
+    "modelId": "gemini-2.5-flash",
+    "hirelensVersion": "1.4.0",
+    "note": "Real output from the HireLens production engine via its public demo. The resume, company and job are fictional, from HireLens apps/web/src/lib/demo-data.ts. blindText is HireLens blindView() on the same text."
+  },
+  "job": {
+    "title": "Senior Backend Engineer",
+    "company": "Meridian Pay (fictional)"
+  },
+  "candidate": {
+    "name": "Jordan Avery",
+    "role": "Senior Backend Engineer"
+  },
+  "resumeText": "Jordan Avery\nSenior Backend Engineer — San Francisco, CA — jordan.avery@example.com\n\nEXPERIENCE\n\nSenior Backend Engineer — Acme Corp — 2021–present\n- Led migration of the payments platform to Kubernetes, cutting deploy time 80%.\n- Built event-driven services in TypeScript on Node.js handling 40k req/s.\n- Designed idempotent webhook delivery with a Postgres-backed outbox table.\n- Introduced SLO dashboards and on-call runbooks; MTTR down 45%.\n\nBackend Engineer — Northwind Systems — 2018–2021\n- Owned PostgreSQL schema for a 200M-row ledger; cut slow queries 60%.\n- Built retry queues with exponential backoff for third-party integrations.\n- Participated in weekly incident reviews and postmortems.\n\nSKILLS\nTypeScript, Node.js, Go, PostgreSQL, Redis, Kafka, Kubernetes, Terraform, AWS\n\nEDUCATION\nB.S. Computer Science, State University (2014–2018)",
+  "blindText": "■■■■■■■■■■■■\nSenior Backend Engineer — San Francisco, CA — ■■■■■■■■■■■■■■■■■■■■■■■■\n\nEXPERIENCE\n\nSenior Backend Engineer — Acme Corp — 2021–present\n- Led migration of the payments platform to Kubernetes, cutting deploy time 80%.\n- Built event-driven services in TypeScript on Node.js handling 40k req/s.\n- Designed idempotent webhook delivery with a Postgres-backed outbox table.\n- Introduced SLO dashboards and on-call runbooks; MTTR down 45%.\n\nBackend Engineer — Northwind Systems — 2018–2021\n- Owned PostgreSQL schema for a 200M-row ledger; cut slow queries 60%.\n- Built retry queues with exponential backoff for third-party integrations.\n- Participated in weekly incident reviews and postmortems.\n\nSKILLS\nTypeScript, Node.js, Go, PostgreSQL, Redis, Kafka, Kubernetes, Terraform, AWS\n\nEDUCATION\nB.S. Computer Science, State University (2014–2018)",
+  "overall": 73,
+  "criteria": [
+    {
+      "key": "event-driven-systems",
+      "title": "Event-driven & queue architecture",
+      "weight": 1,
+      "score": 4,
+      "level": "Strong",
+      "rationale": "The candidate built event-driven services and designed idempotent webhook delivery with a Postgres-backed outbox table, which aligns with designing queues with retries or ordering. They also built retry queues with exponential backoff, demonstrating a solid understanding of queue architecture.",
+      "evidence": [
+        {
+          "start": 306,
+          "end": 379,
+          "quotedText": "Designed idempotent webhook delivery with a Postgres-backed outbox table."
+        }
+      ]
+    },
+    {
+      "key": "postgres-at-scale",
+      "title": "PostgreSQL at scale",
+      "weight": 1,
+      "score": 4,
+      "level": "Strong",
+      "rationale": "The candidate owned a PostgreSQL schema for a 200M-row ledger and cut slow queries by 60%, indicating experience with tuning queries and designing schemas for large tables. This demonstrates solid experience with PostgreSQL at scale.",
+      "evidence": [
+        {
+          "start": 497,
+          "end": 565,
+          "quotedText": "Owned PostgreSQL schema for a 200M-row ledger; cut slow queries 60%."
+        }
+      ]
+    },
+    {
+      "key": "distributed-systems",
+      "title": "Distributed systems fundamentals",
+      "weight": 1,
+      "score": 3,
+      "level": "Solid",
+      "rationale": "The candidate designed idempotent webhook delivery and built retry queues with exponential backoff, showing experience handling retries and idempotency in services. This aligns with the 'Basic' level of handling these aspects in one service.",
+      "evidence": [
+        {
+          "start": 306,
+          "end": 379,
+          "quotedText": "Designed idempotent webhook delivery with a Postgres-backed outbox table."
+        }
+      ]
+    },
+    {
+      "key": "reliability-ops",
+      "title": "Reliability & incident response",
+      "weight": 1,
+      "score": 4,
+      "level": "Strong",
+      "rationale": "The candidate introduced SLO dashboards and on-call runbooks, leading to a 45% reduction in MTTR. This demonstrates driving incident response and improving MTTR, aligning with the 'Solid' level.",
+      "evidence": [
+        {
+          "start": 382,
+          "end": 444,
+          "quotedText": "Introduced SLO dashboards and on-call runbooks; MTTR down 45%."
+        }
+      ]
+    },
+    {
+      "key": "fintech-payments",
+      "title": "Fintech / payments context",
+      "weight": 0.8,
+      "score": 3,
+      "level": "Solid",
+      "rationale": "The candidate led the migration of a payments platform and owned a PostgreSQL schema for a 200M-row ledger. This indicates direct work on payments or settlement services, fitting the 'Solid' description.",
+      "evidence": [
+        {
+          "start": 150,
+          "end": 228,
+          "quotedText": "Led migration of the payments platform to Kubernetes, cutting deploy time 80%."
+        }
+      ]
+    },
+    {
+      "key": "platform-tooling",
+      "title": "Kubernetes & infrastructure as code",
+      "weight": 0.6,
+      "score": 4,
+      "level": "Strong",
+      "rationale": "The candidate led the migration of the payments platform to Kubernetes and lists Kubernetes and Terraform in their skills. This suggests they owned Kubernetes infrastructure for production, aligning with the 'Strong' level.",
+      "evidence": [
+        {
+          "start": 150,
+          "end": 228,
+          "quotedText": "Led migration of the payments platform to Kubernetes, cutting deploy time 80%."
+        }
+      ]
+    }
+  ]
+}
