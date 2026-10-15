@@ -26,7 +26,7 @@ export const profile = {
    * Resume CTA stays hidden until a PDF exists at public/resume.pdf.
    * Set to '/resume.pdf' once the file is added. Never point at a missing file.
    */
-  resumeUrl: null as string | null,
+  resumeUrl: '/resume.pdf' as string | null,
 
   links: {
     github: 'https://github.com/abhay-yemekar',

@@ -1,4 +1,4 @@
-import { todo, type Todo } from '../lib/todo'
+import type { Todo } from '../lib/todo'
 
 /**
  * Bio. Abhay's own sentences, condensed (docs/AUDIT.md P1-3: the earlier
@@ -15,7 +15,7 @@ export const about: { lede: string; paragraphs: string[]; personal: string | Tod
     'Good engineering is clarity, not complexity: predictable behaviour, and decisions I can explain.',
   ],
 
-  personal: todo(
-    'one specific, personal line: what pulled you into AI engineering, or what you do away from the keyboard',
-  ),
+  // From the education record already on this site.
+  personal:
+    'At college I coordinated Team Pragyaa, one of the institute’s largest national socio-technical fests, and volunteered at Smart India Hackathon 2020.',
 }

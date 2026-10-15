@@ -1,4 +1,4 @@
-import { todo, type Todo } from '../lib/todo'
+import type { Todo } from '../lib/todo'
 
 export type Experience = {
   company: string
@@ -36,7 +36,8 @@ export const experience: Experience[] = [
     summary: 'AI and backend engineering on a multi-tenant supply-chain planning SaaS.',
     bullets: [
       'Ship LLM-backed features and Python backend services, from design through QA and release.',
-      todo('one outcome at Translytics that is safe to share publicly, at a high level'),
+      // From Abhay's published resume (2026-10-15): high level, no internal detail.
+      'Design REST APIs and background jobs for data-heavy planning workflows, and improve how data moves in and out of the platform: imports, validation and exports.',
     ],
   },
   {

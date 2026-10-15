@@ -1,4 +1,4 @@
-import { todo, type Todo } from '../lib/todo'
+import type { Todo } from '../lib/todo'
 import type { ProjectLink } from './projects'
 
 /**
@@ -343,7 +343,8 @@ export const caseStudies: CaseStudy[] = [
         },
       ],
     },
-    next: todo('what Abhay would change next (≤ 60 words)'),
+    // From the README roadmap, plus the CI gap found while writing this case study.
+    next: 'Run the seeded benchmark in CI against a real model, so accuracy and name-swap bias are measured on every change rather than only unit-tested. Then the roadmap items for teams: SSO and SAML, finer-grained roles, and i18n.',
     og: { title: 'HireLens', subtitle: 'Every score cites the exact evidence it came from.' },
     structured: { type: 'SoftwareSourceCode', languages: ['TypeScript'], version: '1.4.0' },
   },
@@ -431,7 +432,8 @@ export const caseStudies: CaseStudy[] = [
         'Six architecture decision records, each naming the alternatives it rejected.',
       ],
     },
-    next: todo('what Abhay would change next (≤ 60 words)'),
+    // From the README's beta status: features still planned or switched off.
+    next: 'Turn on draft review in the live beta once it passes its quality gate, so every paragraph is checked against the excerpts it came from before a draft is saved. Then persistent daily quotas and rehearsed backup restores.',
     og: { title: 'SearchScribe', subtitle: 'The model never writes HTML.' },
     structured: { type: 'SoftwareSourceCode', languages: ['Python', 'TypeScript'] },
   },
@@ -598,7 +600,8 @@ export const caseStudies: CaseStudy[] = [
         'The source is private; the public repository carries the product docs, privacy explainer and changelog.',
       ],
     },
-    next: todo('what Abhay would change next (≤ 60 words)'),
+    // From the public roadmap's Now and Next columns.
+    next: 'A smoother first run and a fully keyboard-first side panel, then an accessibility review against current WCAG guidance and faster search for large libraries.',
     og: { title: 'yDirect', subtitle: 'Snippets and prompts in Chrome’s side panel.' },
     structured: {
       type: 'SoftwareApplication',
