@@ -1,4 +1,6 @@
 import { experience } from '../data/experience'
+import { isTodo } from '../lib/todo'
+import { TodoMark } from './TodoMark'
 import { sections } from '../data/sections'
 import { SectionShell } from './SectionShell'
 
@@ -14,19 +16,24 @@ export function Experience() {
             <div>
               <h3 className="text-h3">{job.company}</h3>
               <p className="u-meta mt-1 text-fg-subtle">
-                {job.role} · {job.start} – {job.end}
-              </p>
-              <p className="u-meta text-fg-subtle">
-                {job.location} · {job.arrangement}
+                {job.role} · {job.start} – {job.end} · {job.arrangement}
               </p>
             </div>
 
             <div>
               <p className="m-0">{job.summary}</p>
               <ul className="mt-3 mb-0 list-disc space-y-1.5 pl-5 text-small text-fg-muted marker:text-fg-subtle">
-                {job.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
+                {job.bullets.map((bullet) =>
+                  isTodo(bullet) ? (
+                    import.meta.env.DEV && (
+                      <li key={bullet.todo}>
+                        <TodoMark item={bullet} />
+                      </li>
+                    )
+                  ) : (
+                    <li key={bullet}>{bullet}</li>
+                  ),
+                )}
               </ul>
 
               {job.client && (

@@ -1,9 +1,11 @@
 import { about } from '../data/about'
+import { isTodo } from '../lib/todo'
 import { certificationsNote, education, featuredCertifications } from '../data/credentials'
 import { profile } from '../data/profile'
 import { sections } from '../data/sections'
 import { ExternalArrow } from './Icons'
 import { SectionShell } from './SectionShell'
+import { TodoMark } from './TodoMark'
 
 export function About() {
   return (
@@ -16,7 +18,15 @@ export function About() {
               {text}
             </p>
           ))}
-          <p className="mt-5 mb-0 text-fg-muted">{about.closing}</p>
+          {isTodo(about.personal) ? (
+            import.meta.env.DEV && (
+              <p className="mt-5 mb-0">
+                <TodoMark item={about.personal} />
+              </p>
+            )
+          ) : (
+            <p className="mt-5 mb-0 text-fg-muted">{about.personal}</p>
+          )}
           <p className="u-meta mt-6 mb-0 text-fg-subtle">Based in {profile.location}</p>
         </div>
 

@@ -1,3 +1,5 @@
+import { todo, type Todo } from '../lib/todo'
+
 export type Experience = {
   company: string
   role: string
@@ -5,9 +7,10 @@ export type Experience = {
   end: string
   location: string
   arrangement: 'On-site' | 'Remote' | 'Hybrid'
-  /** Short framing line shown above the bullets. */
+  /** One line on what the role was for. */
   summary: string
-  bullets: string[]
+  /** Outcomes, not duties: what got built or changed. */
+  bullets: (string | Todo)[]
   /** Nested client engagement, rendered as an indented sub-block. */
   client?: {
     name: string
@@ -17,18 +20,23 @@ export type Experience = {
   }
 }
 
+/**
+ * Employer work is proprietary: high level only, no internal numbers.
+ * Exception approved 2026-10-14: the Mahindra & Mahindra engagement may be
+ * named. Translytics stays generic.
+ */
 export const experience: Experience[] = [
   {
     company: 'Translytics',
     role: 'Software Engineer',
     start: 'Mar 2026',
     end: 'Present',
-    location: 'Pune City, Maharashtra',
+    location: 'Pune',
     arrangement: 'On-site',
-    summary: 'AI and backend engineering for a supply-chain planning SaaS platform.',
+    summary: 'AI and backend engineering on a multi-tenant supply-chain planning SaaS.',
     bullets: [
-      'Building AI-powered features and backend services in Python for a multi-tenant planning product.',
-      'Working across LLM integration, API design and data-heavy processing, from design through QA and release.',
+      'Ship LLM-backed features and Python backend services, from design through QA and release.',
+      todo('one outcome at Translytics that is safe to share publicly, at a high level'),
     ],
   },
   {
@@ -38,54 +46,46 @@ export const experience: Experience[] = [
     end: 'Feb 2026',
     location: 'Pune',
     arrangement: 'On-site',
-    summary:
-      'Two years across the SDLC, then a deliberate pivot into generative AI engineering.',
+    summary: 'Two years of production Python, then a deliberate move into generative AI.',
     bullets: [
-      'Applied SDLC practice end to end: Python development, Git, Jira, and unit and integration testing on collaborative production projects.',
-      'Generative AI Bootcamp — built Python and FastAPI AI applications using LLMs, RAG, LangChain and LlamaIndex, with Chroma and Postgres as vector stores.',
-      'Built a Python tool converting legacy test cases from Excel, CSV, Word and plain text into Gherkin .feature files for BDD, with a web UI to upload, preview, edit and export — cutting manual QA-to-Dev handoff effort.',
-      'Completed a Kafka Bootcamp alongside continuing work in advanced Python, data analytics and cloud.',
+      'Built a tool that turns legacy test cases into Gherkin feature files, with a web UI to review and export, cutting the manual hand-off between QA and development.',
+      'Built FastAPI apps on LLMs and RAG (LangChain, LlamaIndex, Chroma) in the Generative AI bootcamp.',
     ],
     client: {
-      name: 'Mahindra & Mahindra — BE 6 & XEV 9E',
+      name: 'Mahindra & Mahindra · BE 6 and XEV 9E',
       period: 'Mar – Jun 2025',
-      note: 'Proprietary automotive client work — no public repository.',
+      note: 'Proprietary client work: no public repository.',
       bullets: [
-        'Wrote Python scripts to parse and analyse OBD diagnostic data and Diagnostic Trouble Codes (DTCs).',
-        'Ran ECU diagnostics with the MDLR tool over UDS interfaces to validate software configurations.',
-        'Built structured Excel reporting with automated OK/Not-OK status and OTA-impact tracking.',
-        'Performed root-cause analysis, validated fixes with Center of Excellence engineers, and explored ML for predictive fault detection.',
+        'Wrote Python that turns OBD diagnostic data and trouble codes into reports with automatic OK / Not-OK status.',
+        'Validated ECU configurations over UDS and traced faults to root cause with Center of Excellence engineers.',
       ],
     },
   },
   {
-    company: 'PHN Technology Pvt Ltd',
+    company: 'PHN Technology',
     role: 'Intern',
     start: 'Jul 2023',
     end: 'Oct 2023',
-    location: 'Pune District, Maharashtra',
+    location: 'Pune',
     arrangement: 'Remote',
-    summary:
-      'Built an end-to-end sports analytics pipeline for the T20 World Cup.',
+    summary: 'An end-to-end sports analytics pipeline for the T20 World Cup.',
     bullets: [
-      'Owned the full workflow: Bright Data scraping of ESPN Cricinfo, pandas cleaning, Power Query shaping, and a star-schema model in Power BI.',
-      'Delivered an interactive dashboard with role filters, player drill-downs and head-to-head comparison to support Playing XI selection.',
-      'Shipped as CricketStat Pro — see Projects.',
+      'Scraped ESPN Cricinfo, cleaned it in pandas and modelled a star schema in Power BI.',
+      'Shipped a selection dashboard with role filters, drill-downs and head-to-head comparison.',
     ],
   },
   {
-    company: 'BitMap Technology Pvt Ltd',
+    company: 'BitMap Technology',
     role: 'SDE Intern',
     start: 'Jan 2023',
     end: 'May 2023',
-    location: 'Pune District, Maharashtra',
+    location: 'Pune',
     arrangement: 'Hybrid',
-    summary:
-      'Built a facial-recognition authentication system for online banking.',
+    summary: 'A three-factor login for online banking: face, then email OTP, then a voice phrase.',
     bullets: [
-      'Designed and shipped a three-factor authentication flow combining face recognition, email OTP and voice phrase verification.',
-      'Integrated OpenCV for detection and an LBPH model for recognition, with a calibration tool for threshold tuning.',
-      'Shipped as AI-Powered 3-Factor Login: about 95% correct identification and 88% of spoof attempts blocked in testing.',
+      'OpenCV detection and an LBPH recogniser, with a calibration tool for thresholds.',
+      // Measured by Abhay in testing; published in the project's repo README.
+      'In testing: about 95% correct identification, and 88% of spoof attempts blocked.',
     ],
   },
 ]

@@ -17,7 +17,7 @@ export function MoreProjects() {
             >
               <span>
                 <span className="inline-flex items-center gap-2 text-[1.25rem] font-medium">
-                  <span className="group-hover:shadow-[inset_0_-2px_0_var(--color-mark)] group-focus-visible:shadow-[inset_0_-2px_0_var(--color-mark)]">
+                  <span className="decoration-mark decoration-2 underline-offset-[0.22em] group-hover:underline group-focus-visible:underline">
                     {project.name}
                   </span>
                   <ExternalArrow />
@@ -29,7 +29,6 @@ export function MoreProjects() {
               </span>
               <span className="text-small text-fg-muted">
                 {project.tagline}
-                <span className="u-meta mt-1 block text-fg-subtle">{project.stack.join(' · ')}</span>
               </span>
             </a>
           </li>

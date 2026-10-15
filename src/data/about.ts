@@ -1,24 +1,21 @@
-/** Bio, close to verbatim from Abhay's own words, lightly edited for web length. */
-export const about = {
-  lede:
-    'I’m someone who enjoys turning messy problems into clean, reliable solutions.',
+import { todo, type Todo } from '../lib/todo'
+
+/**
+ * Bio. Abhay's own sentences, condensed (docs/AUDIT.md P1-3: the earlier
+ * version made the same "messy to clean" point four times). The middle
+ * paragraph ties the voice to the projects; every claim in it is visible in a
+ * case study.
+ */
+export const about: { lede: string; paragraphs: string[]; personal: string | Todo } = {
+  lede: 'I like building things that actually work.',
 
   paragraphs: [
-    'I like building things that actually work — tools, workflows, AI systems, and small utilities that make someone’s day easier. My strength is understanding the root of a problem, simplifying it, and shaping it into something structured and dependable.',
-    'Whether it’s an LLM workflow, a backend service, or data-heavy logic, I approach everything with clarity, modular thinking, and long-term maintainability in mind.',
+    'Tools, workflows, AI systems, and small utilities that make someone’s day easier. I start from the root of a problem, simplify it, and shape it into something structured and dependable.',
+    'Most of what I build now follows one rule: the model proposes, and code checks. HireLens won’t count a score whose quote isn’t in the resume. SearchScribe never lets a model write HTML.',
+    'Good engineering is clarity, not complexity: predictable behaviour, and decisions I can explain.',
   ],
 
-  principles: [
-    {
-      title: 'Clarity over complexity',
-      body: 'Good engineering isn’t about complexity — it’s about clarity. Predictable behaviour and thoughtful decisions matter more than fancy abstractions.',
-    },
-    {
-      title: 'Learn where things fit',
-      body: 'Learning fast matters, but learning the right things matters more. From AI agents to validation tools, I don’t just learn technologies — I learn where they make sense.',
-    },
-  ],
-
-  closing:
-    'I enjoy solving ambiguous problems, improving workflows, and leaving behind systems that keep running smoothly without constant attention.',
-} as const
+  personal: todo(
+    'one specific, personal line: what pulled you into AI engineering, or what you do away from the keyboard',
+  ),
+}
