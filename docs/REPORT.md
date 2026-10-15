@@ -101,36 +101,42 @@ commands for that are at the end.
 
 ## Needs your input
 
-1. **Resume PDF.** Re-export it from Word with the phone number removed and File
-   → Info → Author set to your name, then send the path. Optionally also fix:
-   - HireLens: "CI evals" (CI runs the unit tests, not the benchmark).
-   - ForecastGPT: "schema-enforced JSON" and "grounds every claim" (the figures
-     come from regex; grounding is in the prompt).
+Resolved on 2026-10-15:
 
-   I'll scan the text and links, copy it to `public/resume.pdf`, and set
-   `profile.resumeUrl`. The hero and Contact links then appear on their own.
-2. **Five lines only you can write**, listed by every build:
-   - one personal line for About
-   - one Translytics outcome that's safe to share publicly
-   - "What I'd change next" for HireLens, SearchScribe and yDirect
-3. **HTTPS on `www.`** `https://www.abhayemekar.me` serves GitHub's `*.github.io`
-   certificate (audit P1-2). In the repo's Settings → Pages, remove the custom
-   domain, save, re-add `abhayemekar.me`, and wait for the DNS check, so the
-   certificate covers both names.
-4. **HireLens benchmark (optional).** In PowerShell, from `C:\Playground\hirelens`.
-   It writes `packages/eval-report.json` in that repo, and the key stays in your
-   shell:
+- **Resume.** `public/resume.pdf` is Abhay's own resume.
+  - Only its document properties changed: the Author in both the Info dictionary
+    and the XMP `dc:creator` was a template author's name and is now his.
+  - The text and all 12 links are byte-for-byte unchanged.
+  - The phone number is kept by his choice. CLAUDE.md records it as the single
+    exception to the privacy rule.
+- **The five lines** were written from his own published sources:
+  - Translytics: his resume.
+  - About: the education record on this site.
+  - HireLens next: its README roadmap, plus the CI benchmark gap.
+  - SearchScribe next: its README beta status.
+  - yDirect next: its public roadmap.
+
+  The build now reports 0 TODOs.
+- **The `www.` certificate.** The custom domain was re-saved in Pages
+  settings, the DNS check passed, and a certificate was being provisioned when
+  this was written.
+
+Still open:
+
+1. **HireLens benchmark (optional).** In PowerShell, from
+   `C:Playgroundhirelens`. It writes `packages/eval-report.json` in that repo,
+   and the key stays in your shell:
    ```
    $env:HIRELENS_LLM_PROVIDER="google"; $env:HIRELENS_LLM_MODEL="gemini-2.5-flash"; $env:HIRELENS_LLM_API_KEY="<your key>"; pnpm --filter @hirelens/evals run evals
    ```
-   Send me the report and I'll add the numbers with their model and date.
-5. **HireLens docs drift (separate repo).**
-   - The README says the evals are "wired into CI"; CI runs only the unit tests.
-   - The blind-review docs say "read time" and mention schools; the code does
-     neither.
-   - The docs disagree on the Ollama base URL. It needs `/v1`.
-   - A 3B local model fails the scoring schema, so a minimum-model note would
-     help.
+2. **Resume wording (optional).** Two claims go further than the code does:
+   - HireLens: "CI evals" (CI runs the unit tests, not the benchmark).
+   - ForecastGPT: "schema-enforced JSON" and "grounds every claim".
+3. **HireLens docs drift (separate repo).**
+   - The README says the evals are "wired into CI".
+   - The blind-review docs say "read time" and mention schools.
+   - The docs disagree on the Ollama base URL (it needs `/v1`).
+   - There's no minimum-model note for local scoring.
 
 ## Suggested tag
 

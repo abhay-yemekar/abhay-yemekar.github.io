@@ -201,6 +201,10 @@ These are the owner's rules, not preferences.
 
 - **Never commit a phone number or home address**: not in source, markup, meta,
   OG tags, JSON-LD, or commit messages. Public contact is the `mailto:` link only.
+  **One exception, chosen by the owner on 2026-10-15:** his phone number may appear
+  inside `public/resume.pdf` (his own resume, served as-is), knowing it stays in the
+  public git history. It must never be copied into a page, meta tag, JSON-LD or
+  commit message. Before replacing the PDF, check it for a home address.
   The JSON-LD `PostalAddress` is city-level (Pune / Maharashtra / IN) on purpose:
   no `streetAddress`, no `postalCode`, no `telephone`.
 - **Never link to or copy anything from the private `inksl_ay` repo.** It is
@@ -215,8 +219,9 @@ These are the owner's rules, not preferences.
   default host resolves to a work identity on this machine.
 - No invented projects or metrics. Numbers on the site are measured or absent.
 - No analytics or tracking.
-- `profile.resumeUrl` stays `null` until a real `public/resume.pdf` exists, so the
-  CTA can never 404. Don't generate a resume.
+- `profile.resumeUrl` points at `public/resume.pdf`, Abhay's own resume. Set it back
+  to `null` if the file is removed, so the link can never 404. Don't generate or
+  edit the resume's content.
 - Ask before adding a dependency (`docs/PORTFOLIO_BRIEF.md`, hard rule 5).
 
 ## Deploy

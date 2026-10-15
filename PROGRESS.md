@@ -618,3 +618,27 @@ method with another before optimising.
 
 **Next.** Abhay pushes (commands in `docs/REPORT.md`). Then the resume PDF, the
 five TODO lines, the `www.` certificate, and optionally the HireLens benchmark.
+
+---
+
+## 2026-10-15 — Release prep: resume, last lines, publish
+
+**What changed.**
+
+- **Resume.** `public/resume.pdf` is Abhay's own resume. Its Author field (in
+  both the Info dictionary and the XMP metadata) held a template author's name
+  and is now his; the text and links are unchanged. He chose to keep his phone
+  number in the PDF, knowing it stays in public git history. CLAUDE.md now
+  records that as the single exception: never in pages, meta, JSON-LD or
+  commits. The hero and Contact links appear automatically.
+- **Last TODOs filled from his own published sources:**
+  - About: the college line, from the education record on the site.
+  - Translytics: his resume's bullets.
+  - "What I'd change next": the HireLens, SearchScribe and yDirect roadmaps.
+
+  The build reports 0 TODOs.
+- **Checks.**
+  - axe 0 on the changed pages.
+  - All 97 relative imports resolve with exact case, so the Linux CI build
+    can't fail on casing.
+  - `resume.pdf` is served as `application/pdf`.
