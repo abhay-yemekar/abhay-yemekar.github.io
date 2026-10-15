@@ -579,3 +579,42 @@ template author name. He'll re-export it from Word, and the scan runs again
 before it's copied in.
 
 **Next.** Phase 6: the quality bar, the README, and the final report.
+
+---
+
+## 2026-10-15 — Phase 6: quality bar (branch `chore/quality`)
+
+**What changed.**
+
+- **`npm audit fix`.** sharp 0.35.5 and source-map-js updated within their
+  ranges; 0 vulnerabilities.
+- **Theme switch.** Transitions are now suspended for the switching frame,
+  which measured 260–740 ms at 4× CPU throttle before and 52–182 ms after.
+  - The cause: every element with a colour transition animated at once.
+  - Forcing the flush with `getComputedStyle(root)` wasn't enough, because it
+    restyles only the root. `document.body.offsetWidth` restyles everything.
+  - The suspension is lifted after the next paint, so its own restyle doesn't
+    delay the switch.
+- **README** rewritten to point an engineer at what's worth reading, with the
+  measured numbers.
+- **`docs/REPORT.md`:** the before/after table, decisions, TODOs, the suggested
+  tag and the push commands.
+
+**Measured** (every page):
+
+- **Lighthouse:** 100 / 100 / 100 / 100, mobile (median of 3) and desktop. LCP
+  1.65–1.66 s mobile, CLS 0, TBT 0.
+- **axe-core 4.14:** 0 violations on 6 pages × 2 themes × 360/1280px.
+- **Keyboard:** 156 stops, all with a visible focus ring.
+- **Console and layout:** no console errors; no overflow at 360/768/1280/1920.
+- **Links:** 0 broken internal links or anchors; all 32 cited GitHub files
+  return 200 on `main`.
+- **Privacy:** the gate is clean across every branch's full history.
+
+**Measurement lesson.** In headless Chrome, Event Timing reported about 1.2 s for
+the blind-review click. A performance trace showed no task over 20 ms, and
+in-page click-to-next-frame timing measured 10–43 ms. Cross-check one latency
+method with another before optimising.
+
+**Next.** Abhay pushes (commands in `docs/REPORT.md`). Then the resume PDF, the
+five TODO lines, the `www.` certificate, and optionally the HireLens benchmark.
