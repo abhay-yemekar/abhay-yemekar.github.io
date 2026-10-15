@@ -392,3 +392,70 @@ benchmark against local Ollama. Then Gate 3.
 **Open questions.** `npm audit` reports 2 high-severity advisories in build-time
 dev dependencies (`sharp`, `source-map-js`). Neither ships to visitors; they're
 handled in Phase 6.
+
+---
+
+## 2026-10-15 — Phase 3: content and case studies (branch `feat/content`)
+
+**What changed.**
+
+- **Three new case studies** (SearchScribe, ForecastGPT, yDirect), each with a
+  diagram in the shared grammar, plus HireLens. `caseStudies.ts` is now the single
+  source for the four featured projects (home entry and `/work/<slug>/` page). The
+  long problem/built/learned fields left `projects.ts`.
+- **Copy rewritten:**
+  - Experience is written as outcomes. Kafka, the SDLC duty list and the OTA/MDLR
+    detail are cut.
+  - Capabilities are five groups, each with proof links and no chip wall.
+  - About is Abhay's own sentences, condensed, plus one paragraph tying the voice
+    to the projects.
+  - "Also built" lines are shorter.
+- **Every featured project's role is "Solo"**, as Abhay confirmed.
+- **Six TODOs need Abhay's words.** They're omitted from production and listed in
+  `docs/COPY.md`.
+
+**What the repos showed** (all read-only):
+
+- **SearchScribe** has six ADRs, each naming the alternatives it rejected. It has
+  also added passage-ID evidence selection: the server owns the quote text and the
+  model returns IDs. That's the same "model proposes, code verifies" pattern as
+  HireLens.
+- **ForecastGPT** extracts its figures with pdfplumber and regex; the model only
+  receives them already parsed. On a single free Render instance, the API runs its
+  own RQ worker thread (`EMBED_WORKER=1`). It now covers any Indian listed company
+  that Screener covers.
+- **yDirect's public repo** documents the side panel, the offscreen sign-in and
+  the server as the authorisation boundary. It doesn't document the extension's
+  CSP, the test suites or "no build step", so the site no longer claims those.
+
+**The HireLens benchmark failed, and that's a finding.**
+
+- The run used HireLens's own harness, from a scratch runner that writes nothing
+  into the repo. A loader hook pointed `@hirelens/core` at `src/`, because the
+  `dist/` build predated the last core commit.
+- Against `ollama/llama3.2:3b` it failed with `SchemaViolationError` after two
+  attempts. The AI SDK warns that Ollama's OpenAI-compatible path doesn't support
+  `responseFormat` with a schema.
+- No numbers are published. Gate 3 decides between a larger local model, a hosted
+  key, or a qualitative section.
+
+**Accessibility fix.**
+
+- axe flagged `link-in-text-block` on the SearchScribe breadcrumb: the underline
+  was a box-shadow, which axe ignores.
+- Forced-colors (high contrast) mode removes box-shadows, so every `.u-link` would
+  have lost its underline there.
+- Links, the active-nav marker and the hover underlines now use
+  `text-decoration`.
+
+**Measured:**
+
+- **axe-core 4.14:** 0 violations on all five pages, both themes, at 360 and
+  1280px.
+- **Lighthouse mobile:** 100 / 100 / 100 / 100 on each new case study, LCP
+  1.66 s.
+- **Budgets:** all within; JS is 0.84 kB on every page.
+- **Home page:** 934 words (was 1,739); 69 words before the first project (was
+  588); Selected work at 870px on a 360px phone.
+
+**Next.** Gate 3. Then Phase 4: the HireLens explainer.
