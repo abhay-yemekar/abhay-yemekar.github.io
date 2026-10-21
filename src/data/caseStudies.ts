@@ -538,6 +538,8 @@ export const caseStudies: CaseStudy[] = [
       stack: ['Chrome MV3', 'JavaScript', 'Firebase Auth', 'Firestore', 'Cloud Functions', 'Node 22'],
     },
     links: [
+      // The product site, live since 2026-10 (was unlinked while in development).
+      { label: 'Website', href: 'https://ydirect.tech/' },
       {
         label: 'Chrome Web Store',
         href: 'https://chromewebstore.google.com/detail/ehkahipeoahnbfbahlkedgdcjefejihg',

@@ -39,6 +39,10 @@ type Route = {
 
 const ogFor = (slug: string) => `/og/${slug}.png`
 
+/** The site's address, for the prerender (sitemap, robots.txt, CNAME). */
+export const siteUrl = profile.siteUrl
+const host = new URL(profile.siteUrl).host
+
 const routes: Route[] = [
   {
     meta: {
@@ -143,7 +147,7 @@ export const ogCards = [
     eyebrow: `${profile.role} · ${profile.city}`,
     title: hero.headline,
     mark: hero.evidence,
-    footer: 'abhayemekar.me',
+    footer: host,
   },
   ...caseStudies.map((s) => ({
     slug: s.slug,
@@ -151,6 +155,6 @@ export const ogCards = [
     title: s.og.title,
     subtitle: s.og.subtitle,
     pattern: s.pattern,
-    footer: `abhayemekar.me/work/${s.slug}`,
+    footer: `${host}/work/${s.slug}`,
   })),
 ]

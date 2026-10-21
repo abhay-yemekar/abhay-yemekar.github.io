@@ -18,6 +18,10 @@ const KIND_LABEL: Record<DiagramNode['kind'], string> = {
  * Below that, the same nodes render as a stacked HTML list instead. Both are in
  * the prerendered HTML; CSS shows one. The hidden one is display:none, so
  * assistive tech meets the content once.
+ *
+ * The data-* hooks are for the motion layer, which pops the nodes in and draws
+ * the edges once the diagram scrolls into view (pathLength=1 makes every edge
+ * one unit long for the dash trick). Without it the diagram is simply there.
  */
 export function Diagram({ spec, caption }: { spec: DiagramSpec; caption: string }) {
   const byId = new Map(spec.nodes.map((node) => [node.id, node]))
@@ -30,6 +34,7 @@ export function Diagram({ spec, caption }: { spec: DiagramSpec; caption: string 
         role="img"
         aria-labelledby={`${titleId}-t ${titleId}-d`}
         className="hidden h-auto w-full xl:block"
+        data-diagram
       >
         <title id={`${titleId}-t`}>{spec.title}</title>
         <desc id={`${titleId}-d`}>{spec.description}</desc>
@@ -46,13 +51,15 @@ export function Diagram({ spec, caption }: { spec: DiagramSpec; caption: string 
           <g key={edge.d}>
             <path
               d={edge.d}
+              pathLength={1}
+              data-edge
               fill="none"
               strokeWidth={edge.hot ? 2.25 : 1.25}
               className={edge.hot ? 'stroke-mark' : 'stroke-fg-muted'}
               markerEnd={`url(#${titleId}-${edge.hot ? 'arh' : 'ar'})`}
             />
             {edge.label && (
-              <text x={edge.label.x} y={edge.label.y} className="fill-fg-subtle font-mono text-[12.4px]">
+              <text x={edge.label.x} y={edge.label.y} className="fill-fg-subtle font-mono text-[12.4px]" data-edge-label>
                 {edge.label.text}
               </text>
             )}
@@ -60,7 +67,7 @@ export function Diagram({ spec, caption }: { spec: DiagramSpec; caption: string 
         ))}
 
         {spec.nodes.map((node) => (
-          <g key={node.id}>
+          <g key={node.id} data-node>
             <rect
               x={node.x}
               y={node.y}

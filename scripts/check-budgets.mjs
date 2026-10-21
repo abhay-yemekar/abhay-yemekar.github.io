@@ -8,7 +8,15 @@
  * - JS loaded at page start: was 99 kB gzip when React ran in the browser.
  *   Now that React only renders at build time, 10 kB is generous headroom
  *   for small client behaviours.
+ * - JS loaded after first paint (v3 motion layer, 2026-10-16): GSAP with
+ *   ScrollTrigger, SplitText and CustomEase, plus Lenis, measured at 57.6 kB;
+ *   the OGL particle chunk at 16.3 kB. 85 kB covers every deferred chunk
+ *   together, and the particle chunk alone gets 20 kB.
  * - Fonts: 130 KiB for every face the site ships.
+ * - Images: 400 kB per page, counted as the worst case, the largest AVIF
+ *   candidate of every <picture>, whether or not it's in the first screen.
+ *   Films and hover previews are left out: they load on demand, never with
+ *   the page.
  * Raise a number only with a reason recorded next to it.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -20,6 +28,9 @@ const BUDGET = {
   cssKb: 15,
   htmlKb: 40,
   fontsKib: 130,
+  deferredJsKb: 85,
+  imagesKb: 400,
+  particlesKb: 20,
 }
 
 const dist = resolve(import.meta.dirname, '..', 'dist')
@@ -42,22 +53,47 @@ for (const page of pages) {
   const js = refs(/<script[^>]+type="module"[^>]+src="\/([^"]+)"/g).concat(refs(/<link[^>]+rel="modulepreload"[^>]+href="\/([^"]+)"/g))
   const css = refs(/<link[^>]+rel="stylesheet"[^>]+href="\/([^"]+)"/g)
 
+  // The largest AVIF candidate of each <picture>: what a big, dense screen fetches.
+  const images = [...html.matchAll(/<source type="image\/avif" srcSet="([^"]+)"/gi)].map((match) => {
+    const candidates = match[1].split(',').map((c) => c.trim().split(/\s+/))
+    const [largest] = candidates.sort((a, b) => parseInt(b[1]) - parseInt(a[1]))[0]
+    return join(dist, largest.replace(/^\//, ''))
+  })
+  const imagesKb = images.reduce((sum, file) => sum + statSync(file).size / 1000, 0)
   const jsKb = js.reduce((sum, file) => sum + gz(file), 0)
   const cssKb = css.reduce((sum, file) => sum + gz(file), 0)
   const htmlKb = gz(page)
   const name = '/' + relative(dist, page).replace(/\\/g, '/').replace(/index\.html$/, '')
-  rows.push({ page: name, 'JS kB': jsKb.toFixed(2), 'CSS kB': cssKb.toFixed(2), 'HTML kB': htmlKb.toFixed(2) })
+  rows.push({ page: name, 'JS kB': jsKb.toFixed(2), 'CSS kB': cssKb.toFixed(2), 'HTML kB': htmlKb.toFixed(2), 'images kB': imagesKb.toFixed(0) })
+  if (imagesKb > BUDGET.imagesKb) failures.push(`${name}: images ${imagesKb.toFixed(0)} kB > ${BUDGET.imagesKb} kB`)
 
   if (jsKb > BUDGET.initialJsKb) failures.push(`${name}: initial JS ${jsKb.toFixed(1)} kB > ${BUDGET.initialJsKb} kB`)
   if (cssKb > BUDGET.cssKb) failures.push(`${name}: CSS ${cssKb.toFixed(1)} kB > ${BUDGET.cssKb} kB`)
   if (htmlKb > BUDGET.htmlKb) failures.push(`${name}: HTML ${htmlKb.toFixed(1)} kB > ${BUDGET.htmlKb} kB`)
 }
 
+// Every JS file that no page loads at start is deferred: the explainer, the
+// motion layer and the particle chunk.
+const initial = new Set(
+  pages.flatMap((page) =>
+    [...readFileSync(page, 'utf8').matchAll(/(?:src|href)="\/(assets\/[^"]+\.js)"/g)].map((match) => join(dist, match[1])),
+  ),
+)
+const deferred = files.filter((file) => file.endsWith('.js') && !initial.has(file))
+const deferredKb = deferred.reduce((sum, file) => sum + gz(file), 0)
+const particles = deferred.find((file) => /hero-particles-[\w-]+\.js$/.test(file))
+const particlesKb = particles ? gz(particles) : 0
+if (deferredKb > BUDGET.deferredJsKb) failures.push(`deferred JS ${deferredKb.toFixed(1)} kB > ${BUDGET.deferredJsKb} kB`)
+if (particlesKb > BUDGET.particlesKb) failures.push(`particle chunk ${particlesKb.toFixed(1)} kB > ${BUDGET.particlesKb} kB`)
+
 const fontsKib = files.filter((file) => file.endsWith('.woff2')).reduce((sum, file) => sum + statSync(file).size, 0) / 1024
 if (fontsKib > BUDGET.fontsKib) failures.push(`fonts ${fontsKib.toFixed(1)} KiB > ${BUDGET.fontsKib} KiB`)
 
 console.table(rows)
 console.log(`fonts: ${fontsKib.toFixed(1)} KiB (budget ${BUDGET.fontsKib})`)
+console.log(
+  `deferred JS: ${deferredKb.toFixed(1)} kB in ${deferred.length} chunks (budget ${BUDGET.deferredJsKb}), particles ${particlesKb.toFixed(1)} kB (budget ${BUDGET.particlesKb})`,
+)
 
 if (failures.length > 0) {
   console.error('\nOver budget:\n' + failures.map((failure) => `  - ${failure}`).join('\n'))

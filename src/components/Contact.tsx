@@ -8,22 +8,33 @@ const channels = [
   { label: 'LinkedIn', value: 'abhayyemekar', href: profile.links.linkedin },
 ]
 
+/** The close: the offer, then the email address at display size as the link itself. */
 export function Contact() {
   return (
     <SectionShell section={sections.contact}>
-      <p className="m-0 max-w-[24ch] text-[clamp(1.75rem,4vw,2.75rem)] leading-tight">
-        Open to AI engineering roles and interesting problems.
-      </p>
-      <p className="mt-5 max-w-[52ch] text-fg-muted">
-        The fastest way to reach me is email. I read everything and reply to anything specific.
-      </p>
+      <div className="grid gap-x-8 gap-y-8 lg:grid-cols-12">
+        <p className="u-display m-0 text-[clamp(2.25rem,5.2vw,4.75rem)] leading-[0.98] tracking-[-0.025em] lg:col-span-9">
+          Open to AI engineering roles and <span className="u-accent">interesting problems.</span>
+        </p>
+        <p className="m-0 max-w-[44ch] text-lede text-fg-muted lg:col-span-5">
+          The fastest way to reach me is email. I read everything and reply to anything specific.
+        </p>
+      </div>
 
-      <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-        {/* mailto opens in place, so no target="_blank" (CLAUDE.md). */}
-        <a href={profile.links.email} className="u-btn">
-          {profile.email}
+      {/* mailto opens in place, so no target="_blank" (CLAUDE.md). */}
+      <a
+        href={profile.links.email}
+        className="group mt-14 flex items-center justify-between gap-6 border-y border-border py-8 text-fg no-underline lg:mt-20 lg:py-10"
+      >
+        <span className="u-display min-w-0 text-[clamp(1.375rem,5.6vw,6rem)] leading-none tracking-[-0.02em] [overflow-wrap:anywhere]">
+          <span className="u-link">{profile.email}</span>
+        </span>
+        <span className="u-arrow-ring transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:-rotate-45">
           <ForwardArrow />
-        </a>
+        </span>
+      </a>
+
+      <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-2">
         {channels.map((channel) => (
           <a
             key={channel.label}

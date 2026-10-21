@@ -3,6 +3,7 @@ import { ForwardArrow } from '../components/Icons'
 import { Nav } from '../components/Nav'
 import { SkipLink } from '../components/SkipLink'
 import { caseStudies } from '../data/caseStudies'
+import { vt } from '../lib/view-transition'
 
 /**
  * Served by GitHub Pages for any missing path. It is prerendered like every
@@ -14,25 +15,35 @@ export function NotFoundPage() {
     <>
       <SkipLink />
       <Nav page="other" />
-      <main id="main" className="u-container py-20 lg:py-28">
-        <p className="u-meta m-0 text-fg-subtle">404 · not found</p>
-        <h1 className="mt-5 max-w-[18ch] text-title">
-          There’s <span className="u-evidence">no evidence</span> of that page.
+      <main id="main" className="u-container py-16 lg:py-24">
+        <p className="u-label m-0 text-fg-subtle">404 · not found</p>
+        <h1 className="mt-6 max-w-[16ch] text-title">
+          There’s <span className="u-evidence u-accent">no evidence</span> of that page.
         </h1>
-        <p className="mt-6 max-w-[48ch] text-lede text-fg-muted">
+        <p className="mt-8 max-w-[48ch] text-lede text-fg-muted">
           It may have moved when the site was rebuilt. The work is all still here:
         </p>
-        <ul className="m-0 mt-6 list-none p-0">
+        <ul className="m-0 mt-8 list-none border-t border-border p-0">
           {caseStudies.map((study) => (
-            <li key={study.slug}>
-              <a href={`/work/${study.slug}/`} className="u-tap gap-2 text-[1.25rem] no-underline">
-                <span className="u-link">{study.name}</span>
-                <ForwardArrow />
+            <li key={study.slug} className="border-b border-border">
+              <a
+                href={`/work/${study.slug}/`}
+                className="group flex items-center justify-between gap-6 py-5 text-fg no-underline"
+              >
+                <span
+                  className="vt u-display inline-block text-[clamp(1.75rem,3.4vw,3rem)] leading-none tracking-[-0.02em] transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-2"
+                  style={vt(study.slug)}
+                >
+                  {study.name}
+                </span>
+                <span className="u-arrow-ring">
+                  <ForwardArrow />
+                </span>
               </a>
             </li>
           ))}
         </ul>
-        <a href="/" className="u-btn mt-10">
+        <a href="/" className="u-btn mt-12" data-magnetic>
           Home
           <ForwardArrow />
         </a>

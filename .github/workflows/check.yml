@@ -1,0 +1,33 @@
+name: Build check
+
+# The same gate as the deploy (typecheck, client and SSR builds, prerender,
+# weight budgets), run on every pull request into main. Nothing is deployed:
+# only a push to main deploys, so a PR has to pass this before it can ship.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A newer push to the same PR supersedes the run in progress.
+concurrency:
+  group: check-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck, build, prerender and budgets
+        run: npm run build
