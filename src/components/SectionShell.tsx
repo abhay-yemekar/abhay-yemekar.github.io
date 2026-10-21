@@ -9,24 +9,26 @@ type SectionShellProps = {
 }
 
 /**
- * A section with a real heading: an amber mono numeral and a serif h2 at full
- * size. This replaces the 160px left rail, which cost width and shrank every
- * section heading to a 12px label.
+ * A section with a real heading: a bracketed mono index, then the h2 at
+ * display size. With the motion layer on, the heading's lines rise from masks
+ * as it scrolls in (data-split, src/client/motion/reveals.ts).
  */
 export function SectionShell({ section, children, aside }: SectionShellProps) {
   const headingId = `${section.id}-heading`
 
   return (
-    <section id={section.id} aria-labelledby={headingId} className="border-t border-border py-16 lg:py-24">
+    <section id={section.id} aria-labelledby={headingId} className="border-t border-border py-20 lg:py-32">
       <div className="u-container">
-        <div className="mb-10 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 lg:mb-14">
-          <h2 id={headingId} className="flex items-baseline gap-3.5 text-h2">
-            <span className="u-meta text-accent" aria-hidden="true">
+        <div className="mb-12 lg:mb-20">
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-fg-subtle lg:mb-8">
+            <span className="u-label" aria-hidden="true">
               {section.index}
             </span>
+            {aside && <span className="u-label">{aside}</span>}
+          </div>
+          <h2 id={headingId} className="text-h2" data-split>
             {section.label}
           </h2>
-          {aside && <div className="u-meta text-fg-subtle">{aside}</div>}
         </div>
         {children}
       </div>

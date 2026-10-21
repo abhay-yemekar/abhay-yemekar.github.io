@@ -36,7 +36,9 @@ it isn't a real preset and silently produces junk numbers.
   time only**: no React reaches the browser.
 - **Tailwind CSS v4** via `@tailwindcss/vite`, CSS-first, with no
   `tailwind.config.js`.
-- No animation library. Motion is CSS (see Motion).
+- **Motion (v3, approved 2026-10-16):** GSAP 3.15 (ScrollTrigger, SplitText,
+  CustomEase), Lenis smooth scroll and OGL for the WebGL hero. All of it loads after
+  first paint from `src/client/motion/`; see Motion.
 - **sharp** (devDep) for offline asset generation.
 - No router, no CMS, no analytics, no tracking. Content lives in typed TS files.
 
@@ -148,12 +150,16 @@ button and stays hidden without JS.
 
 ### Motion
 
-**"Mark, don't move."** No entrance animations, and nothing on the LCP element.
-Motion is limited to:
-- evidence marks drawing on scroll (CSS scroll-driven animation inside
-  `@supports`; static where unsupported)
-- hover and focus transitions
-- cross-document View Transitions
+**v3: a progressive-enhancement animation layer** (redesign in progress on
+`redesign/cinematic`; this section is finalised when it ships).
+
+- The HTML is complete without it, and nothing is hidden unless the motion layer
+  is running.
+- The `<h1>` is never faded: it is the LCP element.
+- Above-the-fold entrances are CSS gated on classes the inline head script sets
+  (`motion`, `intro`). Everything below the fold is GSAP, started after first
+  paint.
+- There is a user-facing pause control (WCAG 2.2.2).
 
 Easings are `--ease-entrance` and `--ease-hover`, with durations 150/250/500ms. All
 motion sits under `prefers-reduced-motion: no-preference`, backed by a global

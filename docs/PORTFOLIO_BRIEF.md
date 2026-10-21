@@ -150,8 +150,9 @@ internal numbers and no confidential detail.
    - One-off tools run through `npx` (lighthouse, @axe-core/cli, linkinator) are fine
      but must stay out of `package.json`.
    - Licenses must be MIT, Apache-2.0, BSD or ISC; fonts must be OFL.
-6. **One animation library:** `motion`, which is already installed. No GSAP. Use plain
-   CSS for anything simple.
+6. **Animation stack (superseded 2026-10-16, v3 redesign):** GSAP 3.15 (ScrollTrigger,
+   SplitText, CustomEase), Lenis and OGL, approved by Abhay. Everything loads after
+   first paint as progressive enhancement. Use plain CSS for anything simple.
 7. **No analytics or tracking.** Phase 5 may *propose* an option. Installing one needs
    my explicit yes.
 8. **Resume:** `profile.resumeUrl` stays `null` until I add `public/resume.pdf`. Don't

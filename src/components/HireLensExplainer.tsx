@@ -124,6 +124,7 @@ export function HireLensExplainer({ headingLevel = 3 }: { headingLevel?: 2 | 3 }
             tabIndex={0}
             aria-label={`Resume of ${candidate.name}, fictional`}
             data-resume-box
+            data-lenis-prevent
           >
             <ResumeText text={resumeText} variant="clear" />
             <ResumeText text={blindText} variant="blind" />

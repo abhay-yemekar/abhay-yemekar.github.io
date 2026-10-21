@@ -38,3 +38,13 @@ export function MoonIcon() {
     </svg>
   )
 }
+
+/** Pause bars, swapped for a play triangle while motion is paused. */
+export function PauseIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" className="inline-block align-[-0.05em]" aria-hidden="true">
+      <path className="icon-pause" d="M2 1.5h2v7H2zM6 1.5h2v7H6z" fill="currentColor" />
+      <path className="icon-play" d="M2.5 1.2 8.6 5 2.5 8.8Z" fill="currentColor" />
+    </svg>
+  )
+}

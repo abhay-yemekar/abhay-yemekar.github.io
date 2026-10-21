@@ -1,20 +1,15 @@
 type Theme = 'light' | 'dark'
 
 const STORAGE_KEY = 'theme'
-const darkQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
-/** An explicit choice wins; otherwise the OS preference, as CSS sees it. */
+/** Dark is the designed default (v3); light applies only once chosen. */
 function effectiveTheme(): Theme {
-  const chosen = document.documentElement.dataset.theme
-  if (chosen === 'light' || chosen === 'dark') return chosen
-  return darkQuery.matches ? 'dark' : 'light'
+  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
 }
 
 /**
  * A toggle button ("Dark theme", aria-pressed). Only a click writes to
- * localStorage. Until then the OS preference keeps deciding, including when it
- * changes mid-visit. The previous version persisted on first load, which pinned
- * a first-time visitor to whatever their OS said that day.
+ * localStorage, so a visitor who never touches it keeps getting the default.
  */
 export function initThemeToggle() {
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')
@@ -51,6 +46,5 @@ export function initThemeToggle() {
     }),
   )
 
-  darkQuery.addEventListener('change', sync)
   sync()
 }

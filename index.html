@@ -6,8 +6,7 @@
     <!-- Per-page tags (title, canonical, Open Graph, JSON-LD) come from src/entry-server.tsx. -->
     <!--app-head-->
     <meta name="author" content="Abhay Yemekar" />
-    <meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0a0a0a" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
@@ -15,21 +14,34 @@
     <link rel="manifest" href="/site.webmanifest" />
 
     <!--
-      Runs before first paint. With no stored choice it does nothing about the
-      theme: CSS follows prefers-color-scheme, live. It only applies a theme
-      the visitor picked with the toggle, and marks the page as JS-capable so
-      the toggle becomes visible. Kept inline and dependency-free on purpose.
+      Runs before first paint, inline and dependency-free on purpose. It sets:
+      - .js, so JS-only controls become visible;
+      - data-theme, only for a theme the visitor picked with the toggle (dark is
+        the default without it);
+      - data-motion="on" or "paused". prefers-reduced-motion means paused, unless
+        the visitor pressed "Play motion" (stored as "on"): an explicit choice
+        beats the OS default, in both directions;
+      - .intro on the first page of a session, when motion is on. The CSS
+        keyframes in motion.css play once and always end visible.
     -->
     <script>
       ;(function () {
         var root = document.documentElement
         root.classList.add('js')
+        var store = {}
         try {
-          var stored = localStorage.getItem('theme')
-          if (stored === 'light' || stored === 'dark') root.dataset.theme = stored
+          store.theme = localStorage.getItem('theme')
+          store.motion = localStorage.getItem('motion')
+          store.seen = sessionStorage.getItem('intro')
+          sessionStorage.setItem('intro', '1')
         } catch (e) {
-          /* Private mode or blocked storage: the OS preference stands. */
+          /* Private mode or blocked storage: defaults apply, the intro plays. */
         }
+        if (store.theme === 'light' || store.theme === 'dark') root.dataset.theme = store.theme
+        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+        var on = store.motion === 'on' || (!reduce && store.motion !== 'paused')
+        root.dataset.motion = on ? 'on' : 'paused'
+        if (on && !store.seen) root.classList.add('intro')
       })()
     </script>
 

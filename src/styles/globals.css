@@ -1,116 +1,113 @@
 @import 'tailwindcss';
 @import './fonts.css';
+@import './motion.css';
 
 /*
- * "Evidence" tokens (docs/STRATEGY.md, direction A): paper and ink, plus amber.
+ * v3 "Cinematic" tokens: a near-black canvas, warm off-white text, and amber,
+ * which still marks evidence and now also glows.
  *
- * Amber has one job: it marks evidence. That covers the wash and underline
- * over a cited claim, citation numerals, link underlines, the active-nav
- * underline, the diagram's trust path and section numerals. It is never
- * decoration and never a fill, apart from the evidence wash at <= 30%.
+ * Dark is the designed default whatever the OS says. The paper theme from v2 is
+ * kept behind the toggle (data-theme="light"). It is opt-in only, because the
+ * particles, glow and video are tuned for black.
  *
- * Theme. With no stored choice, prefers-color-scheme decides, live, in CSS.
- * The inline script in index.html sets data-theme only when the visitor has
- * pressed the toggle. Without JS the OS still decides.
- *
- * Every text pair clears WCAG AA (4.5:1) in both themes. Non-text marks
- * (--color-mark, --color-ring) clear 3:1 against the page. On the evidence
- * wash, use fg or fg-muted only: fg-subtle drops to 3.5:1 there in dark. Measured values are
- * in docs/CONTRAST.md. Re-measure computed styles in the browser after any
- * change here; don't eyeball it.
+ * Every text pair clears WCAG AA (4.5:1) in both themes, and non-text marks
+ * clear 3:1. Measured values are in docs/CONTRAST.md. Re-measure computed
+ * styles after any change. On the evidence wash use fg or fg-muted only.
  */
 :root {
-  --color-bg: #f7f5ef;
-  --color-bg-elev: #fffdf8;
-  --color-fg: #1a1917;
-  --color-fg-muted: #4f4b45;
-  --color-fg-subtle: #625e57;
-  --color-border: #dcd6ca;
-  --color-accent: #8a5300;
-  --color-mark: #a86f0a;
-  --color-wash: rgb(227 165 42 / 0.3);
-  --color-ring: #8a5300;
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --color-bg: #121110;
-    --color-bg-elev: #1b1a18;
-    --color-fg: #ece8df;
-    --color-fg-muted: #b3ada2;
-    --color-fg-subtle: #959086;
-    --color-border: #2e2c28;
-    --color-accent: #f0b54c;
-    --color-mark: #f0b54c;
-    --color-wash: rgb(240 181 76 / 0.2);
-    --color-ring: #f0b54c;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
-  --color-bg: #121110;
-  --color-bg-elev: #1b1a18;
-  --color-fg: #ece8df;
-  --color-fg-muted: #b3ada2;
-  --color-fg-subtle: #959086;
-  --color-border: #2e2c28;
+  --color-bg: #0a0a0a;
+  --color-bg-elev: #131313;
+  --color-bg-2: #101012;
+  --color-fg: #f1eee8;
+  --color-fg-muted: #b0aba2;
+  --color-fg-subtle: #8e8a82;
+  --color-border: rgb(255 255 255 / 0.1);
+  --color-border-strong: rgb(255 255 255 / 0.22);
   --color-accent: #f0b54c;
   --color-mark: #f0b54c;
   --color-wash: rgb(240 181 76 / 0.2);
+  --color-glow: rgb(240 181 76 / 0.35);
   --color-ring: #f0b54c;
   color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --color-bg: #f7f5ef;
+  --color-bg-elev: #fffdf8;
+  --color-bg-2: #efebe2;
+  --color-fg: #1a1917;
+  --color-fg-muted: #4f4b45;
+  --color-fg-subtle: #625e57;
+  --color-border: rgb(26 25 23 / 0.14);
+  --color-border-strong: rgb(26 25 23 / 0.3);
+  --color-accent: #8a5300;
+  --color-mark: #a86f0a;
+  --color-wash: rgb(227 165 42 / 0.3);
+  --color-glow: rgb(168 111 10 / 0.25);
+  --color-ring: #8a5300;
+  color-scheme: light;
 }
 
 @theme inline {
   --color-bg: var(--color-bg);
   --color-bg-elev: var(--color-bg-elev);
+  --color-bg-2: var(--color-bg-2);
   --color-fg: var(--color-fg);
   --color-fg-muted: var(--color-fg-muted);
   --color-fg-subtle: var(--color-fg-subtle);
   --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
   --color-accent: var(--color-accent);
   --color-mark: var(--color-mark);
   --color-wash: var(--color-wash);
+  --color-glow: var(--color-glow);
   --color-ring: var(--color-ring);
 }
 
 @theme {
-  --font-serif: 'Newsreader Variable', 'Newsreader Fallback', Georgia, serif;
+  --font-sans: 'Instrument Sans Variable', 'Instrument Sans Fallback', Arial, sans-serif;
+  --font-display: 'Instrument Sans Display', 'Instrument Sans Display Fallback', Arial, sans-serif;
+  --font-serif: 'Instrument Serif', 'Instrument Serif Fallback', 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono Fallback', ui-monospace, monospace;
 
   /* Type scale. The smallest text anywhere is --text-meta (13px). */
-  --text-display: clamp(2.625rem, 6.2vw, 5rem);
-  --text-display--line-height: 1.04;
+  --text-mega: clamp(4.5rem, 15vw, 15rem);
+  --text-mega--line-height: 0.82;
+  --text-mega--letter-spacing: -0.03em;
+  --text-display: clamp(2.5rem, 5.4vw, 5.25rem);
+  --text-display--line-height: 0.98;
   --text-display--letter-spacing: -0.025em;
-  --text-title: clamp(2.75rem, 6vw, 4.5rem);
-  --text-title--line-height: 1;
+  --text-title: clamp(3.25rem, 9vw, 8.5rem);
+  --text-title--line-height: 0.9;
   --text-title--letter-spacing: -0.03em;
-  --text-h2: clamp(1.875rem, 3vw, 2.5rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.015em;
-  --text-h3: clamp(1.375rem, 2vw, 1.75rem);
-  --text-h3--line-height: 1.2;
-  --text-h3--letter-spacing: -0.01em;
-  --text-lede: clamp(1.1875rem, 1.6vw, 1.375rem);
+  --text-h2: clamp(2.5rem, 6.5vw, 6rem);
+  --text-h2--line-height: 0.92;
+  --text-h2--letter-spacing: -0.025em;
+  --text-work: clamp(2.5rem, 5.6vw, 5.25rem);
+  --text-work--line-height: 0.92;
+  --text-work--letter-spacing: -0.025em;
+  --text-h3: clamp(1.5rem, 2.6vw, 2.375rem);
+  --text-h3--line-height: 1.05;
+  --text-h3--letter-spacing: -0.015em;
+  --text-lede: clamp(1.125rem, 1.45vw, 1.375rem);
   --text-lede--line-height: 1.5;
-  --text-body: 1.1875rem;
-  --text-body--line-height: 1.6;
-  --text-small: 1.0625rem;
-  --text-small--line-height: 1.55;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-small: 0.9375rem;
+  --text-small--line-height: 1.6;
   --text-meta: 0.8125rem;
   --text-meta--line-height: 1.5;
-  --text-meta--letter-spacing: 0.02em;
+  --text-meta--letter-spacing: 0.04em;
 
-  --container-content: 1200px;
-  --container-prose: 660px;
+  --container-content: 1360px;
+  --container-prose: 640px;
 
-  --radius-sm: 3px;
-  --radius-card: 6px;
+  --radius-sm: 4px;
+  --radius-card: 14px;
 
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-hover: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-expo: cubic-bezier(0.87, 0, 0.13, 1);
   --duration-fast: 150ms;
   --duration-base: 250ms;
   --duration-slow: 500ms;
@@ -133,7 +130,7 @@
   body {
     background-color: var(--color-bg);
     color: var(--color-fg);
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
     -webkit-font-smoothing: antialiased;
@@ -141,12 +138,18 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Headings: Instrument Sans, condensed and heavy. The serif accent is .u-accent. */
   h1,
   h2,
-  h3,
-  h4 {
-    font-weight: 500;
+  h3 {
+    font-family: var(--font-display);
+    font-stretch: 80%;
+    font-weight: 600;
     text-wrap: balance;
+  }
+
+  h4 {
+    font-weight: 600;
   }
 
   p,
@@ -161,8 +164,8 @@
   }
 
   ::selection {
-    background-color: var(--color-wash);
-    color: var(--color-fg);
+    background-color: var(--color-mark);
+    color: #0a0a0a;
   }
 }
 
@@ -171,12 +174,12 @@
     width: 100%;
     max-width: var(--container-content);
     margin-inline: auto;
-    padding-inline: 1.5rem;
+    padding-inline: 1.25rem;
   }
 
   @media (min-width: 1024px) {
     .u-container {
-      padding-inline: 3rem;
+      padding-inline: 2.5rem;
     }
   }
 
@@ -188,10 +191,36 @@
     letter-spacing: var(--text-meta--letter-spacing);
   }
 
+  /* Bracketed mono label: [ 01 / Work ]. The brackets are decoration. */
+  .u-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .u-label::before {
+    content: '[\00a0';
+    color: var(--color-fg-subtle);
+  }
+
+  .u-label::after {
+    content: '\00a0]';
+    color: var(--color-fg-subtle);
+  }
+
+  /* The serif-italic accent word inside a condensed headline. */
+  .u-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-stretch: 100%;
+    letter-spacing: -0.01em;
+  }
+
   /*
    * Text link: an amber underline that thickens on hover and focus. A real
-   * text-decoration, not a box-shadow: forced-colors (high contrast) mode
-   * strips shadows, which would leave links indistinguishable from text.
+   * text-decoration, not a box-shadow: forced-colors mode strips shadows.
    */
   .u-link {
     text-decoration-line: underline;
@@ -206,41 +235,49 @@
     text-decoration-thickness: 2px;
   }
 
-  /* Standalone link or button row: a 44px tap target with the underline kept tight to the text. */
+  /* Standalone link or button: a 44px tap target. */
   .u-tap {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
   }
 
+  /* Primary action: a light pill on the dark canvas. Magnetic when motion runs. */
   .u-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.625rem;
-    min-height: 48px;
-    padding-inline: 1.375rem;
-    border-radius: var(--radius-sm);
+    gap: 0.75rem;
+    min-height: 52px;
+    padding-inline: 1.5rem;
+    border-radius: 999px;
     background-color: var(--color-fg);
     color: var(--color-bg);
     font-family: var(--font-mono);
     font-size: 0.875rem;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
     text-decoration: none;
-    transition: opacity var(--duration-fast) var(--ease-hover);
+    transition:
+      background-color var(--duration-base) var(--ease-hover),
+      box-shadow var(--duration-base) var(--ease-hover);
   }
 
+  /* Accent, not mark: the hover keeps AA contrast for its text in both themes. */
   .u-btn:hover {
-    opacity: 0.88;
+    background-color: var(--color-accent);
+    box-shadow: 0 0 40px var(--color-glow);
   }
 
-  /* Evidence: the one motif. A wash plus an underline mark, not colour alone. */
+  /* Evidence: a wash plus an underline mark, not colour alone. */
   .u-evidence {
     background-image: linear-gradient(var(--color-wash), var(--color-wash));
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    box-shadow: inset 0 -2px 0 var(--color-mark);
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-mark);
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 0.12em;
     border-radius: 2px;
-    padding-inline: 0.08em;
+    padding-inline: 0.06em;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
@@ -248,7 +285,8 @@
   /* Citation numeral pointing at a source on the page. */
   .u-cite {
     font-family: var(--font-mono);
-    font-size: 0.42em;
+    /* A third of the headline, but never under the 13px floor (phones). */
+    font-size: max(var(--text-meta), 0.32em);
     line-height: 0;
     color: var(--color-accent);
     margin-left: 0.12em;
@@ -270,28 +308,49 @@
 }
 
 /*
- * Evidence marks draw left to right as they scroll into view, using CSS
- * scroll-driven animation. It is pure progressive enhancement: a browser
- * without animation-timeline, or with reduced motion requested, shows the mark
- * fully drawn. No JS is involved.
+ * Film grain over everything: a static SVG noise tile at low opacity. It is
+ * decorative, ignores pointers, and is off in forced-colors mode.
  */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .u-evidence {
-      animation: evidence-draw linear both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 30%;
-    }
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
-    @keyframes evidence-draw {
-      from {
-        background-size: 0% 100%;
-      }
-    }
+:root[data-theme='light'] body::after {
+  opacity: 0.035;
+}
+
+@media (forced-colors: active) {
+  body::after {
+    display: none;
+  }
+}
+
+/* Scroll progress hairline: pure CSS, no JS (scroll-driven animation). */
+.scroll-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    display: block;
+    transform-origin: 0 50%;
+    animation: progress-grow linear both;
+    animation-timeline: scroll(root);
   }
 
-  @view-transition {
-    navigation: auto;
+  @keyframes progress-grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
   }
 }
 
@@ -302,19 +361,42 @@
   transition: none !important;
 }
 
-/* Theme toggle: invisible until the inline script confirms JS is running. */
+/* JS-only controls stay invisible (but keep their space) until JS confirms. */
 html:not(.js) [data-theme-toggle] {
   visibility: hidden;
 }
 
+/* The motion control needs JS: the head script sets data-motion. */
+html:not([data-motion]) [data-motion-toggle] {
+  display: none;
+}
+
+[data-motion-toggle] .icon-play,
+[data-motion-toggle][data-state='paused'] .icon-pause {
+  display: none;
+}
+
+[data-motion-toggle][data-state='paused'] .icon-play {
+  display: inline;
+}
+
+/* Targets that smooth scroll focuses by hand (tabindex=-1) need no ring. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+/*
+ * Reduced motion: transitions and animations collapse to an instant, unless
+ * the visitor explicitly pressed "Play motion" (data-motion="on").
+ */
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not([data-motion='on']) {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  html:not([data-motion='on']) *,
+  html:not([data-motion='on']) *::before,
+  html:not([data-motion='on']) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

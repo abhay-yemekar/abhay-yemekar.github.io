@@ -1,0 +1,265 @@
+/*
+ * Styles for the motion layer. The rule throughout: nothing here hides
+ * content unless the thing that reveals it is certain to run.
+ * - The intro is CSS keyframes that always end visible.
+ * - The JS-built pieces (cursor, preview) are created by the layer itself.
+ * - Inline posters hide only where the hover preview replaces them.
+ */
+
+/* The name wordmark: dot-filled SVG text, the particle field's static form. */
+.wordmark {
+  height: auto;
+  color: var(--color-fg);
+}
+
+/* The particle canvas fades in only once it has drawn (hero-particles.ts). */
+.hero-canvas {
+  opacity: 0;
+}
+
+/*
+ * First-visit intro. The inline head script adds .intro before first paint,
+ * once per session, only when motion is on (so never under reduced motion
+ * unless the visitor chose "Play motion"). Any key or click removes it
+ * (main.ts), which ends every animation at its final frame.
+ *
+ * The <h1> and the lede only move; they never fade, because either can be the
+ * LCP element (the lede is, on phones).
+ */
+html.intro [data-intro='rise'] {
+  animation: intro-rise 900ms var(--ease-entrance) both;
+  animation-delay: calc(var(--intro-order, 0) * 90ms + 250ms);
+}
+
+html.intro [data-intro='settle'] {
+  animation: intro-settle 1100ms var(--ease-entrance) both;
+  animation-delay: 120ms;
+}
+
+/* Like rise, without the fade: for text that may be the LCP element. */
+html.intro [data-intro='drift'] {
+  animation: intro-settle 1000ms var(--ease-entrance) both;
+  animation-delay: calc(var(--intro-order, 0) * 90ms + 150ms);
+}
+
+html.intro [data-intro='line'] {
+  transform-origin: 0 50%;
+  animation: intro-line 1200ms var(--ease-expo) both;
+}
+
+/*
+ * The wordmark waits 1.3s for the particle field to assemble it. If the
+ * field arrives first, it sets the wordmark's opacity to 0, and this fade
+ * (whose end state is that underlying value) stays at 0. If the field is
+ * late or never comes, the dot wordmark fades in on its own.
+ */
+html.intro [data-intro='wordmark'] {
+  animation: intro-fade 700ms var(--ease-hover) 1300ms both;
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@keyframes intro-settle {
+  from {
+    transform: translateY(0.35em);
+  }
+}
+
+@keyframes intro-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Cross-document page transitions, only where motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* Lenis smooth scroll (mouse and trackpad only; see motion/smooth-scroll.ts). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* SplitText line masks: room for descenders, so the mask never clips them. */
+[data-split] > div {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* The trailing cursor ring (motion/cursor.ts). */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-hover);
+}
+
+.cursor[data-visible] {
+  opacity: 1;
+}
+
+.cursor__ring {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  translate: -50% -50%;
+  border: 1px solid color-mix(in srgb, var(--color-fg) 55%, transparent);
+  border-radius: 999px;
+  transition:
+    width var(--duration-slow) var(--ease-entrance),
+    height var(--duration-slow) var(--ease-entrance),
+    background-color var(--duration-base) var(--ease-hover),
+    border-color var(--duration-base) var(--ease-hover);
+}
+
+.cursor[data-state='link'] .cursor__ring {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-color: var(--color-mark);
+  background-color: var(--color-wash);
+}
+
+.cursor[data-state='label'] .cursor__ring {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-color: color-mix(in srgb, var(--color-fg) 35%, transparent);
+  background-color: var(--color-bg);
+}
+
+.cursor__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+}
+
+/* The floating project preview (motion/work-preview.ts), centred on the cursor. */
+.work-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.work-preview__card {
+  position: relative;
+  width: clamp(18rem, 26vw, 28rem);
+  aspect-ratio: 16 / 10;
+  translate: -50% -50%;
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background-color: var(--color-bg-elev);
+  box-shadow:
+    0 30px 80px -20px rgb(0 0 0 / 0.7),
+    0 0 60px -10px var(--color-glow);
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity var(--duration-base) var(--ease-hover),
+    scale var(--duration-slow) var(--ease-entrance);
+}
+
+.work-preview.is-visible .work-preview__card {
+  opacity: 1;
+  scale: 1;
+}
+
+.work-preview__slide {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 650ms var(--ease-expo);
+}
+
+.work-preview__slide.is-active {
+  z-index: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+.work-preview__slide img,
+.work-preview__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.work-preview__media {
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-hover);
+}
+
+.work-preview__media.is-ready {
+  opacity: 1;
+}
+
+/* Work index rows: the name leans in on hover; the rest of the list steps back. */
+.work-title a {
+  display: inline-block;
+  transition:
+    transform var(--duration-slow) var(--ease-entrance),
+    color var(--duration-base) var(--ease-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-row:hover .work-title a {
+    transform: translateX(0.18em);
+  }
+
+  [data-work-index]:has(.work-row:hover) .work-row:not(:hover) .work-title a {
+    color: var(--color-fg-muted);
+  }
+}
+
+/*
+ * Where the hover preview runs (mouse, ≥1024px, motion on), it replaces the
+ * inline posters. Everywhere else the poster stays in its row.
+ */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  html[data-motion='on'] .work-poster {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .cursor,
+  .work-preview {
+    display: none;
+  }
+}

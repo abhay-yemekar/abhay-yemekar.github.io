@@ -46,11 +46,11 @@ function cardHtml(card) {
     ? escape(card.title).replace(escape(card.mark), `<span class="ev">${escape(card.mark)}</span>`)
     : escape(card.title)
   return `<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face { font-family: N; src: url('${font('@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2')}'); font-weight: 200 800; }
+@font-face { font-family: N; src: url('${font('@fontsource-variable/instrument-sans/files/instrument-sans-latin-wdth-normal.woff2')}'); font-weight: 400 700; font-stretch: 75% 100%; }
 @font-face { font-family: M; src: url('${font('@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2')}'); font-weight: 100 800; }
 * { margin: 0; box-sizing: border-box; }
 html, body { width: 1200px; height: 630px; overflow: hidden; }
-body { background: ${T.bg}; color: ${T.fg}; font-family: N, Georgia, serif; padding: 72px 88px; display: flex; flex-direction: column; }
+body { background: ${T.bg}; color: ${T.fg}; font-family: N, Arial, sans-serif; padding: 72px 88px; display: flex; flex-direction: column; }
 .eyebrow { font: 400 24px/1 M, monospace; letter-spacing: 0.02em; color: ${T.subtle}; }
 h1 { font-weight: 500; letter-spacing: -0.03em; line-height: 1.02; margin-top: 40px; }
 .home h1 { font-size: 92px; max-width: 15ch; }
@@ -59,7 +59,7 @@ h1 { font-weight: 500; letter-spacing: -0.03em; line-height: 1.02; margin-top: 4
 .pattern { font: 500 24px/1 M, monospace; color: ${T.accent}; margin-top: 26px; }
 .ev { background: ${T.wash}; box-shadow: inset 0 -4px 0 ${T.mark}; padding: 0 0.06em; border-radius: 3px; }
 footer { margin-top: auto; display: flex; justify-content: space-between; align-items: baseline; border-top: 2px solid ${T.rule}; padding-top: 22px; font: 400 24px/1 M, monospace; color: ${T.subtle}; }
-footer b { font: 600 30px/1 N, serif; color: ${T.fg}; letter-spacing: 0; }
+footer b { font: 600 30px/1 N, sans-serif; color: ${T.fg}; letter-spacing: 0; }
 </style></head><body class="${card.subtitle ? 'case' : 'home'}">
 <p class="eyebrow">${escape(card.eyebrow)}</p>
 <h1>${title}</h1>
