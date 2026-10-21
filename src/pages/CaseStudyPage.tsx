@@ -1,11 +1,14 @@
 import type { ReactNode } from 'react'
 import type { CaseStudy, SourceRef } from '../data/caseStudies'
 import { caseStudies } from '../data/caseStudies'
+import { projectMedia } from '../data/media'
+import { CaseMedia } from '../components/CaseMedia'
 import { Diagram } from '../components/Diagram'
 import { Footer } from '../components/Footer'
 import { HireLensExplainer } from '../components/HireLensExplainer'
 import { ForwardArrow } from '../components/Icons'
 import { LinkRow } from '../components/LinkRow'
+import { MotionToggle } from '../components/MotionToggle'
 import { Poster } from '../components/Poster'
 import { Nav } from '../components/Nav'
 import { SkipLink } from '../components/SkipLink'
@@ -80,12 +83,16 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
       <Nav page="case" />
       <main id="main" className="u-container">
         <header className="pt-10 pb-14 lg:pt-14 lg:pb-20">
-          <p className="u-label m-0 text-fg-subtle">
-            <a href="/#work" className="u-link text-fg-muted">
-              Selected work
-            </a>{' '}
-            / {study.name}
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-x-6">
+            <p className="u-label m-0 text-fg-subtle">
+              <a href="/#work" className="u-link text-fg-muted">
+                Selected work
+              </a>{' '}
+              / {study.name}
+            </p>
+            {/* The page's films loop, so it carries the pause control too (WCAG 2.2.2). */}
+            <MotionToggle className="-my-3" />
+          </div>
           <div className="mt-8 grid gap-x-8 gap-y-10 lg:mt-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <h1 className="text-title">
@@ -117,6 +124,12 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <CaseSection index={idx()} title="The problem">
             <p className="max-w-(--container-prose)">{study.problem}</p>
           </CaseSection>
+
+          {(projectMedia[study.slug]?.film || projectMedia[study.slug]?.stills?.length) && (
+            <CaseSection index={idx()} title="In the product" wide>
+              <CaseMedia slug={study.slug} />
+            </CaseSection>
+          )}
 
           <CaseSection index={idx()} title="Constraints">
             <ul className="m-0 list-none p-0">

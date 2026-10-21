@@ -302,3 +302,39 @@ html.lenis {
     display: none;
   }
 }
+
+/*
+ * Evidence marks in the HireLens explainer. The wash sweeps across a quote as
+ * its criterion is chosen. The final state is the same with or without motion,
+ * and the dotted-to-solid amber underline carries it in forced-colors mode.
+ */
+.evidence-mark {
+  background-color: transparent;
+  background-image: linear-gradient(var(--color-wash), var(--color-wash));
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background-size 650ms var(--ease-expo),
+    color var(--duration-base) var(--ease-hover);
+}
+
+.evidence-mark[data-active] {
+  background-size: 100% 100%;
+}
+
+/* A case-page film playing over its still (motion/films.ts). Decorative: the still's alt describes it. */
+.film-motion {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-hover);
+}
+
+.film-motion.is-ready {
+  opacity: 1;
+}

@@ -13,6 +13,10 @@
  *   the OGL particle chunk at 16.3 kB. 85 kB covers every deferred chunk
  *   together, and the particle chunk alone gets 20 kB.
  * - Fonts: 130 KiB for every face the site ships.
+ * - Images: 400 kB per page, counted as the worst case, the largest AVIF
+ *   candidate of every <picture>, whether or not it's in the first screen.
+ *   Films and hover previews are left out: they load on demand, never with
+ *   the page.
  * Raise a number only with a reason recorded next to it.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -25,6 +29,7 @@ const BUDGET = {
   htmlKb: 40,
   fontsKib: 130,
   deferredJsKb: 85,
+  imagesKb: 400,
   particlesKb: 20,
 }
 
@@ -48,11 +53,19 @@ for (const page of pages) {
   const js = refs(/<script[^>]+type="module"[^>]+src="\/([^"]+)"/g).concat(refs(/<link[^>]+rel="modulepreload"[^>]+href="\/([^"]+)"/g))
   const css = refs(/<link[^>]+rel="stylesheet"[^>]+href="\/([^"]+)"/g)
 
+  // The largest AVIF candidate of each <picture>: what a big, dense screen fetches.
+  const images = [...html.matchAll(/<source type="image\/avif" srcSet="([^"]+)"/gi)].map((match) => {
+    const candidates = match[1].split(',').map((c) => c.trim().split(/\s+/))
+    const [largest] = candidates.sort((a, b) => parseInt(b[1]) - parseInt(a[1]))[0]
+    return join(dist, largest.replace(/^\//, ''))
+  })
+  const imagesKb = images.reduce((sum, file) => sum + statSync(file).size / 1000, 0)
   const jsKb = js.reduce((sum, file) => sum + gz(file), 0)
   const cssKb = css.reduce((sum, file) => sum + gz(file), 0)
   const htmlKb = gz(page)
   const name = '/' + relative(dist, page).replace(/\\/g, '/').replace(/index\.html$/, '')
-  rows.push({ page: name, 'JS kB': jsKb.toFixed(2), 'CSS kB': cssKb.toFixed(2), 'HTML kB': htmlKb.toFixed(2) })
+  rows.push({ page: name, 'JS kB': jsKb.toFixed(2), 'CSS kB': cssKb.toFixed(2), 'HTML kB': htmlKb.toFixed(2), 'images kB': imagesKb.toFixed(0) })
+  if (imagesKb > BUDGET.imagesKb) failures.push(`${name}: images ${imagesKb.toFixed(0)} kB > ${BUDGET.imagesKb} kB`)
 
   if (jsKb > BUDGET.initialJsKb) failures.push(`${name}: initial JS ${jsKb.toFixed(1)} kB > ${BUDGET.initialJsKb} kB`)
   if (cssKb > BUDGET.cssKb) failures.push(`${name}: CSS ${cssKb.toFixed(1)} kB > ${BUDGET.cssKb} kB`)

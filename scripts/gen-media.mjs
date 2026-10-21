@@ -67,6 +67,35 @@ const previews = [
   { slug: 'forecastgpt', from: './docs/media-src/forecastgpt-scroll.webp', to: 'preview.webp' },
   // yDirect's own product tour, served as-is (CC BY 4.0, Abhay's).
   { slug: 'ydirect', from: 'ydirect/assets/demo/ydirect-product-tour.webm', to: 'tour.webm' },
+  // SearchScribe's workspace walkthrough (6 frames: article, SEO, HTML, sources, versions).
+  { slug: 'searchscribe', from: 'SearchScribe_AI_Studio/screenshots/studio-workflow.gif', to: 'preview.webp', animated: true },
+]
+
+/**
+ * Case-page films: a larger moving version for each case study's "In the
+ * product" section, plus a still frame (`page`) shown until the motion layer
+ * plays it, and instead of it when motion is paused or off. Films load only
+ * when they scroll into view with motion on.
+ */
+const FILM_WIDTH = 960
+const films = [
+  { slug: 'hirelens', from: 'hirelens/docs/demo.gif', page: 0 },
+  { slug: 'searchscribe', from: 'SearchScribe_AI_Studio/screenshots/studio-workflow.gif', page: 0 },
+  // 20 frames of the live site, 900 wide, captured 2026-10-21 (docs/media-src), served as-is.
+  { slug: 'forecastgpt', from: './docs/media-src/forecastgpt-scroll-900.webp', page: 0, copy: true },
+  // The product tour as a GIF (82 frames); the still is "Search. 2 results.".
+  { slug: 'ydirect', from: 'ydirect/assets/demo/ydirect-demo.gif', page: 45 },
+]
+
+/** Case-page stills, 16:10 at 800 and 1280 wide. */
+const STILL_WIDTHS = [800, 1280]
+const stills = [
+  // The studio's landing page ("Good writing takes shape."), without the dev badge.
+  { slug: 'searchscribe', name: 'landing', from: 'SearchScribe_AI_Studio/screenshots/studio-editorial-4k.png', crop: { left: 192, top: 0, width: 3456, height: 2160 } },
+  // A completed run over TCS filings on the live site, captured 2026-10-21.
+  { slug: 'forecastgpt', name: 'report', from: './docs/media-src/forecastgpt-report.png', crop: { left: 180, top: 46, width: 1080, height: 675 } },
+  // The Chrome Web Store screenshot for visual masking.
+  { slug: 'ydirect', name: 'masking', from: 'ydirect/assets/screenshots/05-visual-masking-1280x800.png' },
 ]
 
 const kb = (file) => `${(statSync(file).size / 1024).toFixed(1)} KiB`
@@ -107,4 +136,40 @@ for (const preview of previews) {
     copyFileSync(input, target)
   }
   console.log(`${preview.slug} ${preview.to}: ${kb(target)}`)
+}
+
+for (const film of films) {
+  const dir = join(out, film.slug)
+  mkdirSync(dir, { recursive: true })
+  const input = source(film.from)
+  const target = join(dir, 'film.webp')
+  if (film.copy) copyFileSync(input, target)
+  else
+    await sharp(input, { animated: true })
+      .resize({ width: FILM_WIDTH })
+      .webp({ quality: 58, effort: 6, loop: 0 })
+      .toFile(target)
+  const { width, pageHeight, height } = await sharp(target, { animated: true }).metadata()
+  for (const w of [640, FILM_WIDTH]) {
+    const still = () => sharp(input, { page: film.page }).resize({ width: w })
+    await still().avif({ quality: 52, effort: 6 }).toFile(join(dir, `film-${w}.avif`))
+    await still().webp({ quality: 74, effort: 6 }).toFile(join(dir, `film-${w}.webp`))
+  }
+  console.log(`${film.slug} film.webp ${width}x${pageHeight ?? height}: ${kb(target)}; still ${kb(join(dir, `film-${FILM_WIDTH}.avif`))}`)
+}
+
+for (const still of stills) {
+  const dir = join(out, still.slug)
+  mkdirSync(dir, { recursive: true })
+  for (const width of STILL_WIDTHS) {
+    const base = () => {
+      let image = sharp(source(still.from))
+      if (still.crop) image = image.extract(still.crop)
+      return image.resize({ width, height: Math.round(width * ASPECT), fit: 'cover', position: 'top' })
+    }
+    const avif = join(dir, `${still.name}-${width}.avif`)
+    await base().avif({ quality: 52, effort: 6 }).toFile(avif)
+    await base().webp({ quality: 74, effort: 6 }).toFile(join(dir, `${still.name}-${width}.webp`))
+    console.log(`${still.slug} ${still.name} ${width}: avif ${kb(avif)}`)
+  }
 }

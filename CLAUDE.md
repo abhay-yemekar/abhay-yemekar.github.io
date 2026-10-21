@@ -20,7 +20,13 @@ python scripts/gen-wordmark.py   # regenerate src/data/wordmark.ts (fontTools, n
 
 There is no test suite and no linter. `npm run build` is the gate. It fails on a
 type error, on an unfilled template marker, and on a page over its weight budget
-(`scripts/check-budgets.mjs`). Any of those fails the deploy.
+(`scripts/check-budgets.mjs`). Any of those fails the deploy. The budgets:
+- **Initial JS:** 10 kB.
+- **Motion layer:** 85 kB of deferred JS, of which 20 kB for the particle chunk.
+- **CSS:** 15 kB. **HTML:** 40 kB.
+- **Fonts:** 130 KiB.
+- **Images:** 400 kB per page, counted as the largest AVIF of every picture.
+  Films and previews load on demand and aren't counted.
 
 Audits, run against `npm run preview`:
 
@@ -90,9 +96,9 @@ in Node.
 src/data/          all content; editing these needs no markup changes
                    (media.ts = project posters; wordmark.ts is generated)
 src/pages/         HomePage, CaseStudyPage, NotFoundPage
-src/components/    sections plus Nav, SectionShell, Wordmark, MotionToggle, Diagram, LinkRow, TodoMark, Icons
+src/components/    sections plus Nav, SectionShell, Wordmark, MotionToggle, Poster, CaseMedia, Diagram, LinkRow, TodoMark, Icons
 src/client/        the only browser JS: main, theme, motion-toggle, clock, active-section, explainer
-src/client/motion/ the motion layer: boot, smooth-scroll, reveals, cursor, magnetic, work-preview, hero-particles
+src/client/motion/ the motion layer: boot, smooth-scroll, reveals, films, nav-hide, scramble, cursor, magnetic, work-preview, hero-particles
 src/lib/           head.ts (per-page meta), todo.ts (placeholder mechanism)
 src/styles/        globals.css (tokens) + fonts.css (@font-face + fallbacks) + motion.css
 scripts/           prerender, check-budgets, gen-og, gen-assets, gen-media, gen-wordmark.py, hirelens-sample.mts
@@ -244,8 +250,25 @@ How the pieces fit:
   morphs from the work index, the 404 list or a "Next" link into the case-study
   title. Names apply only under `html[data-motion='on']`. When paused, the root
   swaps without animating.
+- **Media** (`src/data/media.ts`, built by `npm run gen:media`):
+  - **Posters:** decorative, `alt=""`.
+  - **Hover previews:** the work index, on hover only.
+  - **Case-page films:** in each case study's "In the product" section. The
+    HTML carries the film's still with real alt text. `motion/films.ts` fades
+    the animated WebP over it only while it's in view (and never with data
+    saver on), and removes it when it scrolls away or motion is paused.
+  - **Stills:** 16:10, `[data-wipe]`.
+
+  Captions state only what the media shows.
+- **The HireLens showcase** on the home page (`[data-showcase]`) scales from
+  0.86 to 1 with the scroll. It's a transform only, never opacity, so the text
+  stays legible wherever the scroll stops.
+- **Evidence marks** in the explainer (`.evidence-mark`) sweep their wash in
+  as a criterion is chosen. This is CSS, and the final state is the same
+  without it.
 - **"Pause motion" / "Play motion"** (`MotionToggle.tsx`, WCAG 2.2.2) sits in the
-  hero. It starts and stops the layer live and stores the choice.
+  hero and in each case-study header, since the films loop. It starts and stops
+  the layer live and stores the choice.
 - **No count-ups:** metric values are evidence, so they never animate through
   numbers that weren't measured.
 - **GSAP and CSS never share an element's transform.** GSAP folds the CSS

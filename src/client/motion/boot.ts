@@ -13,6 +13,7 @@ import { CustomEase } from 'gsap/CustomEase'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { initCursor } from './cursor'
+import { initFilms } from './films'
 import { initMagnetic } from './magnetic'
 import { initNavHide } from './nav-hide'
 import { initReveals } from './reveals'
@@ -47,6 +48,7 @@ export async function start() {
   const keep = (teardown: Teardown) => (gen === generation ? teardowns.push(teardown) : teardown())
 
   keep(initNavHide())
+  keep(initFilms())
   if (mouse()) {
     keep(initSmoothScroll())
     keep(initCursor())

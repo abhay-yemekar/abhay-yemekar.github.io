@@ -18,6 +18,9 @@ const inView = (el: Element) => el.getBoundingClientRect().top < window.innerHei
  * - [data-scramble-in]: a mono label resolves out of random glyphs
  * - svg[data-diagram]: nodes pop in, then edges draw in order, each arrowhead
  *   arriving with its line
+ * - [data-wipe]: a media frame's clip opens upward as it scrolls in
+ * - [data-showcase]: the HireLens explainer scales up to full size with the
+ *   scroll (a transform only)
  *
  * Everything runs inside a gsap.context, so stopping the layer reverts every
  * split, inline style and attribute it touched and kills its ScrollTriggers.
@@ -57,6 +60,30 @@ export async function initReveals() {
         ease: 'entrance',
         scrollTrigger: { trigger: el, start: 'top 90%', once: true },
       })
+    }
+
+    // Media wipes up into view: the frame's clip opens while the image settles from a slight zoom.
+    for (const el of document.querySelectorAll<HTMLElement>('[data-wipe]')) {
+      if (inView(el)) continue
+      const frame = el.firstElementChild as HTMLElement | null
+      const img = frame?.querySelector('img')
+      if (!frame) continue
+      gsap
+        .timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } })
+        .from(frame, { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.2, ease: 'expo.out' })
+        .from(img ?? [], { scale: 1.12, duration: 1.6, ease: 'expo.out' }, 0)
+    }
+
+    // The HireLens showcase grows out of a smaller frame, tied to the scroll
+    // position. It's a transform only, so the text stays fully legible
+    // wherever the scroll stops, and it reaches full size well before its top
+    // passes the upper third.
+    for (const el of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
+      gsap.fromTo(
+        el,
+        { scale: 0.86, transformOrigin: '50% 0%' },
+        { scale: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'top 35%', scrub: 0.4 } },
+      )
     }
 
     for (const el of document.querySelectorAll<HTMLElement>('[data-words]')) {

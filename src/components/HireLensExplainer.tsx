@@ -19,7 +19,7 @@ function ResumeText({ text, variant }: { text: string; variant: 'clear' | 'blind
             key={part.start}
             data-keys={part.keys.join(' ')}
             {...(part.keys.includes(first.key) ? { 'data-active': '' } : {})}
-            className="rounded-[2px] bg-transparent text-fg-muted underline decoration-fg-subtle decoration-dotted decoration-1 underline-offset-[0.25em] [&[data-active]]:bg-wash [&[data-active]]:text-fg [&[data-active]]:decoration-mark [&[data-active]]:decoration-solid [&[data-active]]:decoration-2"
+            className="evidence-mark rounded-[2px] text-fg-muted underline decoration-fg-subtle decoration-dotted decoration-1 underline-offset-[0.25em] [&[data-active]]:text-fg [&[data-active]]:decoration-mark [&[data-active]]:decoration-solid [&[data-active]]:decoration-2"
           >
             {part.text}
           </mark>

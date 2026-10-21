@@ -71,7 +71,8 @@ export function FeaturedProjects() {
 
       {/* The signature moment: real HireLens output, every score tied to its evidence. */}
       {caseStudies.some((study) => study.explainer) && (
-        <div className="mt-20 lg:mt-28" data-reveal>
+        // The showcase: the explainer grows out of a smaller frame as it scrolls in (motion/reveals.ts).
+        <div className="mt-20 lg:mt-28" data-showcase>
           <HireLensExplainer />
         </div>
       )}
