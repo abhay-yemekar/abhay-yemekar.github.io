@@ -51,7 +51,10 @@ const posters = [
   },
   {
     slug: 'ydirect',
-    from: 'ydirect/assets/screenshots/01-everyday-reuse-1280x800.png',
+    // The hero of ydirect.tech, the product site. Captured at 1440x900 in headless
+    // Chrome on 2026-10-21 and kept in docs/media-src; the crop leaves out the nav.
+    from: './docs/media-src/ydirect-site-hero.png',
+    crop: { left: 120, top: 90, width: 1200, height: 750 },
   },
 ]
 

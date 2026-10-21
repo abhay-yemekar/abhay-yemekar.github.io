@@ -36,6 +36,8 @@ export function homeJsonLd(): object[] {
 export function caseStudyJsonLd(study: CaseStudy): object[] {
   const url = `${SITE}/work/${study.slug}/`
   const repo = study.links.find((link) => link.label === 'Repository')?.href
+  // A product's own site, when the page links one (yDirect).
+  const website = study.links.find((link) => link.label === 'Website')?.href
   const { structured } = study
 
   const work =
@@ -65,6 +67,7 @@ export function caseStudyJsonLd(study: CaseStudy): object[] {
       name: study.name,
       description: study.tagline,
       url,
+      ...(website ? { sameAs: [website] } : {}),
       author,
       creator: author,
     },
