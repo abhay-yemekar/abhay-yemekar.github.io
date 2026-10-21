@@ -7,6 +7,12 @@
  */
 
 const EMAIL = 'abhay.s.yemekar@gmail.com'
+/**
+ * The site's one address: canonical URLs, Open Graph, JSON-LD, sitemap,
+ * robots.txt, llms.txt, CNAME and the share-card footers all derive from it.
+ * If the custom domain lapses, set 'https://abhay-yemekar.github.io' and remove
+ * the custom domain in the repo's Pages settings (CLAUDE.md, Deploy).
+ */
 const SITE_URL = 'https://abhayemekar.me'
 
 export const profile = {
