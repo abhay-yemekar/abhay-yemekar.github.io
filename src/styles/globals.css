@@ -86,6 +86,14 @@
   --text-work: clamp(2.5rem, 5.6vw, 5.25rem);
   --text-work--line-height: 0.92;
   --text-work--letter-spacing: -0.025em;
+  /* Names in a list: companies, capabilities, side projects. */
+  --text-name: clamp(2rem, 3.8vw, 3.5rem);
+  --text-name--line-height: 0.98;
+  --text-name--letter-spacing: -0.02em;
+  /* Case-study section headings. */
+  --text-section: clamp(2rem, 3.4vw, 3.25rem);
+  --text-section--line-height: 1;
+  --text-section--letter-spacing: -0.02em;
   --text-h3: clamp(1.5rem, 2.6vw, 2.375rem);
   --text-h3--line-height: 1.05;
   --text-h3--letter-spacing: -0.015em;
@@ -207,6 +215,37 @@
   .u-label::after {
     content: '\00a0]';
     color: var(--color-fg-subtle);
+  }
+
+  /* Display type outside a heading element: the condensed headline cut. */
+  .u-display {
+    font-family: var(--font-display);
+    font-stretch: 80%;
+    font-weight: 600;
+  }
+
+  /* An arrow in a 44px ring that fills on hover: the "go" mark for big links. */
+  .u-arrow-ring {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-fg);
+    transition:
+      background-color var(--duration-base) var(--ease-hover),
+      color var(--duration-base) var(--ease-hover),
+      border-color var(--duration-base) var(--ease-hover),
+      transform var(--duration-slow) var(--ease-entrance);
+  }
+
+  .group:hover .u-arrow-ring,
+  .group:focus-visible .u-arrow-ring {
+    border-color: var(--color-fg);
+    background-color: var(--color-fg);
+    color: var(--color-bg);
   }
 
   /* The serif-italic accent word inside a condensed headline. */

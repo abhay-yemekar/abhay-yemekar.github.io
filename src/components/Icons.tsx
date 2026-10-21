@@ -31,6 +31,15 @@ export function ForwardArrow() {
   )
 }
 
+/** Points up: back to the top of this page. */
+export function ArrowUp() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" className="shrink-0" {...common}>
+      <path d="M6 10V2M2.8 5.2 6 2l3.2 3.2" />
+    </svg>
+  )
+}
+
 export function MoonIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" className="theme-moon" {...common} strokeWidth={1.7}>

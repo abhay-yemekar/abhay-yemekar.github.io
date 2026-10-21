@@ -6,13 +6,17 @@ import { Footer } from '../components/Footer'
 import { HireLensExplainer } from '../components/HireLensExplainer'
 import { ForwardArrow } from '../components/Icons'
 import { LinkRow } from '../components/LinkRow'
+import { Poster } from '../components/Poster'
 import { Nav } from '../components/Nav'
 import { SkipLink } from '../components/SkipLink'
 import { TodoMark } from '../components/TodoMark'
 import { isTodo } from '../lib/todo'
 
-/** A text column plus a margin for sidenotes. The margin folds inline below 1100px. */
-const ROW = 'grid gap-x-12 min-[1100px]:grid-cols-[minmax(0,660px)_260px]'
+/**
+ * A text column plus a margin for sidenotes, inside a section's 8-column body.
+ * The margin folds inline below 1100px.
+ */
+const ROW = 'grid gap-x-10 min-[1100px]:grid-cols-[minmax(0,1fr)_220px]'
 
 function Sidenote({ cites, children }: { cites?: SourceRef[]; children?: ReactNode }) {
   if (!cites?.length && !children) return null
@@ -34,16 +38,23 @@ function Sidenote({ cites, children }: { cites?: SourceRef[]; children?: ReactNo
   )
 }
 
+/**
+ * A numbered section: the heading sits in its own column (pinned while the
+ * section scrolls, from 1024px), the body in the other eight. Wide sections
+ * (the diagram, the explainer) take the full width under their heading.
+ */
 function CaseSection({ index, title, children, wide }: { index: string; title: string; children: ReactNode; wide?: boolean }) {
   return (
-    <section aria-labelledby={`s-${index}`} className="mt-14 first:mt-0">
-      <h2 id={`s-${index}`} className={`mb-4 flex items-baseline gap-3 text-[1.875rem] leading-tight ${wide ? '' : 'max-w-(--container-prose)'}`}>
-        <span className="u-meta text-accent" aria-hidden="true">
+    <section aria-labelledby={`s-${index}`} className="grid gap-x-8 gap-y-8 border-t border-border py-14 lg:grid-cols-12 lg:py-20">
+      <div className={wide ? 'lg:col-span-12' : 'lg:sticky lg:top-28 lg:col-span-4 lg:self-start'}>
+        <p className="u-label m-0 text-fg-subtle" aria-hidden="true">
           {index}
-        </span>
-        {title}
-      </h2>
-      {children}
+        </p>
+        <h2 id={`s-${index}`} className="mt-4 text-section" data-split>
+          {title}
+        </h2>
+      </div>
+      <div className={wide ? 'min-w-0 lg:col-span-12' : 'min-w-0 lg:col-span-8'}>{children}</div>
     </section>
   )
 }
@@ -65,29 +76,36 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
       <SkipLink />
       <Nav page="case" />
       <main id="main" className="u-container">
-        <header className="border-b border-border pt-12 pb-10 lg:pt-16">
-          <p className="u-meta mb-7 text-fg-subtle">
+        <header className="pt-10 pb-14 lg:pt-14 lg:pb-20">
+          <p className="u-label m-0 text-fg-subtle">
             <a href="/#work" className="u-link text-fg-muted">
               Selected work
             </a>{' '}
             / {study.name}
           </p>
-          <h1 className="text-title">{study.name}</h1>
-          <p className="mt-5 max-w-[32ch] text-[clamp(1.25rem,2vw,1.625rem)] leading-snug">{study.tagline}</p>
-          <div className="mt-5">
-            <LinkRow links={study.links} />
+          <div className="mt-8 grid gap-x-8 gap-y-10 lg:mt-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <h1 className="text-title">{study.name}</h1>
+              <p className="mt-6 max-w-[34ch] text-[clamp(1.25rem,2vw,1.75rem)] leading-snug">{study.tagline}</p>
+              <div className="mt-6">
+                <LinkRow links={study.links} />
+              </div>
+            </div>
+            <figure className="m-0 overflow-hidden rounded-card border border-border lg:col-span-5 lg:self-end">
+              <Poster slug={study.slug} sizes="(min-width: 1024px) 38vw, calc(100vw - 2.5rem)" priority />
+            </figure>
           </div>
-          <dl className="mt-9 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-12 grid gap-x-8 border-t border-border sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
             {glance.map(([label, value]) => (
-              <div key={label}>
-                <dt className="u-meta text-fg-subtle">{label}</dt>
-                <dd className="m-0 mt-1 text-small">{value}</dd>
+              <div key={label} className="border-b border-border py-5 lg:border-b-0">
+                <dt className="u-label text-fg-subtle">{label}</dt>
+                <dd className="m-0 mt-2 text-small">{value}</dd>
               </div>
             ))}
           </dl>
         </header>
 
-        <div className="py-14 lg:py-20">
+        <div>
           <CaseSection index={idx()} title="The problem">
             <p className="max-w-(--container-prose)">{study.problem}</p>
           </CaseSection>
@@ -128,7 +146,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             {study.decisions.map((decision) => (
               <div key={decision.title} className={`${ROW} mb-5`}>
                 <div className="rounded-card border border-border bg-bg-elev px-6 py-5">
-                  <h3 className="mb-3 text-[1.25rem] font-semibold">{decision.title}</h3>
+                  <h3 className="mb-4 text-[1.5rem] leading-tight">{decision.title}</h3>
                   <dl className="m-0 grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-2 text-small">
                     <dt className="u-meta pt-1 text-fg-subtle">Chose</dt>
                     <dd className="m-0">{decision.chose}</dd>
@@ -183,10 +201,10 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <CaseSection index={idx()} title="Outcome">
             {study.outcome.metrics && study.outcome.metrics.length > 0 && (
               // Measured numbers only, each with its source and the date it was read.
-              <ul className="m-0 mb-6 grid max-w-(--container-prose) list-none gap-4 p-0 sm:grid-cols-2">
+              <ul className="m-0 mb-8 grid list-none gap-x-8 gap-y-6 p-0 sm:grid-cols-2">
                 {study.outcome.metrics.map((metric) => (
-                  <li key={metric.label} className="rounded-card border border-border bg-bg-elev px-5 py-4">
-                    <p className="m-0 text-[2.25rem] leading-none text-accent">{metric.value}</p>
+                  <li key={metric.label} className="border-t border-border pt-5">
+                    <p className="u-display m-0 text-[clamp(3rem,6vw,5.5rem)] leading-none tracking-[-0.03em] text-accent">{metric.value}</p>
                     <p className="m-0 mt-2 text-small">{metric.label}</p>
                     <p className="u-meta m-0 mt-2 text-fg-subtle">
                       Source:{' '}
@@ -214,14 +232,21 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             </CaseSection>
           )}
 
-          <nav aria-label="More case studies" className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-8">
+          <nav aria-label="More case studies" className="border-t border-border py-14 lg:py-20">
             <a href="/#work" className="u-meta u-tap u-link text-fg-muted">
               All selected work
             </a>
             {next && (
-              <a href={`/work/${next.slug}/`} className="u-tap gap-2 text-[1.25rem] no-underline">
-                <span className="u-link">Next: {next.name}</span>
-                <ForwardArrow />
+              <a href={`/work/${next.slug}/`} className="group mt-8 flex items-end justify-between gap-6 text-fg no-underline">
+                <span className="min-w-0">
+                  <span className="u-label block text-fg-subtle">Next</span>
+                  <span className="u-display mt-4 block text-title transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-3">
+                    {next.name}
+                  </span>
+                </span>
+                <span className="u-arrow-ring mb-3">
+                  <ForwardArrow />
+                </span>
               </a>
             )}
           </nav>

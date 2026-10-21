@@ -1,36 +1,11 @@
 import { caseStudies } from '../data/caseStudies'
-import { POSTER_WIDTHS, projectMedia } from '../data/media'
+import { projectMedia } from '../data/media'
 import { sections } from '../data/sections'
 import { HireLensExplainer } from './HireLensExplainer'
 import { ForwardArrow } from './Icons'
 import { LinkRow } from './LinkRow'
+import { Poster } from './Poster'
 import { SectionShell } from './SectionShell'
-
-/** A 16:10 project poster, AVIF first. Decorative: the name sits beside it. */
-function Poster({ slug }: { slug: string }) {
-  const media = projectMedia[slug]
-  if (!media) return null
-  const srcSet = (ext: string) => POSTER_WIDTHS.map((w) => `${media.poster}-${w}.${ext} ${w}w`).join(', ')
-  // The row's text column: 5/12 of the container from 1024px, else the
-  // viewport less the gutters and the numeral column.
-  const sizes = '(min-width: 1024px) 34vw, calc(100vw - 5.5rem)'
-
-  return (
-    <picture>
-      <source type="image/avif" srcSet={srcSet('avif')} sizes={sizes} />
-      <source type="image/webp" srcSet={srcSet('webp')} sizes={sizes} />
-      <img
-        src={`${media.poster}-640.webp`}
-        alt=""
-        width={640}
-        height={400}
-        loading="lazy"
-        decoding="async"
-        className="block h-auto w-full"
-      />
-    </picture>
-  )
-}
 
 /**
  * The work as a numbered index. With a fine pointer and motion on, hovering a
@@ -82,7 +57,8 @@ export function FeaturedProjects() {
                   </div>
                   {media && (
                     <figure className="work-poster m-0 mt-8 overflow-hidden rounded-card border border-border">
-                      <Poster slug={study.slug} />
+                      {/* The row's text column: 5/12 of the container from 1024px, else the viewport less the gutters and numerals. */}
+                      <Poster slug={study.slug} sizes="(min-width: 1024px) 34vw, calc(100vw - 5.5rem)" />
                     </figure>
                   )}
                 </div>

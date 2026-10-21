@@ -3,32 +3,33 @@ import { sections } from '../data/sections'
 import { ExternalArrow } from './Icons'
 import { SectionShell } from './SectionShell'
 
+/** Smaller work, one row each: the whole row is the link out. */
 export function MoreProjects() {
   return (
-    <SectionShell section={sections.more}>
-      <ul className="m-0 list-none p-0">
+    <SectionShell section={sections.more} aside={`${secondaryProjects.length} projects`}>
+      <ul className="m-0 list-none border-t border-border p-0">
         {secondaryProjects.map((project) => (
-          <li key={project.name} className="border-t border-border first:border-t-0">
+          <li key={project.name} className="border-b border-border" data-reveal>
             <a
               href={project.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group grid gap-x-12 gap-y-1 py-5 text-fg no-underline lg:grid-cols-[5fr_7fr]"
+              className="group grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-3 py-7 text-fg no-underline lg:grid-cols-12 lg:gap-x-8"
             >
-              <span>
-                <span className="inline-flex items-center gap-2 text-[1.25rem] font-medium">
-                  <span className="decoration-mark decoration-2 underline-offset-[0.22em] group-hover:underline group-focus-visible:underline">
-                    {project.name}
-                  </span>
-                  <ExternalArrow />
+              <span className="lg:col-span-5">
+                <span className="u-display block text-[clamp(1.625rem,2.6vw,2.25rem)] leading-[1.05] tracking-[-0.015em] transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-2">
+                  {project.name}
                 </span>
-                <span className="u-meta block text-fg-subtle">
+                <span className="u-meta mt-2 block text-fg-subtle">
                   {project.period}
                   {project.context && ` · ${project.context}`}
                 </span>
               </span>
-              <span className="text-small text-fg-muted">
-                {project.tagline}
+              <span className="col-span-2 text-fg-muted lg:col-span-5 lg:col-start-7">{project.tagline}</span>
+              <span className="col-start-2 row-start-1 lg:col-span-1 lg:col-start-12 lg:justify-self-end">
+                <span className="u-arrow-ring">
+                  <ExternalArrow />
+                </span>
               </span>
             </a>
           </li>
