@@ -41,9 +41,21 @@ it isn't a real preset and silently produces junk numbers.
 The CDP harnesses live outside the repo in `C:\Playground\claude-work\portfolio\harness`
 (see its README):
 - `a11y.mjs`: axe, layout, keyboard, contrast, motion toggle, no-JS
-- `checks-v3.mjs`
-- `protoshots.mjs`: screenshots with motion on
 - `lh.mjs`: Lighthouse, 3 runs plus the median
+- `inp.mjs`: click to next frame at 4× CPU throttle, plus Event Timing (`GPU=1`
+  uses the hardware GPU)
+- `fps.mjs`: the particle hero's frame pacing on the hardware GPU
+- `robust.mjs`: no WebGL, a 2-core device, data saver
+- `content-diff.mjs`: every line of the live site's text still present locally
+  (`LOOSE=1` ignores CSS case and `[ ]`)
+- `protoshots.mjs`, `fullpages.mjs`: screenshots with motion on, full-page tiles
+- `phase3-check.mjs`, `phase4-check.mjs`: transitions, diagram draw, films,
+  showcase
+- `sitecap.mjs`, `site-scroll.mjs`: capture a live site (scroll film, stills)
+
+Headless Chrome can't decode VP9 WebM and renders WebGL in software unless
+launched with `--use-angle=d3d11`. Measure frame rates there or on a real
+device, never on SwiftShader.
 
 Results go to `runs/<date>-<label>/`. Pull requests into `main` run the same
 `npm run build` gate (`.github/workflows/check.yml`).
@@ -337,8 +349,8 @@ These are the owner's rules, not preferences.
 - **Never run `git push` on your own initiative.** By default, hand the owner the
   command. When he explicitly asks you to push, run it in his Terminal panel,
   never in a background shell, so any SSH passphrase prompt reaches him. A push
-  to `main` deploys the live site. v3 work goes through draft PR #1
-  (`redesign/cinematic` → `main`).
+  to `main` deploys the live site, so larger changes go through a PR into `main`
+  (v3 shipped through PR #1 from `redesign/cinematic`).
 - **No AI attribution in commits or PRs:** no `Co-Authored-By` trailer and no
   "Generated with" line.
 - Git identity is set with `--local` only, never `--global`.

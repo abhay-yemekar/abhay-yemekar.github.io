@@ -174,9 +174,22 @@ export async function initParticles(hero: HTMLElement): Promise<() => void> {
   const wordmarks = [...hero.querySelectorAll<SVGSVGElement>('[data-wordmark]')]
   if (!canvas || wordmarks.length === 0) return () => {}
 
+  // OGL's Renderer throws when no WebGL context can be made, before its own
+  // check runs, so probe on a scratch canvas first. The probe's context is
+  // released at once.
+  const probe = document.createElement('canvas')
+  const probeGl = probe.getContext('webgl2') ?? probe.getContext('webgl')
+  if (!probeGl) return () => {}
+  probeGl.getExtension('WEBGL_lose_context')?.loseContext()
+
   const phone = matchMedia('(max-width: 767px)').matches
   const dpr = Math.min(window.devicePixelRatio || 1, phone ? 1.25 : 1.5)
-  const renderer = new Renderer({ canvas, dpr, alpha: true, premultipliedAlpha: true, antialias: false, depth: false })
+  let renderer: Renderer
+  try {
+    renderer = new Renderer({ canvas, dpr, alpha: true, premultipliedAlpha: true, antialias: false, depth: false })
+  } catch {
+    return () => {}
+  }
   const gl = renderer.gl
   if (!gl) return () => {}
   gl.clearColor(0, 0, 0, 0)
@@ -357,10 +370,16 @@ export async function initParticles(hero: HTMLElement): Promise<() => void> {
   })
   ro.observe(hero)
 
-  const mo = new MutationObserver(() => {
-    applyTheme()
-    draw(performance.now())
-  })
+  // Recolour after the theme switch has painted: done inside the click it
+  // added a full redraw to the toggle's interaction (INP).
+  const mo = new MutationObserver(() =>
+    requestAnimationFrame(() =>
+      setTimeout(() => {
+        applyTheme()
+        draw(performance.now())
+      }),
+    ),
+  )
   mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
   let disposed = false

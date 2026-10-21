@@ -59,8 +59,14 @@ export async function start() {
   }
 
   const hero = document.querySelector<HTMLElement>('[data-hero]')
+  // The particle field is a garnish: if its chunk or WebGL fails, the SVG
+  // wordmark stays and the rest of the layer carries on.
   const particles =
-    hero && particlesWelcome() ? import('./hero-particles').then(({ initParticles }) => initParticles(hero)) : undefined
+    hero && particlesWelcome()
+      ? import('./hero-particles')
+          .then(({ initParticles }) => initParticles(hero))
+          .catch((): Teardown => () => {})
+      : undefined
 
   keep(await initReveals())
   if (particles) keep(await particles)

@@ -33,7 +33,10 @@ const syncMotion = () => {
   if (root.dataset.motion === 'on') void (layer ??= import('./motion/boot')).then((motion) => motion.start())
   else void layer?.then((motion) => motion.stop())
 }
-initMotionToggle(syncMotion)
+// From the button, start or stop only after the next frame has painted, so the
+// label flips at once. Tearing the whole layer down inside the click took
+// pause to about 205 ms at 4x CPU throttle, past the 200 ms INP line.
+initMotionToggle(() => requestAnimationFrame(() => setTimeout(syncMotion)))
 
 /** After load and an idle moment, so the layer never competes with first paint. */
 const afterFirstPaint = (run: () => void) => {
