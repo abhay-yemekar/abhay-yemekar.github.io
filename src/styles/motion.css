@@ -82,11 +82,44 @@ html.intro [data-intro='wordmark'] {
   }
 }
 
-/* Cross-document page transitions, only where motion is welcome. */
+/*
+ * Cross-document page transitions, only where motion is welcome. A project's
+ * name carries over between pages (.vt with --vt, src/lib/view-transition.ts),
+ * and the rest crossfades quickly. With motion paused, nothing is named and the
+ * root swaps without animating.
+ */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
   }
+}
+
+html[data-motion='on'] .vt {
+  view-transition-name: var(--vt);
+}
+
+::view-transition-group(*) {
+  animation-duration: 650ms;
+  animation-timing-function: var(--ease-entrance);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+}
+
+html:not([data-motion='on'])::view-transition-old(root),
+html:not([data-motion='on'])::view-transition-new(root) {
+  animation: none;
+}
+
+/* The nav steps aside while you scroll down (motion/nav-hide.ts). */
+[data-nav] {
+  transition: transform var(--duration-slow) var(--ease-entrance);
+}
+
+[data-nav][data-hidden] {
+  transform: translateY(-101%);
 }
 
 /* Lenis smooth scroll (mouse and trackpad only; see motion/smooth-scroll.ts). */
@@ -111,6 +144,12 @@ html.lenis {
 [data-split] > div {
   padding-bottom: 0.08em;
   margin-bottom: -0.08em;
+}
+
+/* Letter masks for the footer name: its line height is under 1, so give the caps room. */
+[data-chars] > div {
+  padding-block: 0.1em;
+  margin-block: -0.1em;
 }
 
 /* The trailing cursor ring (motion/cursor.ts). */

@@ -21,7 +21,7 @@ export function SectionShell({ section, children, aside }: SectionShellProps) {
       <div className="u-container">
         <div className="mb-12 lg:mb-20">
           <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-fg-subtle lg:mb-8">
-            <span className="u-label" aria-hidden="true">
+            <span className="u-label" aria-hidden="true" data-scramble-in>
               {section.index}
             </span>
             {aside && <span className="u-label">{aside}</span>}

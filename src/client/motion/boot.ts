@@ -14,7 +14,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { initCursor } from './cursor'
 import { initMagnetic } from './magnetic'
+import { initNavHide } from './nav-hide'
 import { initReveals } from './reveals'
+import { initScramble } from './scramble'
 import { initSmoothScroll } from './smooth-scroll'
 import { initWorkPreview } from './work-preview'
 
@@ -44,10 +46,12 @@ export async function start() {
   // A stop() can land while start() awaits; anything set up after it is undone at once.
   const keep = (teardown: Teardown) => (gen === generation ? teardowns.push(teardown) : teardown())
 
+  keep(initNavHide())
   if (mouse()) {
     keep(initSmoothScroll())
     keep(initCursor())
     keep(initMagnetic())
+    keep(initScramble())
     const list = document.querySelector<HTMLElement>('[data-work-index]')
     if (list && matchMedia('(min-width: 1024px)').matches) keep(initWorkPreview(list))
   }

@@ -11,6 +11,7 @@ import { Nav } from '../components/Nav'
 import { SkipLink } from '../components/SkipLink'
 import { TodoMark } from '../components/TodoMark'
 import { isTodo } from '../lib/todo'
+import { vt } from '../lib/view-transition'
 
 /**
  * A text column plus a margin for sidenotes, inside a section's 8-column body.
@@ -47,14 +48,16 @@ function CaseSection({ index, title, children, wide }: { index: string; title: s
   return (
     <section aria-labelledby={`s-${index}`} className="grid gap-x-8 gap-y-8 border-t border-border py-14 lg:grid-cols-12 lg:py-20">
       <div className={wide ? 'lg:col-span-12' : 'lg:sticky lg:top-28 lg:col-span-4 lg:self-start'}>
-        <p className="u-label m-0 text-fg-subtle" aria-hidden="true">
+        <p className="u-label m-0 text-fg-subtle" aria-hidden="true" data-scramble-in>
           {index}
         </p>
         <h2 id={`s-${index}`} className="mt-4 text-section" data-split>
           {title}
         </h2>
       </div>
-      <div className={wide ? 'min-w-0 lg:col-span-12' : 'min-w-0 lg:col-span-8'}>{children}</div>
+      <div className={wide ? 'min-w-0 lg:col-span-12' : 'min-w-0 lg:col-span-8'} data-reveal>
+        {children}
+      </div>
     </section>
   )
 }
@@ -85,7 +88,12 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           </p>
           <div className="mt-8 grid gap-x-8 gap-y-10 lg:mt-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
-              <h1 className="text-title">{study.name}</h1>
+              <h1 className="text-title">
+                {/* The project's name morphs here from the work index (cross-document view transition). */}
+                <span className="vt inline-block" style={vt(study.slug)}>
+                  {study.name}
+                </span>
+              </h1>
               <p className="mt-6 max-w-[34ch] text-[clamp(1.25rem,2vw,1.75rem)] leading-snug">{study.tagline}</p>
               <div className="mt-6">
                 <LinkRow links={study.links} />
@@ -240,8 +248,13 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
               <a href={`/work/${next.slug}/`} className="group mt-8 flex items-end justify-between gap-6 text-fg no-underline">
                 <span className="min-w-0">
                   <span className="u-label block text-fg-subtle">Next</span>
-                  <span className="u-display mt-4 block text-title transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-3">
-                    {next.name}
+                  <span className="mt-4 block">
+                    <span
+                      className="vt u-display inline-block text-title transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-3"
+                      style={vt(next.slug)}
+                    >
+                      {next.name}
+                    </span>
                   </span>
                 </span>
                 <span className="u-arrow-ring mb-3">

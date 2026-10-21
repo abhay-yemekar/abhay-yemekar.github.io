@@ -3,6 +3,7 @@ import { ForwardArrow } from '../components/Icons'
 import { Nav } from '../components/Nav'
 import { SkipLink } from '../components/SkipLink'
 import { caseStudies } from '../data/caseStudies'
+import { vt } from '../lib/view-transition'
 
 /**
  * Served by GitHub Pages for any missing path. It is prerendered like every
@@ -29,7 +30,10 @@ export function NotFoundPage() {
                 href={`/work/${study.slug}/`}
                 className="group flex items-center justify-between gap-6 py-5 text-fg no-underline"
               >
-                <span className="u-display text-[clamp(1.75rem,3.4vw,3rem)] leading-none tracking-[-0.02em] transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-2">
+                <span
+                  className="vt u-display inline-block text-[clamp(1.75rem,3.4vw,3rem)] leading-none tracking-[-0.02em] transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-2"
+                  style={vt(study.slug)}
+                >
                   {study.name}
                 </span>
                 <span className="u-arrow-ring">

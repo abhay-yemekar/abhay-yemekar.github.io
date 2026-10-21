@@ -14,7 +14,7 @@ export function Footer({ page }: { page: 'home' | 'case' }) {
       <div className="u-container pt-14 pb-10 lg:pt-20">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-8">
           {/* Decorative: the name is the nav's first link and the copyright line below. */}
-          <p className="u-display m-0 text-[clamp(2.75rem,9vw,8.5rem)] leading-[0.85] tracking-[-0.03em] uppercase [font-stretch:75%]" aria-hidden="true">
+          <p className="u-display m-0 text-[clamp(2.75rem,9vw,8.5rem)] leading-[0.85] tracking-[-0.03em] uppercase [font-stretch:75%]" aria-hidden="true" data-chars>
             {profile.name}
           </p>
           <a href={page === 'home' ? '#top' : '/'} className="group u-meta u-tap gap-3 text-fg-muted no-underline hover:text-fg">

@@ -41,7 +41,7 @@ export function Nav({ page }: NavProps) {
                     {...(page === 'case' && item.id === 'work' ? { 'aria-current': 'true' as const } : {})}
                     className="u-tap px-2 tracking-[0.08em] text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg sm:px-3 [&[aria-current]]:text-fg [&[aria-current]]:underline [&[aria-current]]:decoration-mark [&[aria-current]]:decoration-2 [&[aria-current]]:underline-offset-[0.5em]"
                   >
-                    {item.nav}
+                    <span data-scramble>{item.nav}</span>
                   </a>
                 </li>
               ))}

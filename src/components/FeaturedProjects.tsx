@@ -3,6 +3,7 @@ import { projectMedia } from '../data/media'
 import { sections } from '../data/sections'
 import { HireLensExplainer } from './HireLensExplainer'
 import { ForwardArrow } from './Icons'
+import { vt } from '../lib/view-transition'
 import { LinkRow } from './LinkRow'
 import { Poster } from './Poster'
 import { SectionShell } from './SectionShell'
@@ -38,7 +39,7 @@ export function FeaturedProjects() {
 
                 <div className="lg:col-span-6" data-work-hit>
                   <h3 id={`project-${study.slug}`} className="work-title m-0 text-work">
-                    <a href={`/work/${study.slug}/`} className="text-fg no-underline" data-cursor="View">
+                    <a href={`/work/${study.slug}/`} className="vt text-fg no-underline" style={vt(study.slug)} data-cursor="View">
                       {study.name}
                     </a>
                   </h3>

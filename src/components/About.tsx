@@ -11,8 +11,13 @@ import { TodoMark } from './TodoMark'
 export function About() {
   return (
     <SectionShell section={sections.about}>
-      <p className="u-accent m-0 max-w-[22ch] text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.04]" data-reveal>
-        {about.lede}
+      {/* Words are plain inline spans, so the sentence reads as one for assistive tech; the motion layer lights them up as you scroll. */}
+      <p className="u-accent m-0 max-w-[22ch] text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.04]" data-words>
+        {about.lede.split(' ').map((word, i, all) => (
+          <span key={i} data-word>
+            {i < all.length - 1 ? `${word} ` : word}
+          </span>
+        ))}
       </p>
 
       <div className="mt-14 grid gap-x-8 gap-y-14 lg:mt-20 lg:grid-cols-12">

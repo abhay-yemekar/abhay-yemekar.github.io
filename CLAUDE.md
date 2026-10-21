@@ -224,8 +224,30 @@ How the pieces fit:
   - **Frame rate:** paused off screen; about 30 fps once settled.
   - **Skipped** when data saver is on, on fewer than 4 CPU cores, or when WebGL is
     unavailable.
+- **Scroll choreography** (`motion/reveals.ts`, all inside one `gsap.context`):
+  - `[data-split]` headings rise line by line out of masks (SplitText,
+    `aria: 'auto'`). Use it only on elements without links inside.
+  - `[data-reveal]` blocks rise and fade.
+  - `[data-words]`: the About lede's words, which are build-time inline spans,
+    light up in order, once. Never scrub opacity to the scroll position: text
+    left half-lit fails contrast.
+  - `[data-chars]`: the aria-hidden footer name rises letter by letter.
+  - `[data-scramble-in]`: mono indices resolve out of random glyphs.
+  - `svg[data-diagram]`: nodes pop in, then edges draw (`pathLength=1`), each
+    arrowhead returning as its line lands.
+- **Nav** (`motion/nav-hide.ts`): hides on scroll down and returns on scroll up.
+  It never hides near the top or with focus inside it. Nav labels
+  (`[data-scramble]`) scramble on hover, and their link carries a stable
+  `aria-label`.
+- **Page transitions:** cross-document View Transitions. A project's name
+  (`.vt` + `vt(slug)` from `src/lib/view-transition.ts`, on an inline-block)
+  morphs from the work index, the 404 list or a "Next" link into the case-study
+  title. Names apply only under `html[data-motion='on']`. When paused, the root
+  swaps without animating.
 - **"Pause motion" / "Play motion"** (`MotionToggle.tsx`, WCAG 2.2.2) sits in the
   hero. It starts and stops the layer live and stores the choice.
+- **No count-ups:** metric values are evidence, so they never animate through
+  numbers that weren't measured.
 - **GSAP and CSS never share an element's transform.** GSAP folds the CSS
   `scale`/`translate` properties into its own transform, so GSAP moves an outer
   element and CSS sizes the inner one (see the cursor and the preview card).
