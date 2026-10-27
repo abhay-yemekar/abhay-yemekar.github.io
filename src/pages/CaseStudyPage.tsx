@@ -51,7 +51,7 @@ function CaseSection({ index, title, children, wide }: { index: string; title: s
   return (
     <section aria-labelledby={`s-${index}`} className="grid gap-x-8 gap-y-8 border-t border-border py-14 lg:grid-cols-12 lg:py-20">
       <div className={wide ? 'lg:col-span-12' : 'lg:sticky lg:top-28 lg:col-span-4 lg:self-start'}>
-        <p className="u-label m-0 text-fg-subtle" aria-hidden="true" data-scramble-in>
+        <p className="u-label m-0 text-fg-subtle" aria-hidden="true">
           {index}
         </p>
         <h2 id={`s-${index}`} className="mt-4 text-section" data-split>
@@ -86,7 +86,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           <div className="flex flex-wrap items-center justify-between gap-x-6">
             <p className="u-label m-0 text-fg-subtle">
               <a href="/#work" className="u-link text-fg-muted">
-                Selected work
+                Projects
               </a>{' '}
               / {study.name}
             </p>
@@ -255,7 +255,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
 
           <nav aria-label="More case studies" className="border-t border-border py-14 lg:py-20">
             <a href="/#work" className="u-meta u-tap u-link text-fg-muted">
-              All selected work
+              All projects
             </a>
             {next && (
               <a href={`/work/${next.slug}/`} className="group mt-8 flex items-end justify-between gap-6 text-fg no-underline">

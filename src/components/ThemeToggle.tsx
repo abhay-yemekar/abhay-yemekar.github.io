@@ -13,7 +13,7 @@ export function ThemeToggle() {
       data-theme-toggle
       aria-label="Dark theme"
       title="Toggle dark theme"
-      className="group grid h-11 w-11 place-items-center rounded-full text-fg-muted transition-colors duration-(--duration-fast) hover:text-fg [&[aria-pressed=true]_.theme-moon]:fill-current"
+      className="u-icon-btn [&[aria-pressed=true]_.theme-moon]:fill-current"
     >
       <MoonIcon />
     </button>

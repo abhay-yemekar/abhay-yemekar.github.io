@@ -1,7 +1,5 @@
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
-import { scramble } from './scramble'
 
 /** Already on screen when the layer starts: leave it be rather than hide it. */
 const inView = (el: Element) => el.getBoundingClientRect().top < window.innerHeight * 0.92
@@ -15,12 +13,9 @@ const inView = (el: Element) => el.getBoundingClientRect().top < window.innerHei
  *   light up in reading order as it scrolls in
  * - [data-chars]: a decorative line's letters rise one by one (aria-hidden
  *   elements only)
- * - [data-scramble-in]: a mono label resolves out of random glyphs
  * - svg[data-diagram]: nodes pop in, then edges draw in order, each arrowhead
  *   arriving with its line
  * - [data-wipe]: a media frame's clip opens upward as it scrolls in
- * - [data-showcase]: the HireLens explainer scales up to full size with the
- *   scroll (a transform only)
  *
  * Everything runs inside a gsap.context, so stopping the layer reverts every
  * split, inline style and attribute it touched and kills its ScrollTriggers.
@@ -74,18 +69,6 @@ export async function initReveals() {
         .from(img ?? [], { scale: 1.12, duration: 1.6, ease: 'expo.out' }, 0)
     }
 
-    // The HireLens showcase grows out of a smaller frame, tied to the scroll
-    // position. It's a transform only, so the text stays fully legible
-    // wherever the scroll stops, and it reaches full size well before its top
-    // passes the upper third.
-    for (const el of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
-      gsap.fromTo(
-        el,
-        { scale: 0.86, transformOrigin: '50% 0%' },
-        { scale: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'top 35%', scrub: 0.4 } },
-      )
-    }
-
     for (const el of document.querySelectorAll<HTMLElement>('[data-words]')) {
       // Plays once and stays lit. A scroll-scrubbed version left dim words
       // (1.5:1) wherever the reader stopped, which fails contrast.
@@ -112,13 +95,6 @@ export async function initReveals() {
             scrollTrigger: { trigger: el, start: 'top 94%', once: true },
           }),
       })
-    }
-
-    for (const el of document.querySelectorAll<HTMLElement>('[data-scramble-in]')) {
-      if (inView(el)) continue
-      const text = el.textContent ?? ''
-      restore.push(() => (el.textContent = text))
-      ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => scramble(el, text, 650) })
     }
 
     for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-diagram]')) {

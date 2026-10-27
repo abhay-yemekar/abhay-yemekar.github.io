@@ -1,5 +1,6 @@
 import { profile } from '../data/profile'
 import { ArrowUp, ForwardArrow } from './Icons'
+import { ThemeToggle } from './ThemeToggle'
 
 /**
  * Set when the page is prerendered, so every visitor sees the same HTML.
@@ -27,6 +28,10 @@ export function Footer({ page }: { page: 'home' | 'case' }) {
             © {BUILD_YEAR} {profile.name}
           </p>
           <p className="m-0">Designed and built by {profile.shortName}. No tracking.</p>
+          {/* Phones only: the header has no room for the theme toggle below 640px. */}
+          <span className="-my-3 sm:hidden">
+            <ThemeToggle />
+          </span>
         </div>
       </div>
     </footer>

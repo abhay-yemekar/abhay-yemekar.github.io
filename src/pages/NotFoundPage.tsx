@@ -43,7 +43,7 @@ export function NotFoundPage() {
             </li>
           ))}
         </ul>
-        <a href="/" className="u-btn mt-12" data-magnetic>
+        <a href="/" className="u-btn mt-12">
           Home
           <ForwardArrow />
         </a>

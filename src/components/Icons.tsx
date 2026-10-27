@@ -40,6 +40,36 @@ export function ArrowUp() {
   )
 }
 
+/*
+ * Profile icons, drawn in the same outline style as the arrows (GitHub after
+ * Tabler's brand-github, MIT). Decorative: each link carries its own name.
+ */
+export function GitHubIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0" {...common} strokeWidth={1.7}>
+      <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" />
+    </svg>
+  )
+}
+
+export function LinkedInIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0" {...common} strokeWidth={1.7}>
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0" />
+    </svg>
+  )
+}
+
+export function ResumeIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0" {...common} strokeWidth={1.7}>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 3v5h5M9 13h6M9 17h4" />
+    </svg>
+  )
+}
+
 export function MoonIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" className="theme-moon" {...common} strokeWidth={1.7}>

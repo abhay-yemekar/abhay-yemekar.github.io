@@ -1,40 +1,45 @@
 import { secondaryProjects } from '../data/projects'
-import { sections } from '../data/sections'
 import { ExternalArrow } from './Icons'
-import { SectionShell } from './SectionShell'
 
-/** Smaller work, one row each: the whole row is the link out. */
+/**
+ * Smaller work, under the case studies in the Projects section: a compact
+ * two-column list where each whole row is the link out.
+ */
 export function MoreProjects() {
   return (
-    <SectionShell section={sections.more} aside={`${secondaryProjects.length} projects`}>
-      <ul className="m-0 list-none border-t border-border p-0">
+    <div className="mt-16 lg:mt-20">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-border pb-4">
+        <h3 className="m-0 text-h3">
+          More projects
+        </h3>
+        <p className="m-0 text-small text-fg-subtle">{secondaryProjects.length} on GitHub</p>
+      </div>
+      <ul className="m-0 grid list-none p-0 md:grid-cols-2 md:gap-x-10">
         {secondaryProjects.map((project) => (
           <li key={project.name} className="border-b border-border" data-reveal>
             <a
               href={project.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-3 py-7 text-fg no-underline lg:grid-cols-12 lg:gap-x-8"
+              className="group flex h-full items-start justify-between gap-4 py-5 text-fg no-underline"
             >
-              <span className="lg:col-span-5">
-                <span className="u-display block text-[clamp(1.625rem,2.6vw,2.25rem)] leading-[1.05] tracking-[-0.015em] transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-2">
+              <span>
+                <span className="block font-semibold underline decoration-transparent decoration-1 underline-offset-[0.22em] transition-colors duration-(--duration-fast) group-hover:decoration-mark">
                   {project.name}
                 </span>
-                <span className="u-meta mt-2 block text-fg-subtle">
+                <span className="mt-1 block text-small text-fg-muted">{project.tagline}</span>
+                <span className="u-meta mt-1.5 block text-fg-subtle">
                   {project.period}
                   {project.context && ` · ${project.context}`}
                 </span>
               </span>
-              <span className="col-span-2 text-fg-muted lg:col-span-5 lg:col-start-7">{project.tagline}</span>
-              <span className="col-start-2 row-start-1 lg:col-span-1 lg:col-start-12 lg:justify-self-end">
-                <span className="u-arrow-ring">
-                  <ExternalArrow />
-                </span>
+              <span className="mt-1.5 text-fg-subtle transition-colors duration-(--duration-fast) group-hover:text-fg">
+                <ExternalArrow />
               </span>
             </a>
           </li>
         ))}
       </ul>
-    </SectionShell>
+    </div>
   )
 }

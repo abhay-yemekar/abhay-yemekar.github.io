@@ -42,24 +42,17 @@ export const profile = {
 } as const
 
 /**
- * Hero copy, approved at Gate 2 (docs/STRATEGY.md §2, option A).
- * `evidence` is the clause inside the headline that carries the evidence mark
- * and cites source 1.
+ * Hero copy (v4, docs/V4-PLAN.md): the role is the heading, and the Gate 2
+ * headline (docs/STRATEGY.md §2, option A) becomes the line under it.
+ * `evidence` is the clause inside the headline that carries the evidence mark.
  */
 export const hero = {
-  eyebrow: 'Full-stack AI engineer · Pune',
+  role: 'Full-stack AI Engineer',
   headline: 'I build AI systems that show their work.',
   evidence: 'show their work',
-  lede: 'HireLens, my open-source ranking engine, ties every score to the exact resume text behind it. Agents, RAG pipelines, and the backends that ship them.',
-  /** `shortLabel` is used below 640px, where the full label wraps to two lines. */
-  primaryCta: { label: 'See how HireLens scores a candidate', shortLabel: 'See how HireLens scores', href: '#how-hirelens-scores' },
+  lede: 'Agents, RAG pipelines, and the backends that ship them.',
+  primaryCta: { label: 'View projects', href: '#work' },
   secondaryCta: { label: 'Email me', href: `mailto:${EMAIL}` },
-  /** The proof strip. Every item is a checkable public fact. */
-  sources: [
-    { name: 'HireLens', detail: 'glass-box ranking · MIT, npm v1.4.0', href: '#hirelens' },
-    { name: 'yDirect', detail: 'on the Chrome Web Store', href: 'https://chromewebstore.google.com/detail/ehkahipeoahnbfbahlkedgdcjefejihg' },
-    { name: 'Translytics', detail: 'software engineer · prev. Tata Elxsi', href: '#experience' },
-  ],
 } as const
 
 /** Home page metadata. Option B's keyword wording lives here (Gate 2). */

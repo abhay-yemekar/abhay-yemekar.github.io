@@ -1,32 +1,31 @@
 /**
  * The JavaScript every page loads. Every page arrives as complete HTML from the
  * prerender, so this only adds behaviour, and the site works fully without it:
- * - the theme and motion controls, the nav's current section, the Pune clock
+ * - the theme and motion controls, the nav's current section
  * - the HireLens explainer, a separate chunk, where one exists
  * - the motion layer (src/client/motion), loaded after first paint when
  *   <html data-motion="on">, or the moment someone presses "Play motion"
  */
 import '../styles/globals.css'
 import { initActiveSection } from './active-section'
-import { initClock } from './clock'
 import { initMotionToggle } from './motion-toggle'
 import { initThemeToggle } from './theme'
 
 initThemeToggle()
 initActiveSection()
-initClock()
+
+// A mouse click on a link that opens a new tab leaves it focused, and Chrome
+// redraws its focus ring when you come back to this tab. Keyboard activation
+// (detail 0) keeps focus where it is, so keyboard users don't lose their place.
+document.addEventListener('click', (event) => {
+  const link = event.target instanceof Element ? event.target.closest('a[target="_blank"]') : null
+  if (link instanceof HTMLElement && event.detail > 0) link.blur()
+})
 
 const explainer = document.querySelector<HTMLElement>('[data-explainer]')
 if (explainer) void import('./explainer').then(({ initExplainer }) => initExplainer(explainer))
 
 const root = document.documentElement
-
-// The first-visit intro (CSS) can be skipped: any key or click ends it at its final frame.
-if (root.classList.contains('intro')) {
-  const skip = () => root.classList.remove('intro')
-  window.addEventListener('keydown', skip, { once: true })
-  window.addEventListener('pointerdown', skip, { once: true })
-}
 
 let layer: Promise<typeof import('./motion/boot')> | undefined
 const syncMotion = () => {

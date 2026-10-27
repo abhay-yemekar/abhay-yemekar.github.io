@@ -1,7 +1,5 @@
 export type Section = {
   id: string
-  /** Mono numeral shown before the heading. */
-  index: string
   /** Section heading. */
   label: string
   /** Shown in the top nav; omitted sections stay out of the nav. */
@@ -9,21 +7,20 @@ export type Section = {
 }
 
 /**
- * Home page order (docs/STRATEGY.md §3, Gate 1). The work comes straight
- * after the hero: evidence before biography.
+ * Home page sections, in order (docs/V4-PLAN.md). The ids are the page's
+ * anchors, so `work` keeps its id under the "Projects" label: /#work links
+ * from case pages and search results still land on it.
  */
 export const sections = {
-  work: { id: 'work', index: '01', label: 'Selected work', nav: 'Work' },
-  more: { id: 'more', index: '02', label: 'Also built' },
-  experience: { id: 'experience', index: '03', label: 'Experience' },
-  skills: { id: 'skills', index: '04', label: 'Capabilities' },
-  about: { id: 'about', index: '05', label: 'About', nav: 'About' },
-  contact: { id: 'contact', index: '06', label: 'Contact', nav: 'Contact' },
+  work: { id: 'work', label: 'Projects', nav: 'Projects' },
+  experience: { id: 'experience', label: 'Experience', nav: 'Experience' },
+  skills: { id: 'skills', label: 'Skills' },
+  about: { id: 'about', label: 'About', nav: 'About' },
+  contact: { id: 'contact', label: 'Contact' },
 } as const satisfies Record<string, Section>
 
 export const sectionOrder: Section[] = [
   sections.work,
-  sections.more,
   sections.experience,
   sections.skills,
   sections.about,

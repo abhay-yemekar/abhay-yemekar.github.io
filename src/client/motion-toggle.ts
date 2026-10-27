@@ -25,7 +25,6 @@ export function initMotionToggle(onChange: () => void) {
   for (const button of buttons) {
     button.addEventListener('click', () => {
       root.dataset.motion = root.dataset.motion === 'paused' ? 'on' : 'paused'
-      root.classList.remove('intro')
       try {
         localStorage.setItem(STORAGE_KEY, root.dataset.motion)
       } catch {

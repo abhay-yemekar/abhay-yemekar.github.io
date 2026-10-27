@@ -1,52 +1,53 @@
 import { navItems } from '../data/sections'
 import { profile } from '../data/profile'
+import { ProfileLinks } from './ProfileLinks'
 import { ThemeToggle } from './ThemeToggle'
 
 type NavProps = {
   /**
    * home: links scroll within the page and track the section in view.
-   * case: links go back to the home page, with Work marked current.
+   * case: links go back to the home page, with Projects marked current.
    * other: links go back to the home page, nothing marked (the 404 page).
    */
   page: 'home' | 'case' | 'other'
 }
 
+/**
+ * The sticky header. It stays in place while you scroll (v4), so the section
+ * links and the profile links are always to hand.
+ */
 export function Nav({ page }: NavProps) {
   const onHome = page === 'home'
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-bg/75 backdrop-blur-md" data-nav>
+    <header className="sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md" data-nav>
       <nav aria-label="Primary" className="u-container">
         <div className="flex h-16 items-center justify-between gap-4">
-          <a
-            href={onHome ? '#top' : '/'}
-            className="font-display text-[1.0625rem] font-semibold whitespace-nowrap text-fg uppercase no-underline [font-stretch:80%] tracking-[0.02em]"
-          >
+          <a href={onHome ? '#top' : '/'} className="text-[1.0625rem] font-semibold whitespace-nowrap text-fg no-underline">
             {profile.name}
           </a>
 
-          <div className="flex items-center gap-1 lg:gap-6">
-            {/* Local time for "where is he": static "IST" without JS, the live time with it. */}
-            <p className="u-meta m-0 hidden text-fg-subtle lg:block">
-              {profile.city} <span data-clock>IST</span>
-            </p>
-            <ul className="u-meta m-0 flex list-none items-center p-0 uppercase">
+          <div className="flex items-center">
+            {/* Below 640px only the profile links fit beside the name; the theme toggle moves to the footer there. */}
+            <ul className="m-0 hidden list-none items-center p-0 sm:flex">
               {navItems.map((item) => (
-                // Below 640px only Work and Contact fit beside the name and the
-                // 44px theme toggle; About is one scroll away.
-                <li key={item.id} className={item.id === 'about' ? 'hidden sm:block' : undefined}>
+                <li key={item.id}>
                   <a
                     href={onHome ? `#${item.id}` : `/#${item.id}`}
                     {...(onHome ? { 'data-spy': '' } : {})}
                     {...(page === 'case' && item.id === 'work' ? { 'aria-current': 'true' as const } : {})}
-                    className="u-tap px-2 tracking-[0.08em] text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg sm:px-3 [&[aria-current]]:text-fg [&[aria-current]]:underline [&[aria-current]]:decoration-mark [&[aria-current]]:decoration-2 [&[aria-current]]:underline-offset-[0.5em]"
+                    className="u-tap px-2.5 text-small text-fg-muted no-underline transition-colors duration-(--duration-fast) hover:text-fg lg:px-3 [&[aria-current]]:text-fg [&[aria-current]]:underline [&[aria-current]]:decoration-mark [&[aria-current]]:decoration-2 [&[aria-current]]:underline-offset-[0.5em]"
                   >
-                    <span data-scramble>{item.nav}</span>
+                    {item.nav}
                   </a>
                 </li>
               ))}
             </ul>
-            <ThemeToggle />
+            <span className="mx-2 hidden h-5 w-px bg-border-strong sm:block lg:mx-3" aria-hidden="true" />
+            <ProfileLinks />
+            <span className="hidden sm:contents">
+              <ThemeToggle />
+            </span>
           </div>
         </div>
       </nav>

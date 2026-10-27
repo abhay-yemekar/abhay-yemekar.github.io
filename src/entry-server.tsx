@@ -133,7 +133,7 @@ export function llmsTxt(): string {
     '',
     '## Elsewhere',
     '',
-    `- [Home](${site}/): selected work, experience, capabilities, about, contact`,
+    `- [Home](${site}/): projects, experience, skills, about, contact`,
     `- [GitHub](${profile.links.github})`,
     `- [LinkedIn](${profile.links.linkedin})`,
     '',

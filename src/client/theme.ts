@@ -2,9 +2,9 @@ type Theme = 'light' | 'dark'
 
 const STORAGE_KEY = 'theme'
 
-/** Dark is the designed default (v3); light applies only once chosen. */
+/** Light is the designed default (v4); dark applies only once chosen. */
 function effectiveTheme(): Theme {
-  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
+  return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
 }
 
 /**
