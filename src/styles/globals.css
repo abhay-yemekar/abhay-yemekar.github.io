@@ -3,49 +3,49 @@
 @import './motion.css';
 
 /*
- * v3 "Cinematic" tokens: a near-black canvas, warm off-white text, and amber,
- * which still marks evidence and now also glows.
+ * v4 tokens: warm paper, warm ink and one signal orange (docs/V4-PLAN.md,
+ * palette A). The orange keeps amber's old job: it marks evidence and lights
+ * up on interaction, and nothing else.
  *
- * Dark is the designed default whatever the OS says. The paper theme from v2 is
- * kept behind the toggle (data-theme="light"). It is opt-in only, because the
- * particles, glow and video are tuned for black.
+ * Light is the designed default. The dark version sits behind the toggle
+ * (data-theme="dark") and applies only when the visitor picks it.
  *
  * Every text pair clears WCAG AA (4.5:1) in both themes, and non-text marks
  * clear 3:1. Measured values are in docs/CONTRAST.md. Re-measure computed
  * styles after any change. On the evidence wash use fg or fg-muted only.
  */
 :root {
-  --color-bg: #0a0a0a;
-  --color-bg-elev: #131313;
-  --color-bg-2: #101012;
-  --color-fg: #f1eee8;
-  --color-fg-muted: #b0aba2;
-  --color-fg-subtle: #8e8a82;
-  --color-border: rgb(255 255 255 / 0.1);
-  --color-border-strong: rgb(255 255 255 / 0.22);
-  --color-accent: #f0b54c;
-  --color-mark: #f0b54c;
-  --color-wash: rgb(240 181 76 / 0.2);
-  --color-glow: rgb(240 181 76 / 0.35);
-  --color-ring: #f0b54c;
-  color-scheme: dark;
+  --color-bg: #faf8f3;
+  --color-bg-elev: #ffffff;
+  --color-bg-2: #f2efe7;
+  --color-fg: #171412;
+  --color-fg-muted: #4d4842;
+  --color-fg-subtle: #68625a;
+  --color-border: rgb(23 20 18 / 0.12);
+  --color-border-strong: rgb(23 20 18 / 0.28);
+  --color-accent: #b4410c;
+  --color-mark: #e85d14;
+  --color-wash: rgb(255 106 31 / 0.18);
+  --color-glow: rgb(232 93 20 / 0.2);
+  --color-ring: #b4410c;
+  color-scheme: light;
 }
 
-:root[data-theme='light'] {
-  --color-bg: #f7f5ef;
-  --color-bg-elev: #fffdf8;
-  --color-bg-2: #efebe2;
-  --color-fg: #1a1917;
-  --color-fg-muted: #4f4b45;
-  --color-fg-subtle: #625e57;
-  --color-border: rgb(26 25 23 / 0.14);
-  --color-border-strong: rgb(26 25 23 / 0.3);
-  --color-accent: #8a5300;
-  --color-mark: #a86f0a;
-  --color-wash: rgb(227 165 42 / 0.3);
-  --color-glow: rgb(168 111 10 / 0.25);
-  --color-ring: #8a5300;
-  color-scheme: light;
+:root[data-theme='dark'] {
+  --color-bg: #121110;
+  --color-bg-elev: #1b1a18;
+  --color-bg-2: #171614;
+  --color-fg: #f3efe8;
+  --color-fg-muted: #b9b2a8;
+  --color-fg-subtle: #9a938a;
+  --color-border: rgb(255 255 255 / 0.1);
+  --color-border-strong: rgb(255 255 255 / 0.22);
+  --color-accent: #ff8a4c;
+  --color-mark: #ff7a33;
+  --color-wash: rgb(255 122 51 / 0.22);
+  --color-glow: rgb(255 122 51 / 0.3);
+  --color-ring: #ff8a4c;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -66,46 +66,48 @@
 
 @theme {
   --font-sans: 'Instrument Sans Variable', 'Instrument Sans Fallback', Arial, sans-serif;
-  --font-display: 'Instrument Sans Display', 'Instrument Sans Display Fallback', Arial, sans-serif;
+  /* Headings use the text face at normal width (v4); the condensed cut is retired. */
+  --font-display: var(--font-sans);
   --font-serif: 'Instrument Serif', 'Instrument Serif Fallback', 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono Fallback', ui-monospace, monospace;
 
-  /* Type scale. The smallest text anywhere is --text-meta (13px). */
-  --text-mega: clamp(4.5rem, 15vw, 15rem);
-  --text-mega--line-height: 0.82;
-  --text-mega--letter-spacing: -0.03em;
-  --text-display: clamp(2.5rem, 5.4vw, 5.25rem);
-  --text-display--line-height: 0.98;
-  --text-display--letter-spacing: -0.025em;
-  --text-title: clamp(3.25rem, 9vw, 8.5rem);
-  --text-title--line-height: 0.9;
+  /*
+   * Type scale (v4). The hero's role is the largest text on the page; section
+   * headings and project names sit well below it. The smallest text anywhere
+   * is --text-meta (14px).
+   */
+  --text-display: clamp(2.5rem, 5.2vw, 4.25rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-title: clamp(2.25rem, 4.6vw, 3.75rem);
+  --text-title--line-height: 1.04;
   --text-title--letter-spacing: -0.03em;
-  --text-h2: clamp(2.5rem, 6.5vw, 6rem);
-  --text-h2--line-height: 0.92;
-  --text-h2--letter-spacing: -0.025em;
-  --text-work: clamp(2.5rem, 5.6vw, 5.25rem);
-  --text-work--line-height: 0.92;
-  --text-work--letter-spacing: -0.025em;
-  /* Names in a list: companies, capabilities, side projects. */
-  --text-name: clamp(2rem, 3.8vw, 3.5rem);
-  --text-name--line-height: 0.98;
-  --text-name--letter-spacing: -0.02em;
+  --text-h2: clamp(1.75rem, 2.6vw, 2.25rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-work: clamp(1.5rem, 2vw, 1.75rem);
+  --text-work--line-height: 1.15;
+  --text-work--letter-spacing: -0.015em;
+  /* Names in a list: roles, capabilities. */
+  --text-name: clamp(1.25rem, 1.6vw, 1.375rem);
+  --text-name--line-height: 1.25;
+  --text-name--letter-spacing: -0.01em;
   /* Case-study section headings. */
-  --text-section: clamp(2rem, 3.4vw, 3.25rem);
-  --text-section--line-height: 1;
-  --text-section--letter-spacing: -0.02em;
-  --text-h3: clamp(1.5rem, 2.6vw, 2.375rem);
-  --text-h3--line-height: 1.05;
-  --text-h3--letter-spacing: -0.015em;
-  --text-lede: clamp(1.125rem, 1.45vw, 1.375rem);
-  --text-lede--line-height: 1.5;
+  --text-section: clamp(1.5rem, 2.2vw, 1.875rem);
+  --text-section--line-height: 1.15;
+  --text-section--letter-spacing: -0.015em;
+  --text-h3: clamp(1.25rem, 1.8vw, 1.5rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lede: clamp(1.125rem, 1.4vw, 1.25rem);
+  --text-lede--line-height: 1.55;
   --text-body: 1.0625rem;
   --text-body--line-height: 1.65;
   --text-small: 0.9375rem;
   --text-small--line-height: 1.6;
-  --text-meta: 0.8125rem;
+  --text-meta: 0.875rem;
   --text-meta--line-height: 1.5;
-  --text-meta--letter-spacing: 0.04em;
+  --text-meta--letter-spacing: 0;
 
   --container-content: 1360px;
   --container-prose: 640px;
@@ -146,12 +148,11 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Headings: Instrument Sans, condensed and heavy. The serif accent is .u-accent. */
+  /* Headings: Instrument Sans at normal width, semibold. The serif accent is .u-accent. */
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
-    font-stretch: 80%;
     font-weight: 600;
     text-wrap: balance;
   }
@@ -172,8 +173,8 @@
   }
 
   ::selection {
-    background-color: var(--color-mark);
-    color: #0a0a0a;
+    background-color: var(--color-wash);
+    color: var(--color-fg);
   }
 }
 
@@ -191,36 +192,23 @@
     }
   }
 
-  /* Mono metadata: dates, stack tags, labels, offsets. Never below 13px. */
+  /* Metadata: dates, counts, tags. Sans, sentence case, never below 14px. */
   .u-meta {
-    font-family: var(--font-mono);
     font-size: var(--text-meta);
     line-height: var(--text-meta--line-height);
     letter-spacing: var(--text-meta--letter-spacing);
   }
 
-  /* Bracketed mono label: [ 01 / Work ]. The brackets are decoration. */
+  /* A small label over a group: sans, medium weight, no brackets or capitals. */
   .u-label {
-    font-family: var(--font-mono);
     font-size: var(--text-meta);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-weight: 500;
+    line-height: var(--text-meta--line-height);
   }
 
-  .u-label::before {
-    content: '[\00a0';
-    color: var(--color-fg-subtle);
-  }
-
-  .u-label::after {
-    content: '\00a0]';
-    color: var(--color-fg-subtle);
-  }
-
-  /* Display type outside a heading element: the condensed headline cut. */
+  /* Display type outside a heading element: the heading cut. */
   .u-display {
     font-family: var(--font-display);
-    font-stretch: 80%;
     font-weight: 600;
   }
 
@@ -281,29 +269,121 @@
     min-height: 44px;
   }
 
-  /* Primary action: a light pill on the dark canvas. Magnetic when motion runs. */
+  /*
+   * A round icon button: a 44px tap target that draws a 36px circle. Hover
+   * fills the circle, and the keyboard focus ring follows its shape.
+   */
+  .u-icon-btn {
+    position: relative;
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-fg-muted);
+    transition: color var(--duration-fast) var(--ease-hover);
+  }
+
+  .u-icon-btn::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 999px;
+    transition: background-color var(--duration-fast) var(--ease-hover);
+  }
+
+  .u-icon-btn > svg {
+    position: relative;
+  }
+
+  .u-icon-btn:hover {
+    color: var(--color-fg);
+  }
+
+  .u-icon-btn:hover::before {
+    background-color: color-mix(in srgb, var(--color-fg) 8%, transparent);
+  }
+
+  /* An outlined pill inside a 44px tap target: the link is the target, the inner span the pill. */
+  .u-pill-link {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+
+  .u-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 2.25rem;
+    padding-inline: 0.875rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    font-size: var(--text-meta);
+    font-weight: 500;
+    white-space: nowrap;
+    transition:
+      border-color var(--duration-fast) var(--ease-hover),
+      background-color var(--duration-fast) var(--ease-hover);
+  }
+
+  .u-pill-link:hover .u-pill {
+    border-color: var(--color-fg);
+    background-color: color-mix(in srgb, var(--color-fg) 5%, transparent);
+  }
+
+  /* Both draw their ring on the shape, not on the square tap target. */
+  .u-icon-btn:focus-visible,
+  .u-pill-link:focus-visible {
+    outline: none;
+  }
+
+  .u-icon-btn:focus-visible::before,
+  .u-pill-link:focus-visible .u-pill {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Primary action: an ink pill (fg fill, bg text). */
   .u-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    min-height: 52px;
-    padding-inline: 1.5rem;
+    gap: 0.625rem;
+    min-height: 48px;
+    padding-inline: 1.375rem;
+    border: 1px solid transparent;
     border-radius: 999px;
     background-color: var(--color-fg);
     color: var(--color-bg);
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    letter-spacing: 0.02em;
+    font-size: var(--text-small);
+    font-weight: 500;
     text-decoration: none;
     transition:
       background-color var(--duration-base) var(--ease-hover),
+      border-color var(--duration-base) var(--ease-hover),
       box-shadow var(--duration-base) var(--ease-hover);
   }
 
   /* Accent, not mark: the hover keeps AA contrast for its text in both themes. */
   .u-btn:hover {
     background-color: var(--color-accent);
-    box-shadow: 0 0 40px var(--color-glow);
+    box-shadow: 0 0 32px var(--color-glow);
+  }
+
+  /* Secondary action: the same pill, outlined. */
+  .u-btn--ghost {
+    border-color: var(--color-border-strong);
+    background-color: transparent;
+    color: var(--color-fg);
+  }
+
+  .u-btn--ghost:hover {
+    border-color: var(--color-fg);
+    background-color: transparent;
+    box-shadow: none;
   }
 
   /* Evidence: a wash plus an underline mark, not colour alone. */
@@ -321,19 +401,6 @@
     box-decoration-break: clone;
   }
 
-  /* Citation numeral pointing at a source on the page. */
-  .u-cite {
-    font-family: var(--font-mono);
-    /* A third of the headline, but never under the 13px floor (phones). */
-    font-size: max(var(--text-meta), 0.32em);
-    line-height: 0;
-    color: var(--color-accent);
-    margin-left: 0.12em;
-    vertical-align: super;
-    letter-spacing: 0;
-    text-decoration: none;
-  }
-
   /* Placeholder for missing facts. Rendered only in dev; see src/lib/todo.ts. */
   .u-todo {
     font-family: var(--font-mono);
@@ -343,30 +410,6 @@
     padding: 1px 6px;
     border-radius: var(--radius-sm);
     white-space: nowrap;
-  }
-}
-
-/*
- * Film grain over everything: a static SVG noise tile at low opacity. It is
- * decorative, ignores pointers, and is off in forced-colors mode.
- */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-:root[data-theme='light'] body::after {
-  opacity: 0.035;
-}
-
-@media (forced-colors: active) {
-  body::after {
-    display: none;
   }
 }
 
@@ -405,37 +448,34 @@ html:not(.js) [data-theme-toggle] {
   visibility: hidden;
 }
 
-/* The motion control needs JS: the head script sets data-motion. */
-html:not([data-motion]) [data-motion-toggle] {
+/* A film's Pause / Play button needs JS (src/client/films.ts). Its icon follows the state. */
+html:not(.js) [data-film-toggle] {
   display: none;
 }
 
-[data-motion-toggle] .icon-play,
-[data-motion-toggle][data-state='paused'] .icon-pause {
+[data-film-toggle] .icon-play,
+[data-film-toggle][data-state='paused'] .icon-pause {
   display: none;
 }
 
-[data-motion-toggle][data-state='paused'] .icon-play {
+[data-film-toggle][data-state='paused'] .icon-play {
   display: inline;
 }
 
-/* Targets that smooth scroll focuses by hand (tabindex=-1) need no ring. */
+/* Mouse-only targets (tabindex=-1, like a card's poster link) need no ring. */
 [tabindex='-1']:focus {
   outline: none;
 }
 
-/*
- * Reduced motion: transitions and animations collapse to an instant, unless
- * the visitor explicitly pressed "Play motion" (data-motion="on").
- */
+/* Reduced motion (the OS setting): transitions and animations collapse to an instant. */
 @media (prefers-reduced-motion: reduce) {
-  html:not([data-motion='on']) {
+  html {
     scroll-behavior: auto;
   }
 
-  html:not([data-motion='on']) *,
-  html:not([data-motion='on']) *::before,
-  html:not([data-motion='on']) *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

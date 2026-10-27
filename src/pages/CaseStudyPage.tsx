@@ -8,7 +8,6 @@ import { Footer } from '../components/Footer'
 import { HireLensExplainer } from '../components/HireLensExplainer'
 import { ForwardArrow } from '../components/Icons'
 import { LinkRow } from '../components/LinkRow'
-import { MotionToggle } from '../components/MotionToggle'
 import { Poster } from '../components/Poster'
 import { Nav } from '../components/Nav'
 import { SkipLink } from '../components/SkipLink'
@@ -43,18 +42,16 @@ function Sidenote({ cites, children }: { cites?: SourceRef[]; children?: ReactNo
 }
 
 /**
- * A numbered section: the heading sits in its own column (pinned while the
- * section scrolls, from 1024px), the body in the other eight. Wide sections
- * (the diagram, the explainer) take the full width under their heading.
+ * A section: the heading sits in its own column (pinned while the section
+ * scrolls, from 1024px), the body in the other eight. Wide sections (the
+ * diagram, the explainer) take the full width under their heading. `index`
+ * only keys the heading's id; v4 shows no section numerals.
  */
 function CaseSection({ index, title, children, wide }: { index: string; title: string; children: ReactNode; wide?: boolean }) {
   return (
-    <section aria-labelledby={`s-${index}`} className="grid gap-x-8 gap-y-8 border-t border-border py-14 lg:grid-cols-12 lg:py-20">
-      <div className={wide ? 'lg:col-span-12' : 'lg:sticky lg:top-28 lg:col-span-4 lg:self-start'}>
-        <p className="u-label m-0 text-fg-subtle" aria-hidden="true" data-scramble-in>
-          {index}
-        </p>
-        <h2 id={`s-${index}`} className="mt-4 text-section" data-split>
+    <section aria-labelledby={`s-${index}`} className="grid gap-x-8 gap-y-6 border-t border-border py-12 lg:grid-cols-12 lg:py-16">
+      <div className={wide ? 'lg:col-span-12' : 'lg:sticky lg:top-24 lg:col-span-4 lg:self-start'}>
+        <h2 id={`s-${index}`} className="m-0 text-section" data-split>
           {title}
         </h2>
       </div>
@@ -82,26 +79,22 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
       <SkipLink />
       <Nav page="case" />
       <main id="main" className="u-container">
-        <header className="pt-10 pb-14 lg:pt-14 lg:pb-20">
-          <div className="flex flex-wrap items-center justify-between gap-x-6">
-            <p className="u-label m-0 text-fg-subtle">
-              <a href="/#work" className="u-link text-fg-muted">
-                Selected work
-              </a>{' '}
-              / {study.name}
-            </p>
-            {/* The page's films loop, so it carries the pause control too (WCAG 2.2.2). */}
-            <MotionToggle className="-my-3" />
-          </div>
-          <div className="mt-8 grid gap-x-8 gap-y-10 lg:mt-10 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <h1 className="text-title">
-                {/* The project's name morphs here from the work index (cross-document view transition). */}
+        <header className="pt-10 pb-12 lg:pt-14 lg:pb-16">
+          <p className="u-label m-0 text-fg-subtle">
+            <a href="/#work" className="u-link text-fg-muted">
+              Projects
+            </a>{' '}
+            / {study.name}
+          </p>
+          <div className="mt-6 grid gap-x-8 gap-y-10 lg:mt-8 lg:grid-cols-12">
+            <div className="lg:col-span-7 lg:self-center">
+              <h1 className="m-0 text-title">
+                {/* The project's name morphs here from its card on the home page (cross-document view transition). */}
                 <span className="vt inline-block" style={vt(study.slug)}>
                   {study.name}
                 </span>
               </h1>
-              <p className="mt-6 max-w-[34ch] text-[clamp(1.25rem,2vw,1.75rem)] leading-snug">{study.tagline}</p>
+              <p className="m-0 mt-4 max-w-[40ch] text-[clamp(1.125rem,1.6vw,1.375rem)] leading-snug">{study.tagline}</p>
               <div className="mt-6">
                 <LinkRow links={study.links} />
               </div>
@@ -167,7 +160,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             {study.decisions.map((decision) => (
               <div key={decision.title} className={`${ROW} mb-5`}>
                 <div className="rounded-card border border-border bg-bg-elev px-6 py-5">
-                  <h3 className="mb-4 text-[1.5rem] leading-tight">{decision.title}</h3>
+                  <h3 className="mb-4 text-h3">{decision.title}</h3>
                   <dl className="m-0 grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-2 text-small">
                     <dt className="u-meta pt-1 text-fg-subtle">Chose</dt>
                     <dd className="m-0">{decision.chose}</dd>
@@ -225,7 +218,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
               <ul className="m-0 mb-8 grid list-none gap-x-8 gap-y-6 p-0 sm:grid-cols-2">
                 {study.outcome.metrics.map((metric) => (
                   <li key={metric.label} className="border-t border-border pt-5">
-                    <p className="u-display m-0 text-[clamp(3rem,6vw,5.5rem)] leading-none tracking-[-0.03em] text-accent">{metric.value}</p>
+                    <p className="u-display m-0 text-[clamp(2rem,3.4vw,2.75rem)] leading-none tracking-[-0.02em] text-accent">{metric.value}</p>
                     <p className="m-0 mt-2 text-small">{metric.label}</p>
                     <p className="u-meta m-0 mt-2 text-fg-subtle">
                       Source:{' '}
@@ -253,24 +246,24 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
             </CaseSection>
           )}
 
-          <nav aria-label="More case studies" className="border-t border-border py-14 lg:py-20">
+          <nav aria-label="More case studies" className="border-t border-border py-12 lg:py-16">
             <a href="/#work" className="u-meta u-tap u-link text-fg-muted">
-              All selected work
+              All projects
             </a>
             {next && (
-              <a href={`/work/${next.slug}/`} className="group mt-8 flex items-end justify-between gap-6 text-fg no-underline">
+              <a
+                href={`/work/${next.slug}/`}
+                className="group mt-6 flex items-center justify-between gap-6 rounded-card border border-border bg-bg-elev px-6 py-5 text-fg no-underline transition-colors duration-(--duration-base) hover:border-border-strong"
+              >
                 <span className="min-w-0">
-                  <span className="u-label block text-fg-subtle">Next</span>
-                  <span className="mt-4 block">
-                    <span
-                      className="vt u-display inline-block text-title transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-3"
-                      style={vt(next.slug)}
-                    >
+                  <span className="u-label block text-fg-subtle">Next case study</span>
+                  <span className="mt-1 block">
+                    <span className="vt u-display inline-block text-h2" style={vt(next.slug)}>
                       {next.name}
                     </span>
                   </span>
                 </span>
-                <span className="u-arrow-ring mb-3">
+                <span className="u-arrow-ring">
                   <ForwardArrow />
                 </span>
               </a>

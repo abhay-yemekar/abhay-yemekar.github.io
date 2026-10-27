@@ -1,42 +1,47 @@
 /**
  * The JavaScript every page loads. Every page arrives as complete HTML from the
  * prerender, so this only adds behaviour, and the site works fully without it:
- * - the theme and motion controls, the nav's current section, the Pune clock
- * - the HireLens explainer, a separate chunk, where one exists
+ * - the theme toggle and the nav's current section
+ * - the HireLens explainer and the case-page films, separate chunks, where
+ *   the page has them
  * - the motion layer (src/client/motion), loaded after first paint when
- *   <html data-motion="on">, or the moment someone presses "Play motion"
+ *   <html data-motion="on">, which follows the OS reduced-motion setting
  */
 import '../styles/globals.css'
 import { initActiveSection } from './active-section'
-import { initClock } from './clock'
-import { initMotionToggle } from './motion-toggle'
 import { initThemeToggle } from './theme'
 
 initThemeToggle()
 initActiveSection()
-initClock()
+
+// A mouse click on a link that opens a new tab leaves it focused, and Chrome
+// redraws its focus ring when you come back to this tab. Keyboard activation
+// (detail 0) keeps focus where it is, so keyboard users don't lose their place.
+document.addEventListener('click', (event) => {
+  const link = event.target instanceof Element ? event.target.closest('a[target="_blank"]') : null
+  if (link instanceof HTMLElement && event.detail > 0) link.blur()
+})
 
 const explainer = document.querySelector<HTMLElement>('[data-explainer]')
 if (explainer) void import('./explainer').then(({ initExplainer }) => initExplainer(explainer))
 
-const root = document.documentElement
+const films = [...document.querySelectorAll<HTMLElement>('[data-film]')]
+if (films.length) void import('./films').then(({ initFilms }) => initFilms(films))
 
-// The first-visit intro (CSS) can be skipped: any key or click ends it at its final frame.
-if (root.classList.contains('intro')) {
-  const skip = () => root.classList.remove('intro')
-  window.addEventListener('keydown', skip, { once: true })
-  window.addEventListener('pointerdown', skip, { once: true })
-}
+const root = document.documentElement
 
 let layer: Promise<typeof import('./motion/boot')> | undefined
 const syncMotion = () => {
   if (root.dataset.motion === 'on') void (layer ??= import('./motion/boot')).then((motion) => motion.start())
   else void layer?.then((motion) => motion.stop())
 }
-// From the button, start or stop only after the next frame has painted, so the
-// label flips at once. Tearing the whole layer down inside the click took
-// pause to about 205 ms at 4x CPU throttle, past the 200 ms INP line.
-initMotionToggle(() => requestAnimationFrame(() => setTimeout(syncMotion)))
+
+// The OS setting can change while the page is open: follow it.
+const reduce = matchMedia('(prefers-reduced-motion: reduce)')
+reduce.addEventListener('change', () => {
+  root.dataset.motion = reduce.matches ? 'paused' : 'on'
+  syncMotion()
+})
 
 /** After load and an idle moment, so the layer never competes with first paint. */
 const afterFirstPaint = (run: () => void) => {

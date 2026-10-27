@@ -1,7 +1,7 @@
 import type { ProjectLink } from '../data/projects'
 import { ExternalArrow } from './Icons'
 
-/** Outbound project links, each a 44px tap target with the amber underline. */
+/** Outbound project links, each a 44px tap target with the orange underline. */
 export function LinkRow({ links }: { links: ProjectLink[] }) {
   return (
     <ul className="u-meta m-0 flex list-none flex-wrap gap-x-6 p-0">

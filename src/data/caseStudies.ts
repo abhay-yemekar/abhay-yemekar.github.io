@@ -38,7 +38,7 @@ export type DiagramNode = {
   /** Desktop layout, in viewBox units. Boxes are 210 × 58. */
   x: number
   y: number
-  /** On the trust path, drawn in amber. */
+  /** On the trust path, drawn in orange. */
   hot?: boolean
   /** A failure branch, drawn dotted. */
   warn?: boolean
@@ -270,6 +270,8 @@ export const caseStudies: CaseStudy[] = [
       stack: ['TypeScript', 'Next.js 16', 'Hono', 'Postgres + pgvector', 'Drizzle', 'Turborepo'],
     },
     links: [
+      // The product site; the demo is one page of it.
+      { label: 'Website', href: 'https://hirelens-rosy.vercel.app/' },
       { label: 'Live demo', href: 'https://hirelens-rosy.vercel.app/demo' },
       { label: 'Repository', href: HIRELENS_REPO },
       { label: 'npm', href: 'https://www.npmjs.com/package/hirelens' },

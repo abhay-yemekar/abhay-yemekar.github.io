@@ -16,7 +16,7 @@ import type { ReactNode } from 'react'
 import { prerender } from 'react-dom/static'
 import * as about from './data/about'
 import { caseStudies } from './data/caseStudies'
-import * as credentials from './data/credentials'
+import { education } from './data/education'
 import * as experience from './data/experience'
 import { hero, homeSeo, profile } from './data/profile'
 import * as projects from './data/projects'
@@ -50,7 +50,7 @@ const routes: Route[] = [
       title: homeSeo.title,
       description: homeSeo.description,
       ogImage: ogFor('home'),
-      ogImageAlt: `${profile.name}: ${hero.headline}`,
+      ogImageAlt: `${profile.name}, ${hero.role}: ${hero.headline}`,
       ogType: 'website',
       jsonLd: homeJsonLd(),
     },
@@ -76,7 +76,7 @@ const routes: Route[] = [
       title: `Page not found · ${profile.name}`,
       description: 'This page does not exist. The work is linked from here.',
       ogImage: ogFor('home'),
-      ogImageAlt: `${profile.name}: ${hero.headline}`,
+      ogImageAlt: `${profile.name}, ${hero.role}: ${hero.headline}`,
       ogType: 'website',
       noindex: true,
     },
@@ -111,7 +111,7 @@ export async function renderPage(path: string, template: string): Promise<string
 
 /** Every Todo left in the content, for the prerender's build warnings. */
 export function listTodos() {
-  return collectTodos({ hero, about, caseStudies, credentials, experience, projects, skills })
+  return collectTodos({ hero, about, caseStudies, education, experience, projects, skills })
 }
 
 /**
@@ -133,7 +133,7 @@ export function llmsTxt(): string {
     '',
     '## Elsewhere',
     '',
-    `- [Home](${site}/): selected work, experience, capabilities, about, contact`,
+    `- [Home](${site}/): about, projects, experience, education, skills, contact`,
     `- [GitHub](${profile.links.github})`,
     `- [LinkedIn](${profile.links.linkedin})`,
     '',
@@ -144,14 +144,15 @@ export function llmsTxt(): string {
 export const ogCards = [
   {
     slug: 'home',
-    eyebrow: `${profile.role} · ${profile.city}`,
-    title: hero.headline,
+    eyebrow: 'Portfolio',
+    title: hero.role,
+    subtitle: hero.headline,
     mark: hero.evidence,
     footer: host,
   },
   ...caseStudies.map((s) => ({
     slug: s.slug,
-    eyebrow: `Case study · ${profile.name}`,
+    eyebrow: 'Case study',
     title: s.og.title,
     subtitle: s.og.subtitle,
     pattern: s.pattern,

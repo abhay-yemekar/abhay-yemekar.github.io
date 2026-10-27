@@ -16,18 +16,18 @@ import sharp from 'sharp'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = join(root, 'public')
 
-// The dark "Evidence" tokens: a favicon sits on browser chrome of either theme,
+// v4 palette A, on an ink tile: a favicon sits on browser chrome of either theme,
 // and the dark tile holds its shape on both.
-const INK = '#121110'
-const AMBER = '#f0b54c'
-const PAPER = '#ece8df'
+const INK = '#171412'
+const ORANGE = '#e85d14'
+const PAPER = '#faf8f3'
 
-/** Monogram: an A on ink, with an amber crossbar (the evidence mark). */
+/** Monogram: an A on ink, with an orange crossbar (the evidence mark). */
 const monogram = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="12" fill="${INK}"/>
   <path d="M32 14 46 50" fill="none" stroke="${PAPER}" stroke-width="5" stroke-linecap="round"/>
   <path d="M32 14 18 50" fill="none" stroke="${PAPER}" stroke-width="5" stroke-linecap="round"/>
-  <path d="M24 38h16" fill="none" stroke="${AMBER}" stroke-width="5" stroke-linecap="round"/>
+  <path d="M24 38h16" fill="none" stroke="${ORANGE}" stroke-width="5" stroke-linecap="round"/>
 </svg>
 `
 

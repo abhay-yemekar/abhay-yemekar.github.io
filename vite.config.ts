@@ -2,11 +2,11 @@ import { defineConfig, type Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 
 /**
- * The faces in the hero headline, which is the page's LCP element: Instrument
- * Sans (the condensed display cut comes from the same file) and Instrument
- * Serif Italic for the accent clause.
+ * The face of the hero headline, which is the page's LCP element (v4: the role,
+ * in Instrument Sans). Instrument Serif Italic is used further down only, so
+ * it isn't preloaded.
  */
-const HERO_FACES = ['instrument-sans-latin-wdth-normal', 'instrument-serif-latin-400-italic']
+const HERO_FACES = ['instrument-sans-latin-wdth-normal']
 
 /**
  * Injects a <link rel="preload"> for each of the hero headline's fonts.

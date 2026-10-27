@@ -1,4 +1,5 @@
 import { FILM_WIDTHS, projectMedia, STILL_WIDTHS } from '../data/media'
+import { PauseIcon } from './Icons'
 
 const srcSet = (base: string, widths: readonly number[], ext: string) => widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ')
 
@@ -14,8 +15,8 @@ function Picture({ base, widths, sizes, alt, width, height }: { base: string; wi
 
 /**
  * A case study's "In the product" media: the film (a still in the HTML, played
- * as an animated WebP by the motion layer while it's in view, src/client/
- * motion/films.ts) and any stills, each with a caption.
+ * as an animated WebP while it's in view, with its own Pause / Play button,
+ * src/client/films.ts) and any stills, each with a caption.
  */
 export function CaseMedia({ slug }: { slug: string }) {
   const media = projectMedia[slug]
@@ -36,7 +37,16 @@ export function CaseMedia({ slug }: { slug: string }) {
               height={film.height}
             />
           </div>
-          <figcaption className="u-meta mt-3 text-fg-subtle">{film.caption}</figcaption>
+          <figcaption className="mt-3 flex flex-wrap items-start justify-between gap-x-6 gap-y-1">
+            <span className="u-meta text-fg-subtle">{film.caption}</span>
+            {/* The film loops, so it has its own control (WCAG 2.2.2). src/client/films.ts sets the label; hidden without JS. */}
+            <button type="button" className="u-pill-link -my-2 shrink-0 cursor-pointer" data-film-toggle data-state="playing">
+              <span className="u-pill">
+                <PauseIcon />
+                <span data-film-label>Pause film</span>
+              </span>
+            </button>
+          </figcaption>
         </figure>
       )}
       {stills.map((still) => (

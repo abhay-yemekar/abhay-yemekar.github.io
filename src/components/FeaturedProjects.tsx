@@ -1,25 +1,26 @@
 import { caseStudies } from '../data/caseStudies'
 import { projectMedia } from '../data/media'
 import { sections } from '../data/sections'
-import { HireLensExplainer } from './HireLensExplainer'
 import { ForwardArrow } from './Icons'
 import { vt } from '../lib/view-transition'
 import { LinkRow } from './LinkRow'
+import { MoreProjects } from './MoreProjects'
 import { Poster } from './Poster'
 import { SectionShell } from './SectionShell'
 
 /**
- * The work as a numbered index. With a fine pointer and motion on, hovering a
- * project name floats its poster (or a moving preview) beside the cursor
- * (src/client/motion/work-preview.ts). Otherwise the poster sits in the row.
+ * The four case studies as a 2×2 grid of cards (one column on phones), then
+ * the smaller projects as a compact list. With a mouse and motion on, hovering
+ * a card plays its moving preview inside the poster frame
+ * (src/client/motion/work-preview.ts).
  *
- * The full story lives on each case-study page. The HireLens explainer follows
- * the list as the section's showcase.
+ * The full story lives on each case-study page, the HireLens explainer
+ * included.
  */
 export function FeaturedProjects() {
   return (
     <SectionShell section={sections.work} aside={`${caseStudies.length} case studies`}>
-      <ol className="m-0 list-none border-t border-border p-0" data-work-index>
+      <ol className="m-0 grid list-none gap-x-8 gap-y-14 p-0 md:grid-cols-2 lg:gap-x-10" data-work-index>
         {caseStudies.map((study, i) => {
           const media = projectMedia[study.slug]
           return (
@@ -27,55 +28,54 @@ export function FeaturedProjects() {
               key={study.slug}
               id={study.slug}
               aria-labelledby={`project-${study.slug}`}
-              className="work-row scroll-mt-24 border-b border-border"
+              className="work-card flex scroll-mt-24 flex-col"
               data-work-row={study.slug}
               {...(media?.preview ? { 'data-preview': media.preview.src, 'data-preview-type': media.preview.type } : {})}
               data-reveal
             >
-              <div className="grid grid-cols-[2.5rem_1fr] gap-x-4 gap-y-6 py-10 lg:grid-cols-12 lg:gap-x-8 lg:py-14">
-                <span className="u-meta pt-2 text-fg-subtle lg:col-span-1 lg:pt-4" aria-hidden="true">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+              {media && (
+                // The name below is the card's real link; this one only widens the target for pointers.
+                <a
+                  href={`/work/${study.slug}/`}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="work-card__frame relative block overflow-hidden rounded-card border border-border bg-bg-elev"
+                  data-work-frame
+                >
+                  {/* Half the container from 768px (less the gutter), else the viewport less its gutters. */}
+                  <Poster
+                    slug={study.slug}
+                    sizes="(min-width: 1360px) 620px, (min-width: 1024px) calc(50vw - 3.75rem), (min-width: 768px) calc(50vw - 2.25rem), calc(100vw - 2.5rem)"
+                    eager={i < 2}
+                  />
+                </a>
+              )}
 
-                <div className="lg:col-span-6" data-work-hit>
-                  <h3 id={`project-${study.slug}`} className="work-title m-0 text-work">
-                    <a href={`/work/${study.slug}/`} className="vt text-fg no-underline" style={vt(study.slug)} data-cursor="View">
-                      {study.name}
-                    </a>
-                  </h3>
-                  <p className="u-meta m-0 mt-5 text-fg-subtle">{study.period}</p>
-                  <p className="u-meta m-0 mt-1 text-accent">{study.pattern}</p>
-                </div>
+              <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 id={`project-${study.slug}`} className="work-title m-0 text-work">
+                  <a href={`/work/${study.slug}/`} className="vt inline-block text-fg" style={vt(study.slug)}>
+                    {study.name}
+                  </a>
+                </h3>
+                <p className="u-meta m-0 text-fg-subtle">{study.period}</p>
+              </div>
+              <p className="u-meta m-0 mt-1.5 font-medium text-accent">{study.pattern}</p>
+              <p className="m-0 mt-3 text-fg-muted">{study.summary}</p>
 
-                <div className="col-start-2 lg:col-span-5 lg:col-start-8">
-                  <p className="m-0 text-fg-muted">{study.summary}</p>
-                  <div className="mt-4 flex flex-wrap items-center gap-x-6">
-                    <a href={`/work/${study.slug}/`} className="u-meta u-tap gap-1.5 text-fg no-underline">
-                      <span className="u-link">Read the case study</span>
-                      <ForwardArrow />
-                    </a>
-                    <LinkRow links={study.links} />
-                  </div>
-                  {media && (
-                    <figure className="work-poster m-0 mt-8 overflow-hidden rounded-card border border-border">
-                      {/* The row's text column: 5/12 of the container from 1024px, else the viewport less the gutters and numerals. */}
-                      <Poster slug={study.slug} sizes="(min-width: 1024px) 34vw, calc(100vw - 5.5rem)" />
-                    </figure>
-                  )}
-                </div>
+              {/* The case study on its own line, then the links out: the same two rows on every card. */}
+              <div className="mt-auto flex flex-col items-start pt-3">
+                <a href={`/work/${study.slug}/`} className="u-meta u-tap gap-1.5 font-medium text-fg no-underline">
+                  <span className="u-link">Read the case study</span>
+                  <ForwardArrow />
+                </a>
+                <LinkRow links={study.links} />
               </div>
             </li>
           )
         })}
       </ol>
 
-      {/* The signature moment: real HireLens output, every score tied to its evidence. */}
-      {caseStudies.some((study) => study.explainer) && (
-        // The showcase: the explainer grows out of a smaller frame as it scrolls in (motion/reveals.ts).
-        <div className="mt-20 lg:mt-28" data-showcase>
-          <HireLensExplainer />
-        </div>
-      )}
+      <MoreProjects />
     </SectionShell>
   )
 }

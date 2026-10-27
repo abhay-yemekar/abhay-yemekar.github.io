@@ -7,9 +7,11 @@
  */
 export function initActiveSection() {
   const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-spy]')]
+  // In document order, which can differ from the nav's order.
   const sections = links
     .map((link) => document.getElementById(link.hash.slice(1)))
     .filter((el): el is HTMLElement => el !== null)
+    .sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1))
   if (sections.length === 0) return
 
   /*
