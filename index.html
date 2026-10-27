@@ -18,25 +18,21 @@
       - .js, so JS-only controls become visible;
       - data-theme, only for a theme the visitor picked with the toggle (light is
         the default without it);
-      - data-motion="on" or "paused". prefers-reduced-motion means paused, unless
-        the visitor pressed "Play motion" (stored as "on"): an explicit choice
-        beats the OS default, in both directions.
+      - data-motion="on" or "paused": paused under prefers-reduced-motion (v4
+        follows the OS setting; each case-page film has its own Play button).
     -->
     <script>
       ;(function () {
         var root = document.documentElement
         root.classList.add('js')
-        var store = {}
+        var theme = null
         try {
-          store.theme = localStorage.getItem('theme')
-          store.motion = localStorage.getItem('motion')
+          theme = localStorage.getItem('theme')
         } catch (e) {
-          /* Private mode or blocked storage: the defaults apply. */
+          /* Private mode or blocked storage: the default theme applies. */
         }
-        if (store.theme === 'light' || store.theme === 'dark') root.dataset.theme = store.theme
-        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
-        var on = store.motion === 'on' || (!reduce && store.motion !== 'paused')
-        root.dataset.motion = on ? 'on' : 'paused'
+        if (theme === 'light' || theme === 'dark') root.dataset.theme = theme
+        root.dataset.motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'paused' : 'on'
       })()
     </script>
 

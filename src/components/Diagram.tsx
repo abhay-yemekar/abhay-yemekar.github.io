@@ -11,7 +11,7 @@ const KIND_LABEL: Record<DiagramNode['kind'], string> = {
 
 /**
  * An architecture diagram with one grammar across every case study: dashed =
- * LLM step, solid = deterministic code, pill = data, amber = the trust path.
+ * LLM step, solid = deterministic code, pill = data, orange = the trust path.
  *
  * The SVG only shows from 1280px: at 12.4 viewBox units the smallest labels
  * render at 13.07px there, and would drop under 13px on anything narrower.
@@ -114,7 +114,7 @@ export function Diagram({ spec, caption }: { spec: DiagramSpec; caption: string 
 
       <figcaption className="u-meta mt-4 text-fg-subtle">
         <span className="mr-4 hidden xl:inline">
-          dashed = LLM step · solid = code · pill = data · amber = evidence path
+          dashed = LLM step · solid = code · pill = data · orange = evidence path
         </span>
         {caption}
       </figcaption>

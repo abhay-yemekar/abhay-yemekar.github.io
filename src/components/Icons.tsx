@@ -78,7 +78,7 @@ export function MoonIcon() {
   )
 }
 
-/** Pause bars, swapped for a play triangle while motion is paused. */
+/** Pause bars, swapped for a play triangle while a film is paused (globals.css). */
 export function PauseIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" className="inline-block align-[-0.05em]" aria-hidden="true">

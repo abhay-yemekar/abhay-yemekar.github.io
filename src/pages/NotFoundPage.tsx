@@ -20,21 +20,18 @@ export function NotFoundPage() {
         <h1 className="mt-6 max-w-[16ch] text-title">
           There’s <span className="u-evidence u-accent">no evidence</span> of that page.
         </h1>
-        <p className="mt-8 max-w-[48ch] text-lede text-fg-muted">
+        <p className="mt-6 max-w-[48ch] text-lede text-fg-muted">
           It may have moved when the site was rebuilt. The work is all still here:
         </p>
-        <ul className="m-0 mt-8 list-none border-t border-border p-0">
+        <ul className="m-0 mt-8 grid max-w-3xl list-none border-t border-border p-0">
           {caseStudies.map((study) => (
             <li key={study.slug} className="border-b border-border">
-              <a
-                href={`/work/${study.slug}/`}
-                className="group flex items-center justify-between gap-6 py-5 text-fg no-underline"
-              >
-                <span
-                  className="vt u-display inline-block text-[clamp(1.75rem,3.4vw,3rem)] leading-none tracking-[-0.02em] transition-transform duration-(--duration-slow) ease-(--ease-entrance) group-hover:translate-x-2"
-                  style={vt(study.slug)}
-                >
-                  {study.name}
+              <a href={`/work/${study.slug}/`} className="group flex items-center justify-between gap-6 py-4 text-fg no-underline">
+                <span className="min-w-0">
+                  <span className="vt u-display inline-block text-work" style={vt(study.slug)}>
+                    {study.name}
+                  </span>
+                  <span className="mt-1 block text-small text-fg-muted">{study.tagline}</span>
                 </span>
                 <span className="u-arrow-ring">
                   <ForwardArrow />
@@ -43,7 +40,7 @@ export function NotFoundPage() {
             </li>
           ))}
         </ul>
-        <a href="/" className="u-btn mt-12">
+        <a href="/" className="u-btn mt-10">
           Home
           <ForwardArrow />
         </a>

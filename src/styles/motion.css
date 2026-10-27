@@ -36,10 +36,64 @@ html:not([data-motion='on'])::view-transition-new(root) {
   animation: none;
 }
 
-/* SplitText line masks: room for descenders, so the mask never clips them. */
-[data-split] > div {
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+/*
+ * Scroll reveals (motion/reveals.ts). Only that script adds .is-pending, and
+ * only below the fold; the same script takes it off, so nothing stays hidden.
+ * While it sets up, transitions are off, so nothing animates out first.
+ */
+[data-reveals-setup] :is([data-reveal], [data-split], [data-wipe] > :first-child, svg[data-draw] *) {
+  transition: none !important;
+}
+
+:is([data-reveal], [data-split]) {
+  transition:
+    opacity 700ms var(--ease-entrance),
+    translate 900ms var(--ease-entrance);
+}
+
+:is([data-reveal], [data-split]).is-pending {
+  opacity: 0;
+  translate: 0 2rem;
+}
+
+[data-wipe] > :first-child {
+  transition: clip-path 1100ms var(--ease-expo);
+}
+
+[data-wipe].is-pending > :first-child {
+  clip-path: inset(100% 0 0 0);
+}
+
+/* The diagram: nodes pop in, then the edges draw, each on its own delay (--i). */
+svg[data-draw] [data-node] {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity 600ms var(--ease-entrance) calc(var(--i, 0) * 70ms),
+    scale 600ms var(--ease-entrance) calc(var(--i, 0) * 70ms);
+}
+
+svg[data-draw].is-pending [data-node] {
+  opacity: 0;
+  scale: 0.94;
+}
+
+/* pathLength="1" makes every edge one unit long, so one dash covers it. */
+svg[data-draw] [data-edge] {
+  stroke-dasharray: 1;
+  transition: stroke-dashoffset 450ms var(--ease-hover) calc(300ms + var(--i, 0) * 80ms);
+}
+
+svg[data-draw].is-pending [data-edge] {
+  stroke-dashoffset: 1;
+}
+
+svg[data-draw] [data-edge-label] {
+  transition: opacity 400ms var(--ease-hover) calc(600ms + var(--i, 0) * 50ms);
+}
+
+svg[data-draw].is-pending [data-edge-label] {
+  opacity: 0;
 }
 
 /* Project cards: the frame firms up and the name underlines on hover. */

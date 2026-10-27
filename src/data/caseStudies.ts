@@ -38,7 +38,7 @@ export type DiagramNode = {
   /** Desktop layout, in viewBox units. Boxes are 210 × 58. */
   x: number
   y: number
-  /** On the trust path, drawn in amber. */
+  /** On the trust path, drawn in orange. */
   hot?: boolean
   /** A failure branch, drawn dotted. */
   warn?: boolean

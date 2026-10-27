@@ -468,37 +468,34 @@ html:not(.js) [data-theme-toggle] {
   visibility: hidden;
 }
 
-/* The motion control needs JS: the head script sets data-motion. */
-html:not([data-motion]) [data-motion-toggle] {
+/* A film's Pause / Play button needs JS (src/client/films.ts). Its icon follows the state. */
+html:not(.js) [data-film-toggle] {
   display: none;
 }
 
-[data-motion-toggle] .icon-play,
-[data-motion-toggle][data-state='paused'] .icon-pause {
+[data-film-toggle] .icon-play,
+[data-film-toggle][data-state='paused'] .icon-pause {
   display: none;
 }
 
-[data-motion-toggle][data-state='paused'] .icon-play {
+[data-film-toggle][data-state='paused'] .icon-play {
   display: inline;
 }
 
-/* Targets that smooth scroll focuses by hand (tabindex=-1) need no ring. */
+/* Mouse-only targets (tabindex=-1, like a card's poster link) need no ring. */
 [tabindex='-1']:focus {
   outline: none;
 }
 
-/*
- * Reduced motion: transitions and animations collapse to an instant, unless
- * the visitor explicitly pressed "Play motion" (data-motion="on").
- */
+/* Reduced motion (the OS setting): transitions and animations collapse to an instant. */
 @media (prefers-reduced-motion: reduce) {
-  html:not([data-motion='on']) {
+  html {
     scroll-behavior: auto;
   }
 
-  html:not([data-motion='on']) *,
-  html:not([data-motion='on']) *::before,
-  html:not([data-motion='on']) *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
