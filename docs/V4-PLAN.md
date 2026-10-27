@@ -1,8 +1,10 @@
 # v4 plan: from showreel to a page you can scan
 
-Draft for approval, 2026-10-27. Source: the review with UserA on 2026-10-22
-(the written notes; the audio itself wasn't transcribed). Nothing here is built
-yet.
+Written and approved on 2026-10-27, then built the same day in four phases on
+`redesign/v4-readable`; the results are in [`V4-REPORT.md`](V4-REPORT.md).
+Source: the review with UserA on 2026-10-22 (the written notes; the audio
+itself wasn't transcribed). Changes made along the way are marked in the
+decisions table at the end.
 
 ## What the review is really saying
 

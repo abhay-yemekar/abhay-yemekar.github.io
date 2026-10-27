@@ -199,13 +199,6 @@
     letter-spacing: var(--text-meta--letter-spacing);
   }
 
-  /* Code-like strings only (offsets, file paths): the mono face at meta size. */
-  .u-mono {
-    font-family: var(--font-mono);
-    font-size: var(--text-meta);
-    line-height: var(--text-meta--line-height);
-  }
-
   /* A small label over a group: sans, medium weight, no brackets or capitals. */
   .u-label {
     font-size: var(--text-meta);
@@ -406,19 +399,6 @@
     padding-inline: 0.06em;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
-  }
-
-  /* Citation numeral pointing at a source on the page. */
-  .u-cite {
-    font-family: var(--font-mono);
-    /* A third of the headline, but never under the 13px floor (phones). */
-    font-size: max(var(--text-meta), 0.32em);
-    line-height: 0;
-    color: var(--color-accent);
-    margin-left: 0.12em;
-    vertical-align: super;
-    letter-spacing: 0;
-    text-decoration: none;
   }
 
   /* Placeholder for missing facts. Rendered only in dev; see src/lib/todo.ts. */

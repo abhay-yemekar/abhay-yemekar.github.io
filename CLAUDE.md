@@ -3,7 +3,9 @@
 Personal portfolio for Abhay Yemekar. A home page plus one static page per case
 study, prerendered at build time and deployed to GitHub Pages at the apex domain
 `abhayemekar.me`. The overhaul plan is `docs/PORTFOLIO_BRIEF.md`. Decisions so
-far are in `docs/AUDIT.md` and `docs/STRATEGY.md`.
+far are in `docs/AUDIT.md` and `docs/STRATEGY.md`. The current design is v4
+("Readable"): `docs/V4-PLAN.md` holds its decisions and `docs/V4-REPORT.md` its
+measurements.
 
 ## Commands
 
@@ -15,14 +17,14 @@ npm run typecheck    # tsc --noEmit alone
 npm run gen:assets   # regenerate the favicons from the SVG monogram (sharp)
 npm run gen:og       # regenerate public/og/*.png share cards (headless Chrome, real fonts)
 npm run gen:media    # regenerate public/media/<slug>/ posters and previews (sharp)
-python scripts/gen-wordmark.py   # regenerate src/data/wordmark.ts (fontTools, not a project dep)
 ```
 
 There is no test suite and no linter. `npm run build` is the gate. It fails on a
 type error, on an unfilled template marker, and on a page over its weight budget
 (`scripts/check-budgets.mjs`). Any of those fails the deploy. The budgets:
 - **Initial JS:** 10 kB.
-- **Motion layer:** 85 kB of deferred JS, of which 20 kB for the particle chunk.
+- **Deferred JS:** 10 kB for every chunk loaded after first paint together
+  (the explainer, the films, the motion layer).
 - **CSS:** 15 kB. **HTML:** 40 kB.
 - **Fonts:** 130 KiB.
 - **Images:** 400 kB per page, counted as the largest AVIF of every picture.
@@ -40,22 +42,25 @@ it isn't a real preset and silently produces junk numbers.
 
 The CDP harnesses live outside the repo in `C:\Playground\claude-work\portfolio\harness`
 (see its README):
-- `a11y.mjs`: axe, layout, keyboard, contrast, motion toggle, no-JS
+- `axe-quick.mjs`: axe on given paths at 360 and 1280 in both themes
+- `v4contrast.mjs`: token contrast from computed styles, both themes, plus the
+  no-JS check
 - `lh.mjs`: Lighthouse, 3 runs plus the median
-- `inp.mjs`: click to next frame at 4× CPU throttle, plus Event Timing (`GPU=1`
-  uses the hardware GPU)
-- `fps.mjs`: the particle hero's frame pacing on the hardware GPU
-- `robust.mjs`: no WebGL, a 2-core device, data saver
+- `inp.mjs`: click to next frame at 4× CPU throttle, plus Event Timing
+- `v4motion.mjs`: reveals end visible, diagram arrowheads, film buttons, with
+  motion on and under reduced motion
 - `content-diff.mjs`: every line of the live site's text still present locally
   (`LOOSE=1` ignores CSS case and `[ ]`)
-- `protoshots.mjs`, `fullpages.mjs`: screenshots with motion on, full-page tiles
-- `phase3-check.mjs`, `phase4-check.mjs`: transitions, diagram draw, films,
-  showcase
+- `v4shots.mjs`, `v4header.mjs`, `v4section.mjs`, `fullpages.mjs`: first-screen
+  shots, the header at phone widths, one section, full-page tiles
 - `sitecap.mjs`, `site-scroll.mjs`: capture a live site (scroll film, stills)
+- `a11y.mjs`, `fps.mjs`, `robust.mjs`, `phase3-check.mjs`, `phase4-check.mjs`:
+  the v3 checks, kept for the record (they expect the retired motion toggle
+  and particle hero)
 
-Headless Chrome can't decode VP9 WebM and renders WebGL in software unless
-launched with `--use-angle=d3d11`. Measure frame rates there or on a real
-device, never on SwiftShader.
+Headless Chrome can't decode VP9 WebM, so the yDirect hover preview only plays
+in a real browser. Under Git Bash, prefix harness runs with `MSYS_NO_PATHCONV=1`,
+or a path argument like `/` turns into a Windows path.
 
 Results go to `runs/<date>-<label>/`. Pull requests into `main` run the same
 `npm run build` gate (`.github/workflows/check.yml`).
@@ -66,9 +71,8 @@ Results go to `runs/<date>-<label>/`. Pull requests into `main` run the same
   time only**: no React reaches the browser.
 - **Tailwind CSS v4** via `@tailwindcss/vite`, CSS-first, with no
   `tailwind.config.js`.
-- **Motion (v3, approved 2026-10-16):** GSAP 3.15 (ScrollTrigger, SplitText,
-  CustomEase), Lenis smooth scroll and OGL for the WebGL hero. All of it loads after
-  first paint from `src/client/motion/`; see Motion.
+- **Motion (v4):** CSS transitions plus a few small TypeScript enhancers. No
+  animation library: GSAP, Lenis and OGL were removed with v3's cinematic layer.
 - **sharp** (devDep) for offline asset generation.
 - No router, no CMS, no analytics, no tracking. Content lives in typed TS files.
 
@@ -87,12 +91,14 @@ Results go to `runs/<date>-<label>/`. Pull requests into `main` run the same
   page, since there is no client component to hot-swap.
 
 The browser gets HTML, CSS, fonts and `src/client/main.ts`, about 2 kB gzip of
-plain TypeScript: the theme and motion toggles, the nav's current-section marker,
-and the Pune clock. Two more pieces load on demand:
-- **The HireLens explainer** (`src/client/explainer.ts`, about 1 kB), only on
-  pages that carry it.
-- **The motion layer** (`src/client/motion/`, about 74 kB with GSAP, Lenis and
-  OGL), after first paint, only when `<html data-motion="on">`.
+plain TypeScript: the theme toggle, the nav's current-section marker, and a fix
+that stops a clicked new-tab link keeping its focus ring. Three more pieces load
+on demand, about 2 kB together:
+- **The HireLens explainer** (`src/client/explainer.ts`), only on pages that
+  carry it.
+- **The films** (`src/client/films.ts`), only on case pages with a film.
+- **The motion layer** (`src/client/motion/`: reveals and card previews), after
+  first paint, only when `<html data-motion="on">`.
 
 Interactive behaviour goes in `src/client/` as small enhancers keyed on `data-*`
 attributes. Pages must work fully without them. If something ever needs real
@@ -106,29 +112,35 @@ in Node.
 
 ```
 src/data/          all content; editing these needs no markup changes
-                   (media.ts = project posters; wordmark.ts is generated)
+                   (media.ts = project posters and films; education.ts = schools)
 src/pages/         HomePage, CaseStudyPage, NotFoundPage
-src/components/    sections plus Nav, SectionShell, Wordmark, MotionToggle, Poster, CaseMedia, Diagram, LinkRow, TodoMark, Icons
-src/client/        the only browser JS: main, theme, motion-toggle, clock, active-section, explainer
-src/client/motion/ the motion layer: boot, smooth-scroll, reveals, films, nav-hide, scramble, cursor, magnetic, work-preview, hero-particles
+src/components/    sections plus Nav, ProfileLinks, SectionShell, Poster, CaseMedia, Diagram, LinkRow, TodoMark, Icons
+src/client/        the only browser JS: main, theme, active-section, explainer, films
+src/client/motion/ the motion layer: boot, reveals, work-preview
 src/lib/           head.ts (per-page meta), todo.ts (placeholder mechanism)
 src/styles/        globals.css (tokens) + fonts.css (@font-face + fallbacks) + motion.css
-scripts/           prerender, check-budgets, gen-og, gen-assets, gen-media, gen-wordmark.py, hirelens-sample.mts
+scripts/           prerender, check-budgets, gen-og, gen-assets, gen-media, hirelens-sample.mts
 public/            site.webmanifest, favicons, og/*.png, media/<slug>/ (generated); robots.txt and CNAME come from the prerender
 index.html         the template: static head tags, inline head script, markers
-docs/              brief, audit, strategy, contrast table, mockups, screenshots, media-src (captures)
+docs/              brief, audit, strategy, v4 plan and report, contrast table, mockups, screenshots, media-src (captures)
 ```
 
 **Content changes belong in `src/data/*.ts`.** That split is the point of the
-architecture: copy, projects, case studies and credentials are data, not JSX.
+architecture: copy, projects, case studies and education are data, not JSX.
+
+The home page order is hero, About, Projects (the four case studies as cards,
+then "More projects"), Experience, Education, Skills, then the footer, which is
+also the page's `#contact`. The ids live in `src/data/sections.ts`; Projects
+keeps the id `work` so old `/#work` links still land.
 
 ## Conventions
 
 ### The HireLens explainer
 
-`HireLensExplainer.tsx` and `HeroEvidence.tsx` render real HireLens output from
-`src/data/hirelens-sample.json`: one fictional resume, scored by the production
-engine through the public demo. Provenance travels inside the JSON.
+`HireLensExplainer.tsx` renders real HireLens output from
+`src/data/hirelens-sample.json` on the HireLens case page: one fictional resume,
+scored by the production engine through the public demo. Provenance travels
+inside the JSON.
 
 - `src/lib/hirelens.ts` checks every quote against its offsets at build time, and
   the build fails if one is off.
@@ -145,34 +157,36 @@ renders as a dashed chip in `npm run dev`, is left out of production HTML, and i
 listed as a warning by the prerender. A field that can be missing is typed
 `string | Todo`. Render it through `TodoMark` / `isTodo`.
 
-### Design tokens (v3 "Cinematic")
+### Design tokens (v4 "Readable")
 
 Colours are CSS custom properties in `src/styles/globals.css`, bridged to Tailwind
 through `@theme inline`. Use the semantic utilities (`bg-bg-elev`,
 `text-fg-muted`, `border-border`, `stroke-mark`, `fill-wash`), never raw hex in
 components.
 
-- **Palette:** a near-black canvas (`bg` #0a0a0a), warm off-white text and one
-  amber, with a static film-grain overlay (`body::after`). The v2 paper palette
-  lives on as the light theme.
+- **Palette (A, "paper and signal orange"):** warm paper (`bg` #faf8f3), warm ink
+  (`fg` #171412) and one orange (`accent` #b4410c for text, `mark` #e85d14 for
+  lines). Dark is the same palette inverted, behind the toggle. No grain, no
+  gradients.
 - **Type tokens:**
-  - `text-display`: the hero h1
-  - `text-title`: case-study h1s
-  - `text-h2`: section headings at display size
-  - `text-work`: project names in the index
-  - `text-h3`, `text-lede`
-  - `.u-meta`: mono metadata
-  - `.u-label`: the bracketed mono label `[ 01 ]`
+  - `text-display`: the hero's role, the largest text on the page (40–68px)
+  - `text-title`: case-study h1s (36–60px)
+  - `text-h2`: section headings (28–36px)
+  - `text-work`: project names on the cards (24–28px)
+  - `text-name`: roles, schools, skill labels (20–22px)
+  - `text-section`, `text-h3`, `text-lede`
+  - `.u-meta`: 14px sans metadata (dates, counts, tags)
+  - `.u-label`: a 14px medium label; no brackets, no capitals
 - **Contrast:** every text pair in use clears WCAG AA (4.5:1) in both themes, and
   the non-text marks clear 3:1. The measured table is `docs/CONTRAST.md`. If you
   change a token, re-measure from computed styles in the browser (claude-work
-  `a11y.mjs`). On the evidence wash use `fg` or `fg-muted` only.
-- **Smallest text:** 13px (`.u-meta`), including `.u-cite` on phones.
+  `v4contrast.mjs`). On the evidence wash use `fg` or `fg-muted` only.
+- **Smallest text:** 14px (`.u-meta`). The diagram's SVG labels render at 13px
+  from 1280px, where the SVG shows.
 
-**Amber marks evidence, and lights up on interaction.** It's allowed for:
+**Orange marks evidence, and lights up on interaction.** It's allowed for:
 - **Evidence:**
   - the evidence wash and underline (`.u-evidence`)
-  - citation numerals (`.u-cite`)
   - link underlines (`.u-link`)
   - the active-nav underline
   - the diagram's trust path
@@ -180,126 +194,86 @@ components.
   - measured metric values (a number on the page is evidence too)
 - **Feedback:**
   - the primary button's hover fill and glow
-  - the cursor ring over links
+  - the focus ring (`ring`)
   - the reading-progress hairline
-- **The hero:** about 6% of the particles
 
-Nothing else. Use no amber fills except the evidence wash (≤ 30% opacity) and the
-button hover. Use no gradients. The primary button (`.u-btn`) is a light pill:
-`fg` fill and `bg` text. On hover it takes the `accent` fill (not `mark`, so its
-text keeps AA in the light theme) and the `glow`.
+Nothing else. Use no orange fills except the evidence wash (≤ 30% opacity) and the
+button hover. The primary button (`.u-btn`) is an ink pill: `fg` fill and `bg`
+text, with `.u-btn--ghost` as its outlined twin. On hover it takes the `accent`
+fill (not `mark`, so its text keeps AA) and the `glow`.
 
-**Headlines:** Instrument Sans condensed (`font-stretch: 80%`, weight 600). The
-accent clause is Instrument Serif Italic (`.u-accent`): in the hero it's the
-evidence clause, "show their work".
+**Headings:** Instrument Sans at normal width, weight 600. The accent clause is
+Instrument Serif Italic (`.u-accent`): the footer's "interesting problems." and
+the 404's "no evidence".
 
 **Diagram grammar** (`Diagram.tsx`, typed specs in `caseStudies.ts`): dashed = LLM
-step, solid = deterministic code, pill = data, amber = the trust path. The SVG
+step, solid = deterministic code, pill = data, orange = the trust path. The SVG
 shows from 1280px, where its smallest label renders at 13px. Below that, the same
 nodes render as a stacked list.
 
+### Header and profile links
+
+The sticky header (`Nav.tsx`) never hides. From 640px it carries Projects,
+Experience and About; it always carries GitHub and LinkedIn as round icon
+buttons (`.u-icon-btn`) and the resume as an outlined pill (`.u-pill-link` /
+`.u-pill`), from `ProfileLinks.tsx`. Each draws its focus ring on its own shape,
+not on the 44px tap target. The theme toggle sits in the header from 640px and in
+the footer below that, because the header has to fit in 320px.
+
 ### Theme
 
-**Dark is the designed default, whatever the OS says** (v3). The particles, glow
-and media are tuned for black. The light theme applies only when the visitor
-chooses it with the toggle: the inline head script reads `localStorage.theme`
-and sets `data-theme`. `src/client/theme.ts` writes storage **only on click**.
-The toggle is a pressed/unpressed "Dark theme" button and stays hidden without
-JS. The particle field re-reads the colour tokens on a theme change. It blends
-additively on dark and normally on paper.
+**Light is the default, whatever the OS says** (v4). The dark theme applies only
+when the visitor chooses it with the toggle: the inline head script reads
+`localStorage.theme` and sets `data-theme`. `src/client/theme.ts` writes storage
+**only on click**. The toggle is a pressed/unpressed "Dark theme" button and stays
+hidden without JS.
 
 ### Motion
 
-**A progressive-enhancement animation layer.** The HTML is complete without it,
-and nothing is hidden unless the thing that reveals it is certain to run.
+**A small progressive enhancement.** The HTML is complete without it, and nothing
+is hidden unless the thing that reveals it is certain to run.
 
-The inline head script in `index.html` sets two things before first paint:
-- **`data-motion="on" | "paused"`.** Under `prefers-reduced-motion` the page
-  starts `paused`, unless the visitor pressed "Play motion" (stored as
-  `localStorage.motion = "on"`). An explicit choice beats the OS default in both
-  directions.
-- **`.intro`** on the first page of a session, when motion is on.
+The inline head script in `index.html` sets `data-motion="on" | "paused"` before
+first paint, from the OS setting only: `prefers-reduced-motion` means paused.
+`main.ts` follows the setting if it changes while the page is open. There is no
+site-wide motion toggle.
 
 How the pieces fit:
-- **The intro is CSS keyframes** (`motion.css`, `data-intro="rise|drift|settle|line|wordmark"`).
-  They always end visible, and any key or click ends them.
-  - The `<h1>` and the lede only move (`settle`, `drift`) and never fade: either
-    can be the LCP element (the lede is, on phones).
-- **The JS layer** (`src/client/motion/boot.ts`) loads after `load` plus idle:
-  - Lenis (mouse and trackpad only, with a hand-rolled anchor and focus handler)
-  - SplitText line reveals (`[data-split]`) and block reveals (`[data-reveal]`)
-  - the cursor ring and the magnetic CTA
-  - the work-index hover previews (≥1024px, mouse)
-  - the particle field (its own chunk)
-
-  `stop()` reverts all of it.
-- **The particle field** samples the name's glyph outlines (`Wordmark.tsx`, from
-  `scripts/gen-wordmark.py`).
-  - **Static form:** a dot-filled SVG, kept as the fallback. It's paths, not
-    `<text>`, because Chrome counts SVG text as an LCP candidate.
-  - **Points:** 18k on desktop, 6k on phones. The device pixel ratio is capped at
-    1.5 (desktop) and 1.25 (phones).
-  - **Frame rate:** paused off screen; about 30 fps once settled.
-  - **Skipped** when data saver is on, on fewer than 4 CPU cores, or when WebGL is
-    unavailable.
-- **Scroll choreography** (`motion/reveals.ts`, all inside one `gsap.context`):
-  - `[data-split]` headings rise line by line out of masks (SplitText,
-    `aria: 'auto'`). Use it only on elements without links inside.
-  - `[data-reveal]` blocks rise and fade.
-  - `[data-words]`: the About lede's words, which are build-time inline spans,
-    light up in order, once. Never scrub opacity to the scroll position: text
-    left half-lit fails contrast.
-  - `[data-chars]`: the aria-hidden footer name rises letter by letter.
-  - `[data-scramble-in]`: mono indices resolve out of random glyphs.
-  - `svg[data-diagram]`: nodes pop in, then edges draw (`pathLength=1`), each
-    arrowhead returning as its line lands.
-- **Nav** (`motion/nav-hide.ts`): hides on scroll down and returns on scroll up.
-  It never hides near the top or with focus inside it. Nav labels
-  (`[data-scramble]`) scramble on hover, and their link carries a stable
-  `aria-label`.
-- **Page transitions:** cross-document View Transitions. A project's name
-  (`.vt` + `vt(slug)` from `src/lib/view-transition.ts`, on an inline-block)
-  morphs from the work index, the 404 list or a "Next" link into the case-study
-  title. Names apply only under `html[data-motion='on']`. When paused, the root
-  swaps without animating.
-- **Media** (`src/data/media.ts`, built by `npm run gen:media`):
-  - **Posters:** decorative, `alt=""`.
-  - **Hover previews:** the work index, on hover only.
-  - **Case-page films:** in each case study's "In the product" section. The
-    HTML carries the film's still with real alt text. `motion/films.ts` fades
-    the animated WebP over it only while it's in view (and never with data
-    saver on), and removes it when it scrolls away or motion is paused.
-  - **Stills:** 16:10, `[data-wipe]`.
-
-  Captions state only what the media shows.
-- **The HireLens showcase** on the home page (`[data-showcase]`) scales from
-  0.86 to 1 with the scroll. It's a transform only, never opacity, so the text
-  stays legible wherever the scroll stops.
-- **Evidence marks** in the explainer (`.evidence-mark`) sweep their wash in
-  as a criterion is chosen. This is CSS, and the final state is the same
-  without it.
-- **"Pause motion" / "Play motion"** (`MotionToggle.tsx`, WCAG 2.2.2) sits in the
-  hero and in each case-study header, since the films loop. It starts and stops
-  the layer live and stores the choice.
+- **Reveals** (`motion/reveals.ts` + `motion.css`): `[data-reveal]` blocks and
+  `[data-split]` headings rise and fade once; `[data-wipe]` media frames open
+  upward; `svg[data-diagram]` nodes pop in, then the edges draw
+  (`pathLength=1`), each arrowhead returning as its line lands. Only elements
+  below the fold get `.is-pending`, and only while transitions are switched off,
+  so nothing animates out first.
+- **Card previews** (`motion/work-preview.ts`): with a mouse, hovering a project
+  card plays its moving preview inside the card's own poster frame.
+- **Films** (`src/client/films.ts`, not in the motion layer): each case page's
+  "In the product" film has its own **Pause film / Play film** button (WCAG
+  2.2.2). A playing film runs only while on screen: the animated WebP fades over
+  the still that carries the real alt text, and is removed when it scrolls away.
+  Films start playing when motion is on and data saver is off; otherwise they
+  start paused and the visitor can play one.
+- **Page transitions:** cross-document View Transitions. A project's name (`.vt`
+  + `vt(slug)` from `src/lib/view-transition.ts`, on an inline-block) morphs from
+  its card, the 404 list or the "Next case study" card into the case-study title.
+  Names apply only under `html[data-motion='on']`.
+- **Evidence marks** in the explainer (`.evidence-mark`) sweep their wash in as a
+  criterion is chosen. This is CSS, and the final state is the same without it.
 - **No count-ups:** metric values are evidence, so they never animate through
   numbers that weren't measured.
-- **GSAP and CSS never share an element's transform.** GSAP folds the CSS
-  `scale`/`translate` properties into its own transform, so GSAP moves an outer
-  element and CSS sizes the inner one (see the cursor and the preview card).
 
 Easings are `--ease-entrance`, `--ease-hover` and `--ease-expo`, with durations
-150/250/500ms. The global reduce rule in `globals.css` collapses transitions,
-unless the visitor opted in with "Play motion".
+150/250/500ms. Under `prefers-reduced-motion` the global rule in `globals.css`
+collapses every transition and animation.
 
 ### Fonts
 
 `src/styles/fonts.css` declares the faces by hand, latin subset only, 117 KiB in
 total (budget 130):
-- **Instrument Sans** (the wdth file: width 75–100%, weight 400–700; 57 KB).
-  It's declared twice over the same file: `Instrument Sans Variable` for text and
-  `Instrument Sans Display` for condensed headlines, so each gets its own fallback.
+- **Instrument Sans** (the wdth file, weight 400–700; 57 KB): text and headings.
 - **Instrument Serif Italic** (22 KB): the accent clause.
-- **JetBrains Mono** (40 KB): labels and metadata.
+- **JetBrains Mono** (40 KB): code-like text only (the explainer, the diagram).
+  A page downloads only the faces it renders, so the home page needs no mono.
 
 Don't import the Fontsource index CSS: it ships subsets this site never renders.
 The latin range has no arrow glyphs, so arrows are SVG (`Icons.tsx`).
@@ -307,9 +281,8 @@ The latin range has no arrow glyphs, so arrows are SVG (`Icons.tsx`).
 Each face has a metric-matched local fallback (`size-adjust`, `ascent-override`)
 measured in Chrome on 2026-10-16, so the swap causes no layout shift.
 
-`vite.config.ts` preloads Instrument Sans and Instrument Serif Italic, the two
-faces in the hero h1. It has to be a plugin because Vite content-hashes font
-filenames.
+`vite.config.ts` preloads Instrument Sans, the face of the hero's `<h1>` (the LCP
+element). It has to be a plugin because Vite content-hashes font filenames.
 
 ### SEO and sharing
 
@@ -321,15 +294,20 @@ filenames.
   says, with no ratings and no counts.
 - **Share cards:** the copy is `ogCards` in the entry. After changing a title,
   run `npm run gen:og` and commit the PNGs.
+- The hero's `<h1>` reads "Abhay Yemekar, Full-stack AI Engineer": the name is a
+  screen-reader-only span, because the header already shows it.
 
 ### Accessibility
 
 - Semantic sectioning elements and exactly one `<h1>` per page.
 - A skip link as the first focusable node.
-- A visible `:focus-visible` outline on everything interactive.
-- Standalone links and buttons are 44px tap targets (`.u-tap`, `.u-btn`).
+- A visible `:focus-visible` outline on everything interactive. A mouse click on a
+  new-tab link drops its focus (`main.ts`), so the ring doesn't reappear when the
+  visitor comes back; keyboard activation keeps it.
+- Standalone links and buttons are 44px tap targets (`.u-tap`, `.u-btn`,
+  `.u-icon-btn`, `.u-pill-link`).
 - External links carry `target="_blank" rel="noopener noreferrer"`; the mailto
-  link does not.
+  link does not. The resume opens in a new tab.
 
 ## Hard constraints
 
@@ -350,7 +328,8 @@ These are the owner's rules, not preferences.
   command. When he explicitly asks you to push, run it in his Terminal panel,
   never in a background shell, so any SSH passphrase prompt reaches him. A push
   to `main` deploys the live site, so larger changes go through a PR into `main`
-  (v3 shipped through PR #1 from `redesign/cinematic`).
+  (v3 shipped through PR #1 from `redesign/cinematic`, v4 through a PR from
+  `redesign/v4-readable`).
 - **No AI attribution in commits or PRs:** no `Co-Authored-By` trailer and no
   "Generated with" line.
 - Git identity is set with `--local` only, never `--global`.
@@ -379,5 +358,5 @@ prerender derives the canonical URLs, sitemap, `robots.txt`, `llms.txt` and
 3. Run `npm run gen:og`.
 
 Pull requests into `main` run `.github/workflows/check.yml`: the same
-`npm ci` → `npm run build` gate, with no deploy. Big changes (the v3 redesign)
-go through a draft PR and ship by merging it.
+`npm ci` → `npm run build` gate, with no deploy. Big changes (the v3 and v4
+redesigns) go through a draft PR and ship by merging it.
