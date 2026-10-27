@@ -42,12 +42,6 @@ html:not([data-motion='on'])::view-transition-new(root) {
   margin-bottom: -0.08em;
 }
 
-/* Letter masks for the footer name: its line height is under 1, so give the caps room. */
-[data-chars] > div {
-  padding-block: 0.1em;
-  margin-block: -0.1em;
-}
-
 /* Project cards: the frame firms up and the name underlines on hover. */
 .work-card__frame {
   transition: border-color var(--duration-base) var(--ease-hover);

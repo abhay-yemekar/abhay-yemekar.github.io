@@ -62,7 +62,8 @@ export function FeaturedProjects() {
               <p className="u-meta m-0 mt-1.5 font-medium text-accent">{study.pattern}</p>
               <p className="m-0 mt-3 text-fg-muted">{study.summary}</p>
 
-              <div className="mt-auto flex flex-wrap items-center gap-x-6 pt-3">
+              {/* The case study on its own line, then the links out: the same two rows on every card. */}
+              <div className="mt-auto flex flex-col items-start pt-3">
                 <a href={`/work/${study.slug}/`} className="u-meta u-tap gap-1.5 font-medium text-fg no-underline">
                   <span className="u-link">Read the case study</span>
                   <ForwardArrow />

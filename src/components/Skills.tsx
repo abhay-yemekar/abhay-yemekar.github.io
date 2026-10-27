@@ -1,47 +1,50 @@
 import { capabilities } from '../data/skills'
 import { sections } from '../data/sections'
+import { ExternalArrow } from './Icons'
 import { SectionShell } from './SectionShell'
 
-/** Capabilities, each with the project that proves it. No skill bars, no chip wall. */
+/**
+ * Skills as cards, about one screen in all: what each covers, the tools, and
+ * "Used in" with the projects that show it, so the evidence sits right next
+ * to the claim. No skill bars and no chip wall.
+ */
 export function Skills() {
   return (
     <SectionShell section={sections.skills}>
-      <dl className="m-0 border-t border-border">
-        {capabilities.map((capability, i) => (
-          <div
-            key={capability.label}
-            className="grid gap-x-8 gap-y-4 border-b border-border py-10 lg:grid-cols-12 lg:py-12"
-            data-reveal
-          >
-            <dt className="flex items-baseline gap-4 lg:col-span-5">
-              <span className="u-meta text-fg-subtle" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="u-display text-name">{capability.label}</span>
-            </dt>
-            <dd className="m-0 lg:col-span-6 lg:col-start-7">
-              <p className="m-0 text-lede">{capability.does}</p>
-              <p className="u-meta mt-4 mb-0 text-fg-subtle">{capability.tools.join(' · ')}</p>
-              <p className="u-meta m-0 mt-1 flex flex-wrap items-center gap-x-4 text-fg-subtle">
-                <span>Proof:</span>
-                {capability.proof.map((proof) => {
-                  const external = proof.href.startsWith('http')
-                  return (
-                    <a
-                      key={proof.href}
-                      href={proof.href}
-                      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                      className="u-tap"
-                    >
-                      <span className="u-link text-fg">{proof.label}</span>
-                    </a>
-                  )
-                })}
-              </p>
-            </dd>
-          </div>
+      <ul className="m-0 grid list-none gap-4 p-0 md:grid-cols-2 lg:grid-cols-3">
+        {capabilities.map((capability) => (
+          <li key={capability.label} className="flex flex-col rounded-card border border-border bg-bg-elev p-6" data-reveal>
+            <h3 className="m-0 text-name">{capability.label}</h3>
+            <p className="m-0 mt-2 text-small text-fg-muted">{capability.does}</p>
+
+            <ul aria-label="Tools" className="m-0 mt-4 mb-5 flex list-none flex-wrap gap-1.5 p-0">
+              {capability.tools.map((tool) => (
+                <li key={tool} className="u-meta rounded-sm border border-border bg-bg px-2 py-0.5 text-fg-muted">
+                  {tool}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-auto flex flex-wrap items-center gap-x-4 border-t border-border pt-3">
+              <span className="u-meta text-fg-subtle">Used in</span>
+              {capability.proof.map((proof) => {
+                const external = proof.href.startsWith('http')
+                return (
+                  <a
+                    key={proof.href}
+                    href={proof.href}
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    className="u-meta u-tap gap-1 font-medium text-fg no-underline"
+                  >
+                    <span className="u-link">{proof.label}</span>
+                    {external && <ExternalArrow />}
+                  </a>
+                )
+              })}
+            </div>
+          </li>
         ))}
-      </dl>
+      </ul>
     </SectionShell>
   )
 }

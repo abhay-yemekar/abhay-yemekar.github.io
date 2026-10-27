@@ -93,7 +93,8 @@ review asked for. **Decision 2.**
 
 ## The home page, section by section
 
-New order: header → hero → About → Projects → Experience → Skills → footer.
+New order: header → hero → About → Projects → Experience → Education → Skills → footer.
+(Education became its own section on 2026-10-27, at your request.)
 
 | Section | Now | v4 |
 |---|---|---|
@@ -188,7 +189,7 @@ Branch `redesign/v4-readable` from `main`, shipped through a draft PR like v3.
 | 1 | Palette | **A**, paper and signal orange |
 | 2 | Default theme | Light by default (the review), with dark behind one small toggle (your references) |
 | 3 | Where About goes | Right after the hero |
-| 4 | Education | A side card inside About, not its own section |
+| 4 | Education | ~~A side card inside About~~ **Changed 2026-10-27:** its own section after Experience, with degree, junior college and school from LinkedIn, and no certifications |
 | 5 | The "I build AI systems that show their work" line | Keep it as the one-line subtitle under the role |
 | 6 | Motion | The subtle set above |
 | 7 | Headings | Projects · More projects · Experience · Skills · About |

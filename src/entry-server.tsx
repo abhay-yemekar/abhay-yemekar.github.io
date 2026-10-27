@@ -16,7 +16,7 @@ import type { ReactNode } from 'react'
 import { prerender } from 'react-dom/static'
 import * as about from './data/about'
 import { caseStudies } from './data/caseStudies'
-import * as credentials from './data/credentials'
+import { education } from './data/education'
 import * as experience from './data/experience'
 import { hero, homeSeo, profile } from './data/profile'
 import * as projects from './data/projects'
@@ -111,7 +111,7 @@ export async function renderPage(path: string, template: string): Promise<string
 
 /** Every Todo left in the content, for the prerender's build warnings. */
 export function listTodos() {
-  return collectTodos({ hero, about, caseStudies, credentials, experience, projects, skills })
+  return collectTodos({ hero, about, caseStudies, education, experience, projects, skills })
 }
 
 /**
@@ -133,7 +133,7 @@ export function llmsTxt(): string {
     '',
     '## Elsewhere',
     '',
-    `- [Home](${site}/): projects, experience, skills, about, contact`,
+    `- [Home](${site}/): about, projects, experience, education, skills, contact`,
     `- [GitHub](${profile.links.github})`,
     `- [LinkedIn](${profile.links.linkedin})`,
     '',

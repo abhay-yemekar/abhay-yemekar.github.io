@@ -9,10 +9,6 @@ const inView = (el: Element) => el.getBoundingClientRect().top < window.innerHei
  * - [data-split] headings: lines rise out of masks (SplitText, aria 'auto'
  *   keeps the heading's accessible name whole)
  * - [data-reveal] blocks: a short rise and fade
- * - [data-words]: the words of a statement (plain inline spans in the HTML)
- *   light up in reading order as it scrolls in
- * - [data-chars]: a decorative line's letters rise one by one (aria-hidden
- *   elements only)
  * - svg[data-diagram]: nodes pop in, then edges draw in order, each arrowhead
  *   arriving with its line
  * - [data-wipe]: a media frame's clip opens upward as it scrolls in
@@ -67,34 +63,6 @@ export async function initReveals() {
         .timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } })
         .from(frame, { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.2, ease: 'expo.out' })
         .from(img ?? [], { scale: 1.12, duration: 1.6, ease: 'expo.out' }, 0)
-    }
-
-    for (const el of document.querySelectorAll<HTMLElement>('[data-words]')) {
-      // Plays once and stays lit. A scroll-scrubbed version left dim words
-      // (1.5:1) wherever the reader stopped, which fails contrast.
-      gsap.fromTo(
-        el.querySelectorAll('[data-word]'),
-        { opacity: 0.16 },
-        { opacity: 1, duration: 0.7, ease: 'power1.out', stagger: 0.07, scrollTrigger: { trigger: el, start: 'top 78%', once: true } },
-      )
-    }
-
-    for (const el of document.querySelectorAll<HTMLElement>('[data-chars]')) {
-      if (inView(el)) continue
-      SplitText.create(el, {
-        type: 'chars',
-        mask: 'chars',
-        aria: 'none',
-        autoSplit: true,
-        onSplit: (self) =>
-          gsap.from(self.chars, {
-            yPercent: 105,
-            duration: 0.9,
-            ease: 'entrance',
-            stagger: 0.028,
-            scrollTrigger: { trigger: el, start: 'top 94%', once: true },
-          }),
-      })
     }
 
     for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-diagram]')) {
